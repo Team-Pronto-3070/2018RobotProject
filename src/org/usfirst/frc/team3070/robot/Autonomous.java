@@ -13,7 +13,7 @@ public class Autonomous implements Pronstants {
 	SendableChooser<String> chooser;
 	SendableChooser<String> initPos;
 	int mode;
-	double initTimer;
+	
 
 	String gameData, switchPos, scalePos;
 
@@ -30,6 +30,8 @@ public class Autonomous implements Pronstants {
 
 		// Stop the robot
 		drive.stop();
+		climber.stop();
+		grabber.stop();
 
 		// Resets the gyro
 		resetSensors();

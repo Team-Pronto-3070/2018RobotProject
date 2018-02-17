@@ -67,7 +67,7 @@ public class Drive implements Pronstants {
 	 * @param power
 	 *            Speed of motors
 	 * @param dist
-	 *            Distance wanted, in inches
+	 *            Distance wanted, in encoder ticks
 	 */
 	public void driveDistance(double power, double dist) {
 		simpleDrive(power, power);
