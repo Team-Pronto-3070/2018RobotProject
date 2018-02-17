@@ -38,6 +38,25 @@ public class Autonomous implements Pronstants {
 		timer.reset();
 		timer.start();
 	}
+	
+	public void printMode(boolean firstChoice) {
+		if(!firstChoice) {
+			System.out.print("Balance selected not available. Instead chose ");
+		} else {
+			System.out.print("Mode: ");
+		}
+		if(mode == 0) {
+			System.out.println(mode + "; Left switch");
+		} else if(mode == 1) {
+			System.out.print(mode + "; Right switch");
+		} else if(mode == 2) {
+			System.out.println(mode + "; Left scale");
+		} else if(mode == 3) {
+			System.out.println(mode + ";Right scale");
+		} else {
+			System.out.println(mode + "; Straight");
+		}
+	}
 
 	/**
 	 * Constructor
@@ -84,7 +103,13 @@ public class Autonomous implements Pronstants {
 					// this sets the path to go to the left switch when the robot is on the left
 					// side
 					mode = 0;
-					System.out.println("Mode " + "left side switch, start left");
+					printMode(true);
+				}else if(scalePos.equals("L")) {
+					mode = 2;
+					printMode(false);
+				} else {
+					mode = 4;
+					printMode(false);
 				}
 			} // going to the scale
 			if (chooser.getSelected().equals("c")) {
@@ -92,7 +117,13 @@ public class Autonomous implements Pronstants {
 				if (scalePos.equals("L")) {
 					// this sets the path to go to the left scale when the robot is on the left side
 					mode = 2;
-					System.out.println("Mode " + "left side scale, start left");
+					printMode(true);
+				} else if(switchPos.equals("L")) {
+					mode = 0;
+					printMode(false);
+				} else {
+					mode = 4;
+					printMode(false);
 				}
 			} // if none of the left or the center options are selected, the path will move to
 				// the right side
@@ -104,7 +135,12 @@ public class Autonomous implements Pronstants {
 					// this sets the path to the right side of the switch, while starting on the
 					// right side
 					mode = 1;
-					System.out.println("Mode " + "right side switch, start right");
+					printMode(true);
+				} else if(scalePos.equals("R")) {
+					mode = 3;
+					printMode(false);
+				} else {
+					mode = 4;
 				}
 			} // this sets the path to scale
 			if (chooser.getSelected().equals("c")) {

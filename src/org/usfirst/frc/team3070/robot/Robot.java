@@ -14,8 +14,8 @@ public class Robot extends IterativeRobot implements Pronstants {
 	SendableChooser<String> initPos = new SendableChooser<String>();
 
 	Drive drive;
-	//Grabber grabber;
-	//Climber climber;
+	Grabber grabber;
+	Climber climber;
 	Autonomous auto;
 	ProntoGyro prontoGyro;
 
