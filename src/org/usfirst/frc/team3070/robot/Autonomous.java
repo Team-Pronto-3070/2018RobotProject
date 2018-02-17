@@ -23,7 +23,7 @@ public class Autonomous implements Pronstants {
 			AUTO_SWITCH_DIST1 };
 	double[] firstTurn = { AUTO_TURN_LEFT, AUTO_TURN_RIGHT, AUTO_TURN_LEFT, AUTO_TURN_RIGHT, 0 };
 	double[] secondDist = { AUTO_SWITCH_DIST2, AUTO_SWITCH_DIST2, AUTO_SCALE_DIST2, AUTO_SCALE_DIST2, 0 };
-
+	
 	public void nextStep(AutoSteps next) {
 		// Tells the robot to go to the next step
 		autoStep = next;
@@ -178,7 +178,7 @@ public class Autonomous implements Pronstants {
 			break;
 		// this step is the first turn
 		case FIRST_TURN:
-			if (drive.turn(90)) {
+			if (drive.turn(firstTurn[mode])) {
 				// advances the step
 				nextStep(AutoSteps.SECOND_BREAK);
 			}
@@ -190,7 +190,6 @@ public class Autonomous implements Pronstants {
 			break;
 		case SECOND_STRAIGHT:
 			drive.driveDistance(AUTO_SPEED, secondDist[mode]);
-			drive.simpleDrive(AUTO_SPEED, AUTO_SPEED);
 			nextStep(AutoSteps.THIRD_BREAK);
 			break;
 		case THIRD_BREAK:
