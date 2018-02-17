@@ -51,7 +51,7 @@ public class Autonomous implements Pronstants {
 	 * @param climber
 	 *            Pass in climber object
 	 */
-	public Autonomous(Drive drive, /* Grabber grabber, Climber climber, */ SendableChooser<String> initPos,
+	public Autonomous(Drive drive, Grabber grabber, Climber climber, SendableChooser<String> initPos,
 
 			SendableChooser<String> chooser) {
 		this.drive = drive;
@@ -145,7 +145,7 @@ public class Autonomous implements Pronstants {
 	}
 
 	public boolean timerWait(double seconds) {
-		if (timer.get() - initTimer >= seconds) {
+		if (timer.get() >= seconds) {
 			return true;
 		} else {
 			return false;
@@ -202,7 +202,7 @@ public class Autonomous implements Pronstants {
 			climber.up();
 
 			if (mode <= 1) { // If we are going to the switch
-				if (timer.get() - initTimer >= TIME_TO_SWITCH) { // When the timer is greater than the time it takes to
+				if (timer.get()	>= TIME_TO_SWITCH) { // When the timer is greater than the time it takes to
 																	// get to the switch
 					climber.stop(); // Stop the climber
 					if (timer.get() < TIME_FOR_CUBE_OUT) { // While the cube is getting spit out
@@ -213,7 +213,7 @@ public class Autonomous implements Pronstants {
 					nextStep(AutoSteps.DONE); // Advance steps
 				}
 			} else if (mode > 1) { // If we are going to scale
-				if (timer.get() - initTimer >= TIME_TO_SCALE) {// When the timer is greater than the time it takes toget
+				if (timer.get()	>= TIME_TO_SCALE) {// When the timer is greater than the time it takes toget
 																// to the switch
 					climber.stop();
 					if (timer.get() < TIME_FOR_CUBE_OUT) { // While the cube is getting spit out
