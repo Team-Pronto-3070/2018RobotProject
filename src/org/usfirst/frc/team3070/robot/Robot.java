@@ -11,7 +11,7 @@ public class Robot extends IterativeRobot implements Pronstants {
 	final String defaultAuxto = "Default";
 	final String customAuto = "My Auto";
 	String autoSelected;
-	SendableChooser<String> chooser = new SendableChooser<String>();
+	SendableChooser<String> balanceChoice = new SendableChooser<String>();
 	SendableChooser<String> initPos = new SendableChooser<String>();
 
 	Drive drive;
@@ -24,10 +24,10 @@ public class Robot extends IterativeRobot implements Pronstants {
 
 	@Override
 	public void robotInit() {
-		chooser.addDefault("Switch", "w");
-		chooser.addObject("Scale", "c");
-		chooser.addObject("Fallback (go straight)", "f");
-		SmartDashboard.putData("Auto choices", chooser);
+		balanceChoice.addDefault("Switch", "w");
+		balanceChoice.addObject("Scale", "c");
+		balanceChoice.addObject("Fallback (go straight)", "f");
+		SmartDashboard.putData("Auto choices", balanceChoice);
 
 		initPos.addDefault("Left", "l");
 		initPos.addObject("Center", "c");
@@ -38,9 +38,15 @@ public class Robot extends IterativeRobot implements Pronstants {
 		// Class initialization
 
 		drive = new Drive(prontoGyro);
+<<<<<<< HEAD
 		// grabber = new Grabber();
 		// climber = new Climber();
 		auto = new Autonomous(drive, grabber, climber, initPos, chooser);
+=======
+		//grabber = new Grabber();
+		//climber = new Climber();
+		auto = new Autonomous(drive, /*grabber, climber,*/ initPos, balanceChoice);
+>>>>>>> master
 
 		joyL = new Joystick(0);
 		joyR = new Joystick(1);
@@ -65,9 +71,15 @@ public class Robot extends IterativeRobot implements Pronstants {
 
 		SmartDashboard.putString("Mode:", "mode");
 		drive = new Drive(prontoGyro);
+<<<<<<< HEAD
 		grabber = new Grabber();
 		climber = new Climber();
 		auto = new Autonomous(drive, grabber, climber, initPos, chooser);
+=======
+//		grabber = new Grabber();
+//		climber = new Climber();
+		auto = new Autonomous(drive, /*grabber, climber,*/ initPos, balanceChoice);
+>>>>>>> master
 
 		joyL = new Joystick(0);
 		joyR = new Joystick(1);
@@ -92,7 +104,7 @@ public class Robot extends IterativeRobot implements Pronstants {
 	}
 
 	public void autonomousInit() {
-		autoSelected = chooser.getSelected();
+		autoSelected = balanceChoice.getSelected();
 		System.out.println("" + autoSelected);
 		// Sets up field data
 		auto.gameData = DriverStation.getInstance().getGameSpecificMessage(); // Gets data from field/dashboard

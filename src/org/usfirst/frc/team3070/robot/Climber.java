@@ -1,10 +1,17 @@
 package org.usfirst.frc.team3070.robot;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import edu.wpi.first.wpilibj.DigitalInput;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 public class Climber implements Pronstants {
 	TalonSRX talC;
+	DigitalInput limitSwitchSt1;
+	DigitalInput limitSwitchSt2;
+	DigitalInput limitSwitchSt3;
+	DigitalInput limitSwitchSt4;
 
 	/**
 	 * Constructor
