@@ -1,4 +1,5 @@
 package org.usfirst.frc.team3070.robot;
+
 //Merge test
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -12,7 +13,8 @@ public class Robot extends IterativeRobot implements Pronstants {
 	String autoSelected;
 	SendableChooser<String> balanceChoice = new SendableChooser<String>();
 	SendableChooser<String> initPos = new SendableChooser<String>();
-
+	SendableChooser<String>chooser = new SendableChooser<String>();
+	
 	Drive drive;
 	Grabber grabber;
 	Climber climber;
@@ -36,39 +38,37 @@ public class Robot extends IterativeRobot implements Pronstants {
 
 		// Class initialization
 
-		drive = new Drive(prontoGyro);
-		//grabber = new Grabber();
-		//climber = new Climber();
-		auto = new Autonomous(drive, /*grabber, climber,*/ initPos, balanceChoice);
+	
+		
 
 		joyL = new Joystick(0);
 		joyR = new Joystick(1);
-		
-//		SmartDashboard.putNumber("Setpoint", 0);
-//		SmartDashboard.putNumber("SpeedL", 0);
-//		SmartDashboard.putNumber("SpeedR", 0);
-//		
-//		
-//		SmartDashboard.putNumber("LP", 0);
-//		SmartDashboard.putNumber("LI", 0);
-//		SmartDashboard.putNumber("LD", 0);
-//		SmartDashboard.putNumber("LF", 0);
-//		
-//		SmartDashboard.putNumber("RP", 0);
-//		SmartDashboard.putNumber("RI", 0);
-//		SmartDashboard.putNumber("RD", 0);
-//		SmartDashboard.putNumber("RF", 0);
-//		
-//		SmartDashboard.putNumber("Left output", 0);
-//		SmartDashboard.putNumber("Right output", 0);
-		
+
+		// SmartDashboard.putNumber("Setpoint", 0);
+		// SmartDashboard.putNumber("SpeedL", 0);
+		// SmartDashboard.putNumber("SpeedR", 0);
+		//
+		//
+		// SmartDashboard.putNumber("LP", 0);
+		// SmartDashboard.putNumber("LI", 0);
+		// SmartDashboard.putNumber("LD", 0);
+		// SmartDashboard.putNumber("LF", 0);
+		//
+		// SmartDashboard.putNumber("RP", 0);
+		// SmartDashboard.putNumber("RI", 0);
+		// SmartDashboard.putNumber("RD", 0);
+		// SmartDashboard.putNumber("RF", 0);
+		//
+		// SmartDashboard.putNumber("Left output", 0);
+		// SmartDashboard.putNumber("Right output", 0);
+
 		SmartDashboard.putString("Mode:", "mode");
 		drive = new Drive(prontoGyro);
-//		grabber = new Grabber();
-//		climber = new Climber();
-		auto = new Autonomous(drive, /*grabber, climber,*/ initPos, balanceChoice);
+		grabber = new Grabber();
+		climber = new Climber();
+		auto = new Autonomous(drive, grabber, climber, initPos, balanceChoice, chooser);
 
-		joyL = new Joystick(0);
+		joyL = new Joystick(0); 
 		joyR = new Joystick(1);
 		xbox = new Joystick(2);
 
@@ -97,15 +97,15 @@ public class Robot extends IterativeRobot implements Pronstants {
 		auto.gameData = DriverStation.getInstance().getGameSpecificMessage(); // Gets data from field/dashboard
 		auto.switchPos = auto.gameData.substring(0, 1); // Position of alliance's switch, either L or R
 		auto.scalePos = auto.gameData.substring(1, 2); // Position of scale, either L or R
-				//prontoGyro.reset(); 
-		//auto.go();
+		// prontoGyro.reset();
+		// auto.go();
 	}
 
 	@Override
 	public void autonomousPeriodic() {
 		auto.go();
 		System.out.println("Game data is" + auto.gameData);
-		
+
 	}
 
 	public void teleopInit() {
@@ -125,15 +125,11 @@ public class Robot extends IterativeRobot implements Pronstants {
 	@Override
 	public void teleopPeriodic() {
 		drive.joystickDrive(joyL.getRawAxis(1), joyR.getRawAxis(1));
-//		climber.cTeleop(joyL.getRawButton(2), joyR.getRawButton(3));
-//		grabber.teleop(joyL.getRawButton(0), joyR.getRawButton(0));
-//		SmartDashboard.putNumber("SpeedL", drive.talLM.getSelectedSensorVelocity(0));
-//		SmartDashboard.putNumber("SpeedR", drive.talRM.getSelectedSensorVelocity(0));
-		drive.joystickDrive(joyL.getRawAxis(1), joyR.getRawAxis(5));
-//		climber.cTeleop(joyL.getRawButton(2), joyR.getRawButton(3));
-//		grabber.teleop(joyL.getRawButton(0), joyR.getRawButton(0));
+		climber.cTeleop(joyR.getRawButton(2), joyR.getRawButton(3));
+		grabber.teleop(joyL.getRawButton(2), joyR.getRawButton(3));
 		SmartDashboard.putNumber("SpeedL", drive.talLM.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("SpeedR", drive.talRM.getSelectedSensorVelocity(0));
+
 	}
 
 	@Override
