@@ -8,7 +8,6 @@ public class Autonomous implements Pronstants {
 	Drive drive;
 	Grabber grabber;
 	Climber climber;
-	Timer timer;
 	AutoSteps autoStep;
 	SendableChooser<String> balanceChoice;
 	SendableChooser<String> initPos;
@@ -22,7 +21,6 @@ public class Autonomous implements Pronstants {
 			AUTO_SWITCH_DIST1 };
 	double[] firstTurn = { AUTO_TURN_LEFT, AUTO_TURN_RIGHT, AUTO_TURN_LEFT, AUTO_TURN_RIGHT, 0 };
 	double[] secondDist = { AUTO_SWITCH_DIST2, AUTO_SWITCH_DIST2, AUTO_SCALE_DIST2, AUTO_SCALE_DIST2, 0 };
-	double[] timeToLift = { TIME_TO_SWITCH, TIME_TO_SWITCH, TIME_TO_SCALE, TIME_TO_SCALE, 0 };
 
 	public void nextStep(AutoSteps next) {
 		// Tells the robot to go to the next step
@@ -34,11 +32,7 @@ public class Autonomous implements Pronstants {
 		grabber.stop();
 
 		// Resets the gyro
-		resetSensors();
-
-		// Reset and start the timer
-		timer.reset();
-		timer.start();
+		resetGyro();
 	}
 
 	public void printMode(boolean firstChoice) {
@@ -89,10 +83,8 @@ public class Autonomous implements Pronstants {
 		}
 	}
 
-	public void resetSensors() {
-		timer.reset();
+	public void resetGyro() {
 		drive.prontoGyro.reset();
-
 	}
 
 	public void go() {
@@ -190,15 +182,6 @@ public class Autonomous implements Pronstants {
 
 	}
 
-	public boolean timerWait(double seconds) {
-		timer.reset();
-		if (timer.get() >= seconds) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	public void periodic() {
 		// the list of steps that the robot needs to do in auto
 		switch (autoStep) {
@@ -213,12 +196,6 @@ public class Autonomous implements Pronstants {
 				nextStep(AutoSteps.FIRST_BREAK);
 			}
 			break;
-		// Break step that stops for .1 seconds
-		case FIRST_BREAK:
-			if (timerWait(.1)) {
-				nextStep(AutoSteps.FIRST_TURN);
-			}
-			break;
 		// this step is the first turn
 		case FIRST_TURN:
 			if (drive.turn(90)) {
@@ -226,44 +203,17 @@ public class Autonomous implements Pronstants {
 				nextStep(AutoSteps.SECOND_BREAK);
 			}
 			break;
-		case SECOND_BREAK:
-			if (timerWait(.1)) {
-				nextStep(AutoSteps.SECOND_STRAIGHT);
-			}
-			break;
 		case SECOND_STRAIGHT:
 			drive.driveDistance(AUTO_SPEED, secondDist[mode]);
-			drive.simpleDrive(AUTO_SPEED, AUTO_SPEED);
 			nextStep(AutoSteps.THIRD_BREAK);
-			break;
-		case THIRD_BREAK:
-			if (timerWait(.1)) {
-				nextStep(AutoSteps.LOADING);
-			}
 			break;
 		case LOADING:
 			climber.up();
-			if (timer.get() >= timeToLift[mode]) { // When the timer is greater than the time it takes
-				climber.stop(); // Stop the climber
-				if (timer.get() < TIME_FOR_CUBE_OUT) { // While the cube is getting spit out
-					grabber.ungrab(); // Spit the cube out
-				} else { // When the cube is done getting spit out
-					grabber.stop(); // Stop the grabber
-				}
-				nextStep(AutoSteps.DONE); // Advance steps
-			}
-
-			if (timer.get() >= timeToLift[mode]) {// When the timer is greater than the time it takes toget
-												// to the switch
+			if (climber.limitSwitch.get()) { // When the timer is greater than the time it takes
 				climber.stop();
-				if (timer.get() < TIME_FOR_CUBE_OUT) { // While the cube is getting spit out
-					grabber.ungrab(); // Spit the cube out
-				} else { // When the cube is done getting spit out
-					grabber.stop(); // Stop the grabber
-				}
+				grabber.ungrab();
 				nextStep(AutoSteps.DONE); // Advance steps
 			}
-
 			break;
 		default:
 		case DONE:

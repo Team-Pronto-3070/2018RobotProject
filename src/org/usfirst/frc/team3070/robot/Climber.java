@@ -8,10 +8,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 public class Climber implements Pronstants {
 	TalonSRX talC;
-	DigitalInput limitSwitchSt1;
-	DigitalInput limitSwitchSt2;
-	DigitalInput limitSwitchSt3;
-	DigitalInput limitSwitchSt4;
+	DigitalInput limitSwitch;
 
 	/**
 	 * Constructor
