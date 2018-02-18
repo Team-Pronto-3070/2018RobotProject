@@ -1,16 +1,7 @@
 package org.usfirst.frc.team3070.robot;
 
 public enum AutoSteps {
-<<<<<<< HEAD
-	FIRST_STRAIGHT,
-	FIRST_BREAK,
-	FIRST_TURN, 
-	SECOND_BREAK, 
-	SECOND_STRAIGHT,
-	THIRD_BREAK,
-	LOADING, 
-	DONE;
-=======
+
 	FIRST_STRAIGHT, FIRST_BREAK, FIRST_TURN, SECOND_BREAK, SECOND_STRAIGHT, THIRD_BREAK, LOADING, DONE
->>>>>>> master
+
 }

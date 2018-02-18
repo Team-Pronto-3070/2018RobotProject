@@ -13,7 +13,7 @@ public class Autonomous implements Pronstants {
 	SendableChooser<String> chooser;
 	SendableChooser<String> balanceChoice;
 	SendableChooser<String> initPos;
-	int mode;
+	int mode = 0;
 	
 
 	String gameData, switchPos, scalePos;
@@ -72,7 +72,7 @@ public class Autonomous implements Pronstants {
 	 * @param climber
 	 *            Pass in climber object
 	 */
-	public Autonomous(Drive drive, Grabber grabber, Climber climber, SendableChooser<String> initPos,
+	public Autonomous(Drive drive, Grabber grabber, Climber climber, SendableChooser<String> initPos, SendableChooser<String> chooser,
 
 			SendableChooser<String> balanceChoice) {
 		this.drive = drive;
@@ -201,6 +201,8 @@ public class Autonomous implements Pronstants {
 		}
 	}
 
+
+
 	public void periodic() {
 		// the list of steps that the robot needs to do in auto
 		switch (autoStep) {
@@ -286,12 +288,14 @@ public class Autonomous implements Pronstants {
 				}
 				nextStep(AutoSteps.DONE); // Advance steps
 			}
-
+				}
+			}
 			break;
-		default:
 		case DONE:
 			nextStep(AutoSteps.DONE);
 			break;
 		}
-	}
+		}
 }
+		
+	

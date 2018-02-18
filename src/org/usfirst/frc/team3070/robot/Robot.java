@@ -13,7 +13,8 @@ public class Robot extends IterativeRobot implements Pronstants {
 	String autoSelected;
 	SendableChooser<String> balanceChoice = new SendableChooser<String>();
 	SendableChooser<String> initPos = new SendableChooser<String>();
-
+	SendableChooser<String>chooser = new SendableChooser<String>();
+	
 	Drive drive;
 	Grabber grabber;
 	Climber climber;
@@ -37,16 +38,8 @@ public class Robot extends IterativeRobot implements Pronstants {
 
 		// Class initialization
 
-		drive = new Drive(prontoGyro);
-<<<<<<< HEAD
-		// grabber = new Grabber();
-		// climber = new Climber();
-		auto = new Autonomous(drive, grabber, climber, initPos, chooser);
-=======
-		//grabber = new Grabber();
-		//climber = new Climber();
-		auto = new Autonomous(drive, /*grabber, climber,*/ initPos, balanceChoice);
->>>>>>> master
+	
+		
 
 		joyL = new Joystick(0);
 		joyR = new Joystick(1);
@@ -71,17 +64,11 @@ public class Robot extends IterativeRobot implements Pronstants {
 
 		SmartDashboard.putString("Mode:", "mode");
 		drive = new Drive(prontoGyro);
-<<<<<<< HEAD
 		grabber = new Grabber();
 		climber = new Climber();
-		auto = new Autonomous(drive, grabber, climber, initPos, chooser);
-=======
-//		grabber = new Grabber();
-//		climber = new Climber();
-		auto = new Autonomous(drive, /*grabber, climber,*/ initPos, balanceChoice);
->>>>>>> master
+		auto = new Autonomous(drive, grabber, climber, initPos, balanceChoice, chooser);
 
-		joyL = new Joystick(0);
+		joyL = new Joystick(0); 
 		joyR = new Joystick(1);
 		xbox = new Joystick(2);
 
