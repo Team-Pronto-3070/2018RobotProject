@@ -24,7 +24,6 @@ public class Autonomous implements Pronstants {
 			AUTO_SWITCH_DIST1 };
 	double[] firstTurn = { AUTO_TURN_LEFT, AUTO_TURN_RIGHT, AUTO_TURN_LEFT, AUTO_TURN_RIGHT, 0 };
 	double[] secondDist = { AUTO_SWITCH_DIST2, AUTO_SWITCH_DIST2, AUTO_SCALE_DIST2, AUTO_SCALE_DIST2, 0 };
-	
 	double[] timeToLift = { TIME_TO_SWITCH, TIME_TO_SWITCH, TIME_TO_SCALE, TIME_TO_SCALE, 0 };
 	public void nextStep(AutoSteps next) {
 		// Tells the robot to go to the next step
