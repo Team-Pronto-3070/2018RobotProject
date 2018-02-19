@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/Users/km0987514/Documents/GitHub/2018RobotProject/lib/cscore.jar"/>
+	<classpathentry kind="lib" path="/Users/km0987514/Documents/GitHub/2018RobotProject/lib/CTRE_Phoenix.jar"/>
+	<classpathentry kind="lib" path="/Users/km0987514/Documents/GitHub/2018RobotProject/lib/ntcore.jar"/>
+	<classpathentry kind="lib" path="/Users/km0987514/Documents/GitHub/2018RobotProject/lib/opencv.jar"/>
+	<classpathentry kind="lib" path="/Users/km0987514/Documents/GitHub/2018RobotProject/lib/WPILib.jar"/>
+	<classpathentry kind="lib" path="/Users/km0987514/Documents/GitHub/2018RobotProject/lib/wpiutil.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

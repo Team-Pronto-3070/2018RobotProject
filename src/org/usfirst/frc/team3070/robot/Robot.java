@@ -10,12 +10,12 @@ public class Robot extends IterativeRobot implements Pronstants {
 	final String defaultAuxto = "Default";
 	final String customAuto = "My Auto";
 	String autoSelected;
-	SendableChooser<String> chooser = new SendableChooser<String>();
+	SendableChooser<String> balanceChoice = new SendableChooser<String>();
 	SendableChooser<String> initPos = new SendableChooser<String>();
 
 	Drive drive;
-	//Grabber grabber;
-	//Climber climber;
+	Grabber grabber;
+	Climber climber;
 	Autonomous auto;
 	ProntoGyro prontoGyro;
 
@@ -23,50 +23,46 @@ public class Robot extends IterativeRobot implements Pronstants {
 
 	@Override
 	public void robotInit() {
-		chooser.addDefault("Switch", "w");
-		chooser.addObject("Scale", "c");
-		chooser.addObject("Fallback (go straight)", "f");
-		SmartDashboard.putData("Auto choices", chooser);
+		balanceChoice.addDefault("Switch", "w");
+		balanceChoice.addObject("Scale", "c");
+		balanceChoice.addObject("Fallback (go straight)", "f");
+		SmartDashboard.putData("Auto choices", balanceChoice);
 
 		initPos.addDefault("Left", "l");
 		initPos.addObject("Center", "c");
 		initPos.addObject("Right", "r");
 		SmartDashboard.putData("Initial Position", initPos);
-		prontoGyro = new ProntoGyro();
 
 		// Class initialization
 
+		prontoGyro = new ProntoGyro();
 		drive = new Drive(prontoGyro);
-		//grabber = new Grabber();
-		//climber = new Climber();
-		auto = new Autonomous(drive, /*grabber, climber,*/ initPos, chooser);
+		grabber = new Grabber();
+		climber = new Climber();
+		auto = new Autonomous(drive, grabber, climber, initPos, balanceChoice);
 
 		joyL = new Joystick(0);
 		joyR = new Joystick(1);
 		
-//		SmartDashboard.putNumber("Setpoint", 0);
-//		SmartDashboard.putNumber("SpeedL", 0);
-//		SmartDashboard.putNumber("SpeedR", 0);
-//		
-//		
-//		SmartDashboard.putNumber("LP", 0);
-//		SmartDashboard.putNumber("LI", 0);
-//		SmartDashboard.putNumber("LD", 0);
-//		SmartDashboard.putNumber("LF", 0);
-//		
-//		SmartDashboard.putNumber("RP", 0);
-//		SmartDashboard.putNumber("RI", 0);
-//		SmartDashboard.putNumber("RD", 0);
-//		SmartDashboard.putNumber("RF", 0);
-//		
-//		SmartDashboard.putNumber("Left output", 0);
-//		SmartDashboard.putNumber("Right output", 0);
+		SmartDashboard.putNumber("Setpoint", 0);
+		SmartDashboard.putNumber("SpeedL", 0);
+		SmartDashboard.putNumber("SpeedR", 0);
+		
+		
+		SmartDashboard.putNumber("LP", 0);
+		SmartDashboard.putNumber("LI", 0);
+		SmartDashboard.putNumber("LD", 0);
+		SmartDashboard.putNumber("LF", 0);
+		
+		SmartDashboard.putNumber("RP", 0);
+		SmartDashboard.putNumber("RI", 0);
+		SmartDashboard.putNumber("RD", 0);
+		SmartDashboard.putNumber("RF", 0);
+		
+		SmartDashboard.putNumber("Left output", 0);
+		SmartDashboard.putNumber("Right output", 0);
 		
 		SmartDashboard.putString("Mode:", "mode");
-		drive = new Drive(prontoGyro);
-//		grabber = new Grabber();
-//		climber = new Climber();
-		auto = new Autonomous(drive, /*grabber, climber,*/ initPos, chooser);
 
 		joyL = new Joystick(0);
 		joyR = new Joystick(1);
@@ -91,7 +87,7 @@ public class Robot extends IterativeRobot implements Pronstants {
 	}
 
 	public void autonomousInit() {
-		autoSelected = chooser.getSelected();
+		autoSelected = balanceChoice.getSelected();
 		System.out.println("" + autoSelected);
 		// Sets up field data
 		auto.gameData = DriverStation.getInstance().getGameSpecificMessage(); // Gets data from field/dashboard

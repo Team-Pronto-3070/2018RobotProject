@@ -8,12 +8,10 @@ public class Autonomous implements Pronstants {
 	Drive drive;
 	Grabber grabber;
 	Climber climber;
-	Timer timer;
 	AutoSteps autoStep;
-	SendableChooser<String> chooser;
+	SendableChooser<String> balanceChoice;
 	SendableChooser<String> initPos;
 	int mode;
-	double initTimer;
 
 	String gameData, switchPos, scalePos;
 
@@ -23,21 +21,7 @@ public class Autonomous implements Pronstants {
 			AUTO_SWITCH_DIST1 };
 	double[] firstTurn = { AUTO_TURN_LEFT, AUTO_TURN_RIGHT, AUTO_TURN_LEFT, AUTO_TURN_RIGHT, 0 };
 	double[] secondDist = { AUTO_SWITCH_DIST2, AUTO_SWITCH_DIST2, AUTO_SCALE_DIST2, AUTO_SCALE_DIST2, 0 };
-
-	public void nextStep(AutoSteps next) {
-		// Tells the robot to go to the next step
-		autoStep = next;
-
-		// Stop the robot
-		drive.stop();
-
-		// Resets the gyro
-		resetSensors();
-
-		// Reset and start the timer
-		timer.reset();
-		timer.start();
-	}
+	String[] modeType = { " (Left switch)", " (Right switch)", " (Left scale)", " (Right scale)", " (Straight)" };
 
 	/**
 	 * Constructor
@@ -49,16 +33,15 @@ public class Autonomous implements Pronstants {
 	 * @param climber
 	 *            Pass in climber object
 	 */
-	public Autonomous(Drive drive, /* Grabber grabber, Climber climber, */ SendableChooser<String> initPos,
+	public Autonomous(Drive drive, Grabber grabber, Climber climber, SendableChooser<String> initPos,
 
-			SendableChooser<String> chooser) {
+			SendableChooser<String> balanceChoice) {
 		this.drive = drive;
-		// this.grabber = grabber;
-		// this.climber = climber;
+		this.grabber = grabber;
+		this.climber = climber;
 		this.initPos = initPos;
-		this.chooser = chooser;
+		this.balanceChoice = balanceChoice;
 		nextStep(AutoSteps.FIRST_STRAIGHT);
-		// this.prontoGyro = prontoGyro;
 
 		// Sets up field data
 		gameData = DriverStation.getInstance().getGameSpecificMessage(); // Gets data from field/dashboard
@@ -68,86 +51,124 @@ public class Autonomous implements Pronstants {
 		}
 	}
 
-	public void resetSensors() {
-		timer.reset();
-		drive.prontoGyro.reset();
+	public void nextStep(AutoSteps next) {
+		// Tells the robot to go to the next step
+		autoStep = next;
 
+		// Stop the robot
+		drive.stop();
+		climber.stop();
+
+		// Resets the gyro
+		resetGyro();
+	}
+
+	public void printMode(boolean firstChoice) {
+		if (!firstChoice) {
+			System.out.print("Balance selected not available. Instead chose ");
+		} else {
+			System.out.print("Mode: ");
+		}
+		System.out.println(mode + modeType[mode]);
+	}
+
+	public void resetGyro() {
+		drive.prontoGyro.reset();
 	}
 
 	public void go() {
 		// left start position
 		if (initPos.getSelected().equals("l")) {
 			// going to the switch
-			if (chooser.getSelected().equals("w")) {
+			if (balanceChoice.getSelected().equals(SWITCH)) {
 				// switch is on the left side
 				if (switchPos.equals("L")) {
 					// this sets the path to go to the left switch when the robot is on the left
 					// side
 					mode = 0;
-					System.out.println("Mode " + "left side switch, start left");
+					printMode(true);
+				} else if (scalePos.equals("L")) {
+					mode = 2;
+					printMode(false);
+				} else {
+					mode = 4;
+					printMode(false);
 				}
 			} // going to the scale
-			if (chooser.getSelected().equals("c")) {
+			if (balanceChoice.getSelected().equals(SCALE)) {
 				// switch is on the left side
 				if (scalePos.equals("L")) {
 					// this sets the path to go to the left scale when the robot is on the left side
 					mode = 2;
-					System.out.println("Mode " + "left side scale, start left");
+					printMode(true);
+				} else if (switchPos.equals("L")) {
+					mode = 0;
+					printMode(false);
+				} else {
+					mode = 4;
+					printMode(false);
 				}
 			} // if none of the left or the center options are selected, the path will move to
 				// the right side
 		} else if (initPos.getSelected().equals("r")) {
 			// path that goes to the switch
-			if (chooser.getSelected().equals("w")) {
+			if (balanceChoice.getSelected().equals(SWITCH)) {
 				// goes to right side of the switch
 				if (switchPos.equals("R")) {
 					// this sets the path to the right side of the switch, while starting on the
 					// right side
 					mode = 1;
-					System.out.println("Mode " + "right side switch, start right");
+					printMode(true);
+				} else if (scalePos.equals("R")) {
+					mode = 3;
+					printMode(false);
+				} else {
+					mode = 4;
+					printMode(false);
 				}
 			} // this sets the path to scale
-			if (chooser.getSelected().equals("c")) {
+			if (balanceChoice.getSelected().equals(SCALE)) {
 				// this sets the path to the right side of scale
 				if (scalePos.equals("R")) {
 					// this sets the path to the right side of the scale, when the robot starts on
+					mode = 3;
+					printMode(true);
 					// the right
-				} // if none of the left or the center options are selected, the path will move to
-					// the right side
-			} else if (initPos.getSelected().equals("r")) {
-				// path that goes to the switch
-				if (chooser.getSelected().equals("w")) {
-					// goes to right side of the switch
-					if (switchPos.equals("R")) {
-						// this sets the path to the right side of the switch, while starting on the
-						// right side
-						mode = 1;
-					}
-				} // this sets the path to scale
-				if (chooser.getSelected().equals("c")) {
-					// this sets the path to the right side of scale
-					if (scalePos.equals("R")) {
-						// this sets the path to the right side of the scale, when the robot starts on
-						// the right
-						mode = 3;
-						System.out.println("Mode " + "right side scale, start right");
-					}
+				} else if (switchPos.equals("R")) {
+					mode = 1;
+					printMode(false);
+				} else {
+					mode = 4;
+					printMode(false);
 				}
-			} else if (initPos.getSelected().equals("c")) {
+			}
+
+			// if none of the left or the center options are selected, the path will move to
+			// the right side
+		} else if (initPos.getSelected().equals("r")) {
+			// path that goes to the switch
+			if (balanceChoice.getSelected().equals(SWITCH)) {
+				// goes to right side of the switch
+				if (switchPos.equals("R")) {
+					// this sets the path to the right side of the switch, while starting on the
+					// right side
+					mode = 1;
+					printMode(true);
+				} else if (scalePos.equals("R")) {
+					mode = 3;
+					printMode(false);
+				} else {
+					mode = 4;
+					printMode(false);
+				}
+			} else if (initPos.getSelected().equals(SCALE)) {
 				// this sets the path to the path that just sets the robot to forward
 				mode = 4;
 			} else {
-				System.out.println("Mode " + "no auto selected");
+				System.err.println(mode + ": No auto selected");
 			}
 		}
-	}
 
-	public boolean timerWait(double seconds) {
-		if (timer.get() - initTimer >= seconds) {
-			return true;
-		} else {
-			return false;
-		}
 	}
 
 	public void periodic() {
@@ -155,22 +176,8 @@ public class Autonomous implements Pronstants {
 		switch (autoStep) {
 		// this step makes the robot go straight
 		case FIRST_STRAIGHT:
-			// robot drives the distance defined by firstDist
-			if (drive.getLeftDist() < firstDist[mode]) {
-				drive.simpleDrive(AUTO_SPEED, AUTO_SPEED);
-			} else {
-				// this makes sure all of the momentum stops
-				drive.stop();
-				// this advances the step
-				// robot drives the distance defined by firstDist
-				drive.drivePID(10, 10);
-				// this advances the step
-				nextStep(AutoSteps.FIRST_BREAK);
-			}
-			break;
-		// Break step that stops for .1 seconds
-		case FIRST_BREAK:
-			if (timerWait(.1)) {
+			drive.driveDistance(AUTO_SPEED, firstDist[mode]);
+			if (drive.getLeftDist() >= firstDist[mode] && drive.getRightDist() >= firstDist[mode]) {
 				nextStep(AutoSteps.FIRST_TURN);
 			}
 			break;
@@ -178,55 +185,25 @@ public class Autonomous implements Pronstants {
 		case FIRST_TURN:
 			if (drive.turn(90)) {
 				// advances the step
-				nextStep(AutoSteps.SECOND_BREAK);
-			}
-			break;
-		case SECOND_BREAK:
-			if (timerWait(.1)) {
 				nextStep(AutoSteps.SECOND_STRAIGHT);
 			}
 			break;
 		case SECOND_STRAIGHT:
 			drive.driveDistance(AUTO_SPEED, secondDist[mode]);
-			drive.simpleDrive(AUTO_SPEED, AUTO_SPEED);
-			nextStep(AutoSteps.THIRD_BREAK);
-			break;
-		case THIRD_BREAK:
-			if (timerWait(.1)) {
+			if (drive.getLeftDist() >= firstDist[mode] && drive.getRightDist() >= secondDist[mode]) {
 				nextStep(AutoSteps.LOADING);
 			}
 			break;
 		case LOADING:
 			climber.up();
-
-			if (mode <= 1) { // If we are going to the switch
-				if (timer.get() - initTimer >= TIME_TO_SWITCH) { // When the timer is greater than the time it takes to
-																	// get to the switch
-					climber.stop(); // Stop the climber
-					if (timer.get() < TIME_FOR_CUBE_OUT) { // While the cube is getting spit out
-						grabber.ungrab(); // Spit the cube out
-					} else { // When the cube is done getting spit out
-						grabber.stop(); // Stop the grabber
-					}
-					nextStep(AutoSteps.DONE); // Advance steps
-				}
-			} else if (mode > 1) { // If we are going to scale
-				if (timer.get() - initTimer >= TIME_TO_SCALE) {// When the timer is greater than the time it takes toget
-																// to the switch
-					climber.stop();
-					if (timer.get() < TIME_FOR_CUBE_OUT) { // While the cube is getting spit out
-						grabber.ungrab(); // Spit the cube out
-					} else { // When the cube is done getting spit out
-						grabber.stop(); // Stop the grabber
-					}
-					nextStep(AutoSteps.DONE); // Advance steps
-				}
+			if (climber.limitSwitch.get()) { // When the timer is greater than the time it takes
+				nextStep(AutoSteps.DONE); // Advance steps
 			}
-
 			break;
 		default:
 		case DONE:
-			drive.stop();
+			grabber.ungrab();
+			nextStep(AutoSteps.DONE);
 			break;
 		}
 	}
