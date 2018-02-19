@@ -21,9 +21,8 @@ public class Autonomous implements Pronstants {
 			AUTO_SWITCH_DIST1 };
 	double[] firstTurn = { AUTO_TURN_LEFT, AUTO_TURN_RIGHT, AUTO_TURN_LEFT, AUTO_TURN_RIGHT, 0 };
 	double[] secondDist = { AUTO_SWITCH_DIST2, AUTO_SWITCH_DIST2, AUTO_SCALE_DIST2, AUTO_SCALE_DIST2, 0 };
-<<<<<<< HEAD
-	double[] timeToLift = { TIME_TO_SWITCH, TIME_TO_SWITCH, TIME_TO_SCALE, TIME_TO_SCALE, 0 };
-	
+	String[] modeType = {" (Left switch)", " (Right switch)", " (Left scale)", " (Right scale)", " (Straight)"};
+
 	/**
 	 * Constructor
 	 * 
@@ -38,14 +37,11 @@ public class Autonomous implements Pronstants {
 
 			SendableChooser<String> balanceChoice) {
 		this.drive = drive;
-		this.grabber = grabber; 
+		this.grabber = grabber;
 		this.climber = climber;
 		this.initPos = initPos;
 		this.balanceChoice = balanceChoice;
 		nextStep(AutoSteps.FIRST_STRAIGHT);
-		this.timer = new Timer();
-=======
->>>>>>> 23896e15b6a6dbd768fb1df0cf9114b1447a761d
 
 		// Sets up field data
 		gameData = DriverStation.getInstance().getGameSpecificMessage(); // Gets data from field/dashboard
@@ -54,7 +50,7 @@ public class Autonomous implements Pronstants {
 			scalePos = gameData.substring(1, 2); // Position of scale, either L or R
 		}
 	}
-	
+
 	public void nextStep(AutoSteps next) {
 		// Tells the robot to go to the next step
 		autoStep = next;
@@ -62,18 +58,9 @@ public class Autonomous implements Pronstants {
 		// Stop the robot
 		drive.stop();
 		climber.stop();
-		grabber.stop();
 
 		// Resets the gyro
-<<<<<<< HEAD
-		resetSensors();
-
-		// Reset and start the timer
-		//timer.reset();
-		timer.start();
-=======
 		resetGyro();
->>>>>>> 23896e15b6a6dbd768fb1df0cf9114b1447a761d
 	}
 
 	public void printMode(boolean firstChoice) {
@@ -95,14 +82,7 @@ public class Autonomous implements Pronstants {
 		}
 	}
 
-	
-
-<<<<<<< HEAD
-	public void resetSensors() {
-		////timer.reset();
-=======
 	public void resetGyro() {
->>>>>>> 23896e15b6a6dbd768fb1df0cf9114b1447a761d
 		drive.prontoGyro.reset();
 	}
 
@@ -110,7 +90,7 @@ public class Autonomous implements Pronstants {
 		// left start position
 		if (initPos.getSelected().equals("l")) {
 			// going to the switch
-			if (balanceChoice.getSelected().equals("w")) {
+			if (balanceChoice.getSelected().equals(SWITCH)) {
 				// switch is on the left side
 				if (switchPos.equals("L")) {
 					// this sets the path to go to the left switch when the robot is on the left
@@ -125,7 +105,7 @@ public class Autonomous implements Pronstants {
 					printMode(false);
 				}
 			} // going to the scale
-			if (balanceChoice.getSelected().equals("c")) {
+			if (balanceChoice.getSelected().equals(SCALE)) {
 				// switch is on the left side
 				if (scalePos.equals("L")) {
 					// this sets the path to go to the left scale when the robot is on the left side
@@ -142,7 +122,7 @@ public class Autonomous implements Pronstants {
 				// the right side
 		} else if (initPos.getSelected().equals("r")) {
 			// path that goes to the switch
-			if (balanceChoice.getSelected().equals("w")) {
+			if (balanceChoice.getSelected().equals(SWITCH)) {
 				// goes to right side of the switch
 				if (switchPos.equals("R")) {
 					// this sets the path to the right side of the switch, while starting on the
@@ -157,7 +137,7 @@ public class Autonomous implements Pronstants {
 					printMode(false);
 				}
 			} // this sets the path to scale
-			if (balanceChoice.getSelected().equals("c")) {
+			if (balanceChoice.getSelected().equals(SCALE)) {
 				// this sets the path to the right side of scale
 				if (scalePos.equals("R")) {
 					// this sets the path to the right side of the scale, when the robot starts on
@@ -177,7 +157,7 @@ public class Autonomous implements Pronstants {
 			// the right side
 		} else if (initPos.getSelected().equals("r")) {
 			// path that goes to the switch
-			if (balanceChoice.getSelected().equals("w")) {
+			if (balanceChoice.getSelected().equals(SWITCH)) {
 				// goes to right side of the switch
 				if (switchPos.equals("R")) {
 					// this sets the path to the right side of the switch, while starting on the
@@ -191,7 +171,7 @@ public class Autonomous implements Pronstants {
 					mode = 4;
 					printMode(false);
 				}
-			} else if (initPos.getSelected().equals("c")) {
+			} else if (initPos.getSelected().equals(SCALE)) {
 				// this sets the path to the path that just sets the robot to forward
 				mode = 4;
 			} else {
@@ -201,68 +181,36 @@ public class Autonomous implements Pronstants {
 
 	}
 
-<<<<<<< HEAD
-	public boolean timerWait(double seconds) {
-		//timer.reset();
-		if (timer.get() >= seconds) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-=======
->>>>>>> 23896e15b6a6dbd768fb1df0cf9114b1447a761d
 	public void periodic() {
 		// the list of steps that the robot needs to do in auto
 		switch (autoStep) {
 		// this step makes the robot go straight
 		case FIRST_STRAIGHT:
-			// robot drives the distance defined by firstDist
-			if (drive.getLeftDist() < firstDist[mode]) {
-				drive.simpleDrive(AUTO_SPEED, AUTO_SPEED);
-			} else {
-				// this makes sure all of the momentum stops
-				// this advances the step
-				nextStep(AutoSteps.FIRST_BREAK);
+			drive.driveDistance(AUTO_SPEED, firstDist[mode]);
+			if (drive.getLeftDist() >= firstDist[mode] && drive.getRightDist() >= firstDist[mode]) {
+				nextStep(AutoSteps.FIRST_TURN);
 			}
 			break;
 		// this step is the first turn
 		case FIRST_TURN:
 			if (drive.turn(90)) {
 				// advances the step
-				nextStep(AutoSteps.SECOND_BREAK);
+				nextStep(AutoSteps.SECOND_STRAIGHT);
 			}
 			break;
 		case SECOND_STRAIGHT:
 			drive.driveDistance(AUTO_SPEED, secondDist[mode]);
-			nextStep(AutoSteps.THIRD_BREAK);
+			nextStep(AutoSteps.LOADING);
 			break;
 		case LOADING:
 			climber.up();
-<<<<<<< HEAD
-			if (timer.get() >= timeToLift[mode]) { // When the timer is greater than the time it takes
-				climber.stop(); // Stop the climber
-				if (timer.get() < TIME_FOR_CUBE_OUT) { // While the cube is getting spit out
-					grabber.ungrab(); // Spit the cube out
-				} else { // When the cube is done getting spit out
-					grabber.stop(); // Stop the grabber
-				}
-				nextStep(AutoSteps.DONE); // Advance steps
-			}
-
-			if (timer.get() >= timeToLift[mode]) {// When the timer is greater than the time it takes toget
-													// to the switch
-=======
 			if (climber.limitSwitch.get()) { // When the timer is greater than the time it takes
->>>>>>> 23896e15b6a6dbd768fb1df0cf9114b1447a761d
-				climber.stop();
-				grabber.ungrab();
 				nextStep(AutoSteps.DONE); // Advance steps
 			}
 			break;
 		default:
 		case DONE:
+			grabber.ungrab();
 			nextStep(AutoSteps.DONE);
 			break;
 		}

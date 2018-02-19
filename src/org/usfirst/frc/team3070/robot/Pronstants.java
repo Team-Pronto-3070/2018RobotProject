@@ -1,6 +1,8 @@
 package org.usfirst.frc.team3070.robot;
 
 public interface Pronstants {
+	public static final String SCALE = "c";
+	public static final String SWITCH = "w";
 	// Talon Ports
 	public static final int TALLM_PORT = 1;
 	public static final int TALLF_PORT = 0;
