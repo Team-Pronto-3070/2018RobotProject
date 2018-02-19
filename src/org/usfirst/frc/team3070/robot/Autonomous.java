@@ -21,7 +21,7 @@ public class Autonomous implements Pronstants {
 			AUTO_SWITCH_DIST1 };
 	double[] firstTurn = { AUTO_TURN_LEFT, AUTO_TURN_RIGHT, AUTO_TURN_LEFT, AUTO_TURN_RIGHT, 0 };
 	double[] secondDist = { AUTO_SWITCH_DIST2, AUTO_SWITCH_DIST2, AUTO_SCALE_DIST2, AUTO_SCALE_DIST2, 0 };
-	String[] modeType = {" (Left switch)", " (Right switch)", " (Left scale)", " (Right scale)", " (Straight)"};
+	String[] modeType = { " (Left switch)", " (Right switch)", " (Left scale)", " (Right scale)", " (Straight)" };
 
 	/**
 	 * Constructor
@@ -69,17 +69,7 @@ public class Autonomous implements Pronstants {
 		} else {
 			System.out.print("Mode: ");
 		}
-		if (mode == 0) {
-			System.out.println(mode + "; Left switch");
-		} else if (mode == 1) {
-			System.out.print(mode + "; Right switch");
-		} else if (mode == 2) {
-			System.out.println(mode + "; Left scale");
-		} else if (mode == 3) {
-			System.out.println(mode + ";Right scale");
-		} else {
-			System.out.println(mode + "; Straight");
-		}
+		System.out.println(mode + modeType[mode]);
 	}
 
 	public void resetGyro() {
@@ -200,7 +190,9 @@ public class Autonomous implements Pronstants {
 			break;
 		case SECOND_STRAIGHT:
 			drive.driveDistance(AUTO_SPEED, secondDist[mode]);
-			nextStep(AutoSteps.LOADING);
+			if (drive.getLeftDist() >= firstDist[mode] && drive.getRightDist() >= secondDist[mode]) {
+				nextStep(AutoSteps.LOADING);
+			}
 			break;
 		case LOADING:
 			climber.up();
