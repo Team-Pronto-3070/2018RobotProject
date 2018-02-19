@@ -23,7 +23,36 @@ public class Autonomous implements Pronstants {
 	double[] firstTurn = { AUTO_TURN_LEFT, AUTO_TURN_RIGHT, AUTO_TURN_LEFT, AUTO_TURN_RIGHT, 0 };
 	double[] secondDist = { AUTO_SWITCH_DIST2, AUTO_SWITCH_DIST2, AUTO_SCALE_DIST2, AUTO_SCALE_DIST2, 0 };
 	double[] timeToLift = { TIME_TO_SWITCH, TIME_TO_SWITCH, TIME_TO_SCALE, TIME_TO_SCALE, 0 };
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param drive
+	 *            Pass in drive object
+	 * @param grabber
+	 *            Pass in grabber object
+	 * @param climber
+	 *            Pass in climber object
+	 */
+	public Autonomous(Drive drive, Grabber grabber, Climber climber, SendableChooser<String> initPos,
 
+			SendableChooser<String> balanceChoice) {
+		this.drive = drive;
+		this.grabber = grabber; 
+		this.climber = climber;
+		this.initPos = initPos;
+		this.balanceChoice = balanceChoice;
+		nextStep(AutoSteps.FIRST_STRAIGHT);
+		this.timer = new Timer();
+
+		// Sets up field data
+		gameData = DriverStation.getInstance().getGameSpecificMessage(); // Gets data from field/dashboard
+		if (gameData != null) {
+			switchPos = gameData.substring(0, 1); // Position of alliance's switch, either L or R
+			scalePos = gameData.substring(1, 2); // Position of scale, either L or R
+		}
+	}
+	
 	public void nextStep(AutoSteps next) {
 		// Tells the robot to go to the next step
 		autoStep = next;
@@ -37,7 +66,7 @@ public class Autonomous implements Pronstants {
 		resetSensors();
 
 		// Reset and start the timer
-		timer.reset();
+		//timer.reset();
 		timer.start();
 	}
 
@@ -60,37 +89,10 @@ public class Autonomous implements Pronstants {
 		}
 	}
 
-	/**
-	 * Constructor
-	 * 
-	 * @param drive
-	 *            Pass in drive object
-	 * @param grabber
-	 *            Pass in grabber object
-	 * @param climber
-	 *            Pass in climber object
-	 */
-	public Autonomous(Drive drive, /* Grabber grabber, Climber climber, */ SendableChooser<String> initPos,
-
-			SendableChooser<String> balanceChoice) {
-		this.drive = drive;
-		// this.grabber = grabber;
-		// this.climber = climber;
-		this.initPos = initPos;
-		this.balanceChoice = balanceChoice;
-		nextStep(AutoSteps.FIRST_STRAIGHT);
-		// this.prontoGyro = prontoGyro;
-
-		// Sets up field data
-		gameData = DriverStation.getInstance().getGameSpecificMessage(); // Gets data from field/dashboard
-		if (gameData != null) {
-			switchPos = gameData.substring(0, 1); // Position of alliance's switch, either L or R
-			scalePos = gameData.substring(1, 2); // Position of scale, either L or R
-		}
-	}
+	
 
 	public void resetSensors() {
-		timer.reset();
+		////timer.reset();
 		drive.prontoGyro.reset();
 
 	}
@@ -191,7 +193,7 @@ public class Autonomous implements Pronstants {
 	}
 
 	public boolean timerWait(double seconds) {
-		timer.reset();
+		//timer.reset();
 		if (timer.get() >= seconds) {
 			return true;
 		} else {
@@ -254,7 +256,7 @@ public class Autonomous implements Pronstants {
 			}
 
 			if (timer.get() >= timeToLift[mode]) {// When the timer is greater than the time it takes toget
-												// to the switch
+													// to the switch
 				climber.stop();
 				if (timer.get() < TIME_FOR_CUBE_OUT) { // While the cube is getting spit out
 					grabber.ungrab(); // Spit the cube out

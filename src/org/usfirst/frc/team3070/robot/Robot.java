@@ -32,41 +32,37 @@ public class Robot extends IterativeRobot implements Pronstants {
 		initPos.addObject("Center", "c");
 		initPos.addObject("Right", "r");
 		SmartDashboard.putData("Initial Position", initPos);
-		prontoGyro = new ProntoGyro();
 
 		// Class initialization
 
+		prontoGyro = new ProntoGyro();
 		drive = new Drive(prontoGyro);
-		//grabber = new Grabber();
-		//climber = new Climber();
-		auto = new Autonomous(drive, /*grabber, climber,*/ initPos, balanceChoice);
+		grabber = new Grabber();
+		climber = new Climber();
+		auto = new Autonomous(drive, grabber, climber, initPos, balanceChoice);
 
 		joyL = new Joystick(0);
 		joyR = new Joystick(1);
 		
-//		SmartDashboard.putNumber("Setpoint", 0);
-//		SmartDashboard.putNumber("SpeedL", 0);
-//		SmartDashboard.putNumber("SpeedR", 0);
-//		
-//		
-//		SmartDashboard.putNumber("LP", 0);
-//		SmartDashboard.putNumber("LI", 0);
-//		SmartDashboard.putNumber("LD", 0);
-//		SmartDashboard.putNumber("LF", 0);
-//		
-//		SmartDashboard.putNumber("RP", 0);
-//		SmartDashboard.putNumber("RI", 0);
-//		SmartDashboard.putNumber("RD", 0);
-//		SmartDashboard.putNumber("RF", 0);
-//		
-//		SmartDashboard.putNumber("Left output", 0);
-//		SmartDashboard.putNumber("Right output", 0);
+		SmartDashboard.putNumber("Setpoint", 0);
+		SmartDashboard.putNumber("SpeedL", 0);
+		SmartDashboard.putNumber("SpeedR", 0);
+		
+		
+		SmartDashboard.putNumber("LP", 0);
+		SmartDashboard.putNumber("LI", 0);
+		SmartDashboard.putNumber("LD", 0);
+		SmartDashboard.putNumber("LF", 0);
+		
+		SmartDashboard.putNumber("RP", 0);
+		SmartDashboard.putNumber("RI", 0);
+		SmartDashboard.putNumber("RD", 0);
+		SmartDashboard.putNumber("RF", 0);
+		
+		SmartDashboard.putNumber("Left output", 0);
+		SmartDashboard.putNumber("Right output", 0);
 		
 		SmartDashboard.putString("Mode:", "mode");
-		drive = new Drive(prontoGyro);
-//		grabber = new Grabber();
-//		climber = new Climber();
-		auto = new Autonomous(drive, /*grabber, climber,*/ initPos, balanceChoice);
 
 		joyL = new Joystick(0);
 		joyR = new Joystick(1);
