@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 public class Climber implements Pronstants {
 	TalonSRX talC;
@@ -56,6 +57,20 @@ public class Climber implements Pronstants {
 		// if none of the above are being pressed, the extendy bit wont be moved.
 		else {
 			stop();
+		}
+	}
+	
+	/**
+	 * Keep this false probably
+	 * 
+	 * @param brake
+	 *            True for Brake, False for Coast
+	 */
+	private void setNeutralMode(boolean brake) {
+		if (brake) {
+			talC.setNeutralMode(NeutralMode.Brake);
+		} else {
+			talC.setNeutralMode(NeutralMode.Coast);
 		}
 	}
 }

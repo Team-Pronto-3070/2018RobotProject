@@ -18,7 +18,7 @@ public class Robot extends IterativeRobot implements Pronstants {
 	Drive drive;
 	Grabber grabber;
 	Climber climber;
-	Autonomous auto;
+	//Autonomous auto;
 	ProntoGyro prontoGyro;
 
 	Joystick joyL, joyR, xbox;
@@ -66,7 +66,7 @@ public class Robot extends IterativeRobot implements Pronstants {
 		drive = new Drive(prontoGyro);
 		grabber = new Grabber();
 		climber = new Climber();
-		auto = new Autonomous(drive, grabber, climber, initPos, balanceChoice,chooser);
+		//auto = new Autonomous(drive, grabber, climber, initPos, balanceChoice,chooser);
 
 		joyL = new Joystick(0); 
 		joyR = new Joystick(1);
@@ -93,18 +93,18 @@ public class Robot extends IterativeRobot implements Pronstants {
 	public void autonomousInit() {
 		autoSelected = balanceChoice.getSelected();
 		System.out.println("" + autoSelected);
-		// Sets up field data
-		auto.gameData = DriverStation.getInstance().getGameSpecificMessage(); // Gets data from field/dashboard
-		auto.switchPos = auto.gameData.substring(0, 1); // Position of alliance's switch, either L or R
-		auto.scalePos = auto.gameData.substring(1, 2); // Position of scale, either L or R
+		//// Sets up field data
+		//auto.gameData = DriverStation.getInstance().getGameSpecificMessage(); // Gets data from field/dashboard
+		//auto.switchPos = auto.gameData.substring(0, 1); // Position of alliance's switch, either L or R
+		//auto.scalePos = auto.gameData.substring(1, 2); // Position of scale, either L or R
 		// prontoGyro.reset();
 		// auto.go();
 	}
 
 	@Override
 	public void autonomousPeriodic() {
-		auto.go();
-		System.out.println("Game data is" + auto.gameData);
+		//auto.go();
+		//System.out.println("Game data is" + auto.gameData);
 
 	}
 
@@ -125,8 +125,8 @@ public class Robot extends IterativeRobot implements Pronstants {
 	@Override
 	public void teleopPeriodic() {
 		drive.joystickDrive(joyL.getRawAxis(1), joyR.getRawAxis(1));
-		climber.cTeleop(joyR.getRawButton(2), joyR.getRawButton(3));
-		grabber.teleop(joyL.getRawButton(2), joyR.getRawButton(3));
+		climber.cTeleop(joyR.getRawButton(UP_BUTT), joyR.getRawButton(DOWN_BUTT));
+		grabber.teleop(joyL.getRawButton(UP_BUTT), joyL.getRawButton(DOWN_BUTT));
 		SmartDashboard.putNumber("SpeedL", drive.talLM.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("SpeedR", drive.talRM.getSelectedSensorVelocity(0));
 

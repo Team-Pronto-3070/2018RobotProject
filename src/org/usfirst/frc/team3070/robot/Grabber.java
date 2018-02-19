@@ -2,6 +2,8 @@ package org.usfirst.frc.team3070.robot;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 
@@ -21,6 +23,8 @@ public class Grabber implements Pronstants {
 		talGL.setInverted(false);
 		// Makes sure talGR is inverse of galGL
 		talGR.setInverted(!talGL.getInverted());
+		
+		setNeutralMode(false);
 	}
 
 	/**
@@ -65,7 +69,7 @@ public class Grabber implements Pronstants {
 	public void teleop(boolean in, boolean out) {
 		// if [in] is passed in and the limit switch is not pressed, the grabber will
 		// intake the not-cube.
-		if (in && !limitSwitch.get()) {
+		if (in /*&& !limitSwitch.get()*/) {
 			grab();
 		} else if (out) {// if the button is passed and pressed on the right joystick, the grabber will
 							// shoot out the cube the not cube
@@ -77,5 +81,21 @@ public class Grabber implements Pronstants {
 			stop();
 		}
 
+	}
+	
+	/**
+	 * Keep this false probably
+	 * 
+	 * @param brake
+	 *            True for Brake, False for Coast
+	 */
+	private void setNeutralMode(boolean brake) {
+		if (brake) {
+			talGL.setNeutralMode(NeutralMode.Brake);
+			talGR.setNeutralMode(NeutralMode.Brake);
+		} else {
+			talGL.setNeutralMode(NeutralMode.Coast);
+			talGR.setNeutralMode(NeutralMode.Coast);
+		}
 	}
 }

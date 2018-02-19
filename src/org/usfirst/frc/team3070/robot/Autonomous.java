@@ -14,7 +14,6 @@ public class Autonomous implements Pronstants {
 	SendableChooser<String> balanceChoice;
 	SendableChooser<String> initPos;
 	int mode = 0;
-	
 
 	String gameData, switchPos, scalePos;
 
@@ -25,6 +24,8 @@ public class Autonomous implements Pronstants {
 	double[] firstTurn = { AUTO_TURN_LEFT, AUTO_TURN_RIGHT, AUTO_TURN_LEFT, AUTO_TURN_RIGHT, 0 };
 	double[] secondDist = { AUTO_SWITCH_DIST2, AUTO_SWITCH_DIST2, AUTO_SCALE_DIST2, AUTO_SCALE_DIST2, 0 };
 	double[] timeToLift = { TIME_TO_SWITCH, TIME_TO_SWITCH, TIME_TO_SCALE, TIME_TO_SCALE, 0 };
+	ProntoGyro prontoGyro;
+
 	public void nextStep(AutoSteps next) {
 		// Tells the robot to go to the next step
 		autoStep = next;
@@ -65,22 +66,26 @@ public class Autonomous implements Pronstants {
 	 * Constructor
 	 * 
 	 * @param drive
-	 *            Pass in drive object
+	 *            Drive instance
 	 * @param grabber
-	 *            Pass in grabber object
+	 *            Grabber instance
 	 * @param climber
-	 *            Pass in climber object
+	 *            Climber instance
+	 * @param initPos
+	 *            Sendable chooser for initial position
+	 * @param chooser
+	 *            Sendable chooser for balance choice (Scale or Switch)
+	 * @param balanceChoice
 	 */
-	public Autonomous(Drive drive, Grabber grabber, Climber climber, SendableChooser<String> initPos, SendableChooser<String> chooser,
-
-			SendableChooser<String> balanceChoice) {
+	public Autonomous(Drive drive, Grabber grabber, Climber climber, SendableChooser<String> initPos,
+			SendableChooser<String> balanceChoice,  ProntoGyro prontoGyro) {
 		this.drive = drive;
-		// this.grabber = grabber;
-		// this.climber = climber;
+		this.grabber = grabber;
+		this.climber = climber;
 		this.initPos = initPos;
 		this.balanceChoice = balanceChoice;
 		nextStep(AutoSteps.FIRST_STRAIGHT);
-		// this.prontoGyro = prontoGyro;
+		this.prontoGyro = prontoGyro;
 
 		// Sets up field data
 		gameData = DriverStation.getInstance().getGameSpecificMessage(); // Gets data from field/dashboard
@@ -200,8 +205,6 @@ public class Autonomous implements Pronstants {
 		}
 	}
 
-
-
 	public void periodic() {
 		// the list of steps that the robot needs to do in auto
 		switch (autoStep) {
@@ -247,8 +250,8 @@ public class Autonomous implements Pronstants {
 			climber.up();
 
 			if (mode <= 1) { // If we are going to the switch
-				if (timer.get()	>= TIME_TO_SWITCH) { // When the timer is greater than the time it takes to
-																	// get to the switch
+				if (timer.get() >= TIME_TO_SWITCH) { // When the timer is greater than the time it takes to
+														// get to the switch
 					climber.stop(); // Stop the climber
 					if (timer.get() < TIME_FOR_CUBE_OUT) { // While the cube is getting spit out
 						grabber.ungrab(); // Spit the cube out
@@ -258,8 +261,8 @@ public class Autonomous implements Pronstants {
 					nextStep(AutoSteps.DONE); // Advance steps
 				}
 			} else if (mode > 1) { // If we are going to scale
-				if (timer.get()	>= TIME_TO_SCALE) {// When the timer is greater than the time it takes toget
-																// to the switch
+				if (timer.get() >= TIME_TO_SCALE) {// When the timer is greater than the time it takes toget
+													// to the switch
 					climber.stop();
 					if (timer.get() < TIME_FOR_CUBE_OUT) { // While the cube is getting spit out
 						grabber.ungrab(); // Spit the cube out
@@ -267,26 +270,26 @@ public class Autonomous implements Pronstants {
 						grabber.stop(); // Stop the grabber
 					}
 					nextStep(AutoSteps.DONE); // Advance steps
-			if (timer.get() >= timeToLift[mode]) { // When the timer is greater than the time it takes
-				climber.stop(); // Stop the climber
-				if (timer.get() < TIME_FOR_CUBE_OUT) { // While the cube is getting spit out
-					grabber.ungrab(); // Spit the cube out
-				} else { // When the cube is done getting spit out
-					grabber.stop(); // Stop the grabber
-				}
-				nextStep(AutoSteps.DONE); // Advance steps
-			}
+					if (timer.get() >= timeToLift[mode]) { // When the timer is greater than the time it takes
+						climber.stop(); // Stop the climber
+						if (timer.get() < TIME_FOR_CUBE_OUT) { // While the cube is getting spit out
+							grabber.ungrab(); // Spit the cube out
+						} else { // When the cube is done getting spit out
+							grabber.stop(); // Stop the grabber
+						}
+						nextStep(AutoSteps.DONE); // Advance steps
+					}
 
-			if (timer.get() >= timeToLift[mode]) {// When the timer is greater than the time it takes toget
-												// to the switch
-				climber.stop();
-				if (timer.get() < TIME_FOR_CUBE_OUT) { // While the cube is getting spit out
-					grabber.ungrab(); // Spit the cube out
-				} else { // When the cube is done getting spit out
-					grabber.stop(); // Stop the grabber
-				}
-				nextStep(AutoSteps.DONE); // Advance steps
-			}
+					if (timer.get() >= timeToLift[mode]) {// When the timer is greater than the time it takes toget
+															// to the switch
+						climber.stop();
+						if (timer.get() < TIME_FOR_CUBE_OUT) { // While the cube is getting spit out
+							grabber.ungrab(); // Spit the cube out
+						} else { // When the cube is done getting spit out
+							grabber.stop(); // Stop the grabber
+						}
+						nextStep(AutoSteps.DONE); // Advance steps
+					}
 				}
 			}
 			break;
@@ -294,7 +297,5 @@ public class Autonomous implements Pronstants {
 			nextStep(AutoSteps.DONE);
 			break;
 		}
-		}
+	}
 }
-		
-	

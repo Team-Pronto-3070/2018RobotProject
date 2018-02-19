@@ -2,19 +2,23 @@ package org.usfirst.frc.team3070.robot;
 
 public interface Pronstants {
 	// Talon Ports
-	public static final int TALLM_PORT = 1;
-	public static final int TALLF_PORT = 0;
-	public static final int TALRM_PORT = 5;
-	public static final int TALRF_PORT = 2;
+	public static final int TALLM_PORT = 0;
+	public static final int TALLF_PORT = 7;
+	public static final int TALRM_PORT = 2;
+	public static final int TALRF_PORT = 3;
 
 	public static final int TALC_PORT = 4;
 
-	public static final int TALGL_PORT = 5;
+	public static final int TALGL_PORT = 1;
 	public static final int TALGR_PORT = 6;
 
 	// Joystick Ports
 	public static final int JOYL_PORT = 0;
 	public static final int JOYR_PORT = 1;
+	
+	// Button ports for grabber/climber
+	public static final int UP_BUTT = 3;
+	public static final int DOWN_BUTT = 2;
 
 	public static final int MAX_SPEEED = 400; // max speed in RPM
 	// Use these values for something??
