@@ -66,11 +66,11 @@ public class Robot extends IterativeRobot implements Pronstants {
 		drive = new Drive(prontoGyro);
 		grabber = new Grabber();
 		climber = new Climber();
-		auto = new Autonomous(drive, grabber, climber, initPos, balanceChoice, chooser);
+		auto = new Autonomous(drive, grabber, climber, initPos, balanceChoice,chooser);
 
 		joyL = new Joystick(0); 
 		joyR = new Joystick(1);
-		xbox = new Joystick(2);
+		xbox = new Joystick(2);	
 
 		SmartDashboard.putNumber("Setpoint", 0);
 		SmartDashboard.putNumber("SpeedL", 0);
