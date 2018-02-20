@@ -34,7 +34,7 @@ public class Drive implements Pronstants {
 		resetEncDist();
 
 		talRM.setSensorPhase(true);
-		talLM.setSensorPhase(false);
+		talLM.setSensorPhase(true);
 	}
 
 	public boolean getDistance(double distance) {
@@ -57,12 +57,12 @@ public class Drive implements Pronstants {
 		double left = 0;
 		double right = 0;
 		if (Math.abs(joyL) > DEADZONE) {
-			left = joyL * MAX_SPEEED / 2;
+			left = joyL * MAX_SPEEED;
 		} else {
 			left = 0;
 		}
 		if (Math.abs(joyR) > DEADZONE) {
-			right = joyR * MAX_SPEEED / 2;
+			right = joyR * MAX_SPEEED;
 		} else {
 			right = 0;
 		}
@@ -160,7 +160,7 @@ public class Drive implements Pronstants {
 	 * @param brake
 	 *            True for Brake, False for Coast
 	 */
-	private void setNeutralMode(boolean brake) {
+	public void setNeutralMode(boolean brake) {
 		if (brake) {
 			talLM.setNeutralMode(NeutralMode.Brake);
 			talLF.setNeutralMode(NeutralMode.Brake);

@@ -21,11 +21,8 @@ public interface Pronstants {
 	public static final int JOYL_PORT = 0;
 	public static final int JOYR_PORT = 1;
 
-	public static final int MAX_SPEEED = 400; // max speed in RPM
-	// Use these values for something??
-	// public static final int UP_BUTTON = 0;
-	// public static final int DOWN_BUTTON = 1;
-	// Number Constants
+	public static final int MAX_SPEEED = 800;
+	
 	public static final double DEADZONE = 0.1;
 	public static final double AUTO_SPEED = 0.5;
 }
