@@ -33,8 +33,8 @@ public class Autonomous implements Pronstants {
 	}
 
 	
-public class Autonomous implements Pronstants {
-	Drive drive;
+
+
 
 	/**
 	 * Constructor
@@ -138,7 +138,7 @@ public class Autonomous implements Pronstants {
 		this.drive = drive;
 	}
 
-	public void periodic() {
+	public void DriveForwards() {
 		if (!drive.getDistance(AA_TICKS)) {
 			drive.drivePID(AA_TICKS, AA_TICKS);
 		} else {

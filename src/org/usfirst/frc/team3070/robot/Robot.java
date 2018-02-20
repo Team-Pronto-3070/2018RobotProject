@@ -27,19 +27,13 @@ public class Robot extends IterativeRobot implements Pronstants {
 	public void robotInit() {
 
 		// Class initialization
-<<<<<<< HEAD
 
 		prontoGyro = new ProntoGyro();
 		drive = new Drive(prontoGyro);
 		grabber = new Grabber();
 		climber = new Climber();
 		auto = new Autonomous(drive, grabber, prontoGyro);
-=======
-		drive = new Drive();
-		// grabber = new Grabber();
-		// climber = new Climber();
-		auto = new Autonomous(drive);
->>>>>>> eea3190a7f7ae885acd625c4860bbeacf34574ad
+
 
 		joyL = new Joystick(0);
 		joyR = new Joystick(1);

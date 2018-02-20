@@ -18,5 +18,6 @@
 	<classpathentry kind="lib" path="C:/Users/frc/wpilib/java/current/lib/wpiutil.jar"/>
 	<classpathentry kind="lib" path="C:/Users/frc/wpilib/java/current/lib/wpiutil-sources.jar"/>
 	<classpathentry kind="lib" path="C:/Users/frc/Desktop/CTRE_Phoenix_FRCLibs_NON-WINDOWS_v5.2.1.1/java/lib/CTRE_Phoenix.jar"/>
+	<classpathentry kind="lib" path="C:/Users/RyanRobotics/Desktop/CTRE_Phoenix.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
