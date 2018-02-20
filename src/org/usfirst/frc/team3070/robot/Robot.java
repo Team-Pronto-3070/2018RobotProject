@@ -2,11 +2,7 @@ package org.usfirst.frc.team3070.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
-<<<<<<< HEAD
-=======
 import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
->>>>>>> de78a56341630489393794c83692f0caf81c338d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot implements Pronstants {
@@ -22,7 +18,6 @@ public class Robot extends IterativeRobot implements Pronstants {
 	double rd = 15.0;
 	double rf = 0.337;
 
-	
 	double lp = .8;
 	double li = .006;
 	double ld = 15.0;
@@ -59,14 +54,11 @@ public class Robot extends IterativeRobot implements Pronstants {
 
 		SmartDashboard.putNumber("Left output", 0);
 		SmartDashboard.putNumber("Right output", 0);
-<<<<<<< HEAD
 
-=======
-		
-		// Camera code. 
-		// On SmartDashboard, do View->Add->CameraServer Stream Viewer to make it pop up. 
+		// Camera code.
+		// On SmartDashboard, do View->Add->CameraServer Stream Viewer to make it pop
+		// up.
 		CameraServer.getInstance().startAutomaticCapture();
->>>>>>> de78a56341630489393794c83692f0caf81c338d
 	}
 
 	public void autonomousInit() {
@@ -94,16 +86,16 @@ public class Robot extends IterativeRobot implements Pronstants {
 		// grabber.teleop(joyL.getRawButton(3), joyR.getRawButton(3));
 		SmartDashboard.putNumber("SpeedL", drive.talLM.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("SpeedR", drive.talRM.getSelectedSensorVelocity(0));
-		
-		 lp = SmartDashboard.getNumber("LP", lp);
-		 li = SmartDashboard.getNumber("LI", li);
-		 ld = SmartDashboard.getNumber("LD", ld);
-		 lf = SmartDashboard.getNumber("LF", lf);
 
-		 rp = SmartDashboard.getNumber("RP", rp);
-		 ri = SmartDashboard.getNumber("RI", ri);
-		 rd = SmartDashboard.getNumber("RD", rd);
-		 rf = SmartDashboard.getNumber("RF", rf);
+		lp = SmartDashboard.getNumber("LP", lp);
+		li = SmartDashboard.getNumber("LI", li);
+		ld = SmartDashboard.getNumber("LD", ld);
+		lf = SmartDashboard.getNumber("LF", lf);
+
+		rp = SmartDashboard.getNumber("RP", rp);
+		ri = SmartDashboard.getNumber("RI", ri);
+		rd = SmartDashboard.getNumber("RD", rd);
+		rf = SmartDashboard.getNumber("RF", rf);
 	}
 
 	@Override
