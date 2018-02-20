@@ -3,20 +3,31 @@ package org.usfirst.frc.team3070.robot;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Servo;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 public class Climber implements Pronstants {
 	TalonSRX talC;
 	DigitalInput limitSwitch;
+	Servo ratchet;
+	boolean locked;
 
 	/**
 	 * Constructor
 	 */
 	public Climber() {
 		talC = new TalonSRX(TALC_PORT);
+		unlock();
+	}
+	
+	public void unlock() {
+		ratchet.set(UNLOCKED_ANGLE);
 	}
 
+	public void lock() {
+		ratchet.set(LOCKED_ANGLE);
+	}
 	/**
 	 * Sets motor speed to 1 Make sure it's going the right way
 	 */
@@ -41,7 +52,7 @@ public class Climber implements Pronstants {
 	/**
 	 * this method is for the climbing/extending of the robot extender bit
 	 */
-	public void cTeleop(boolean up, boolean down) {
+	public void cTeleop(boolean up, boolean down, boolean lock) {
 		// if [up] is pressed, it will extend as much as it can
 		if (up) {
 			up();
@@ -53,6 +64,10 @@ public class Climber implements Pronstants {
 		// if none of the above are being pressed, the extendy bit wont be moved.
 		else {
 			stop();
+		}
+		if(lock && !this.locked) {
+			lock();
+			locked = true;
 		}
 	}
 }

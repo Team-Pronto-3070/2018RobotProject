@@ -18,6 +18,7 @@ public class Robot extends IterativeRobot implements Pronstants {
 	Climber climber;
 	Autonomous auto;
 	ProntoGyro prontoGyro;
+	boolean locked = false;
 
 	Joystick joyL, joyR, xbox;
 
@@ -117,16 +118,23 @@ public class Robot extends IterativeRobot implements Pronstants {
 		double rf = 0.337;
 		drive.setRightPID(rp, ri, rd, rf);
 	}
+	public boolean getLocked() {
+		if(!locked) {
+			if(joyR.getRawButton(11) && joyR.getRawButton(13)) {
+				locked = true;
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return locked;
+		}
+	}
 
 	@Override
 	public void teleopPeriodic() {
-		drive.joystickDrive(joyL.getRawAxis(1), joyR.getRawAxis(1));
-//		climber.cTeleop(joyL.getRawButton(2), joyR.getRawButton(3));
-//		grabber.teleop(joyL.getRawButton(0), joyR.getRawButton(0));
-//		SmartDashboard.putNumber("SpeedL", drive.talLM.getSelectedSensorVelocity(0));
-//		SmartDashboard.putNumber("SpeedR", drive.talRM.getSelectedSensorVelocity(0));
 		drive.joystickDrive(joyL.getRawAxis(1), joyR.getRawAxis(5));
-//		climber.cTeleop(joyL.getRawButton(2), joyR.getRawButton(3));
+//		climber.cTeleop(joyL.getRawButton(2), joyR.getRawButton(3), joyR.getRawButton(11));
 //		grabber.teleop(joyL.getRawButton(0), joyR.getRawButton(0));
 		SmartDashboard.putNumber("SpeedL", drive.talLM.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("SpeedR", drive.talRM.getSelectedSensorVelocity(0));
