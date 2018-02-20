@@ -14,14 +14,13 @@ public class Drive implements Pronstants {
 
 	int initDistL, initDistR;
 
-	public Drive(ProntoGyro prontoGyro) {
+	public Drive() {
 		talLM = new TalonSRX(TALLM_PORT);
 		talLF = new TalonSRX(TALLF_PORT);
 		talRM = new TalonSRX(TALRM_PORT);
 		talRF = new TalonSRX(TALRF_PORT);
 		joyL = new Joystick(JOYL_PORT);
 		joyR = new Joystick(JOYR_PORT);
-		this.prontoGyro = prontoGyro;
 		setInverted();
 		setNeutralMode(false);
 		setCurrentLimits(10, 15, 100);
@@ -31,9 +30,19 @@ public class Drive implements Pronstants {
 
 		initDistL = talLM.getSelectedSensorPosition(0);
 		initDistR = talRM.getSelectedSensorPosition(0);
+		
+		resetEncDist();
 
 		talRM.setSensorPhase(true);
-		talLM.setSensorPhase(true);
+		talLM.setSensorPhase(false);
+	}
+
+	public boolean getDistance(double distance) {
+		if (Math.abs(getRightDist()) >= distance && Math.abs(getLeftDist()) >= distance) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -69,56 +78,12 @@ public class Drive implements Pronstants {
 	 * @param dist
 	 *            Distance wanted, in encoder ticks
 	 */
-	public void driveDistance(double power, double dist) {
-		simpleDrive(power, power);
-		if (getLeftDist() >= dist && getRightDist() >= dist) {
-			stop();
-		} else {
-			driveDistance(power, dist);
-		}
-	}
-
-	public boolean moveAngle(double degrees) {
-		if (degrees > 180) {
-			setRight(AUTO_TURN_SPEED);
-			setLeft(-AUTO_TURN_SPEED);
-
-			if (prontoGyro.getRawHeading() >= -360 + degrees) {
-				stop();
-				return true;
-			} else {
-				moveAngle(degrees);
-			}
-		} else {
-			setRight(-AUTO_TURN_SPEED);
-			setLeft(AUTO_TURN_SPEED);
-			
-			if (prontoGyro.getRawHeading() >= degrees) {
-				stop();
-				return true;
-			} else {
-				moveAngle(degrees);
-			}
-		}
-		return false;
-		
-	}
-
-	/**
-	 * |MUST RESET GYRO IN LINE DIRECTLY ABOVE CALLING turn()!!| Turns a certain
-	 * amount of degrees
-	 * 
-	 * @param degrees
-	 *            Degrees wanted If you want to turn left, put 360- degreesWanted in
-	 *            arg
-	 */
-
-	public boolean turn(double degrees) {
-		prontoGyro.reset();
-		if(!moveAngle(degrees)) {
-			return false;
-		} else {
+	public boolean driveDistance(double power, double dist) {
+		simpleDrive(-power, power);
+		if (getDistance(dist)) {
 			return true;
+		} else {
+			return false;
 		}
 	}
 
