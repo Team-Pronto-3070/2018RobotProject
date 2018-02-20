@@ -2,6 +2,11 @@ package org.usfirst.frc.team3070.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+<<<<<<< HEAD
+=======
+import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+>>>>>>> de78a56341630489393794c83692f0caf81c338d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot implements Pronstants {
@@ -54,7 +59,14 @@ public class Robot extends IterativeRobot implements Pronstants {
 
 		SmartDashboard.putNumber("Left output", 0);
 		SmartDashboard.putNumber("Right output", 0);
+<<<<<<< HEAD
 
+=======
+		
+		// Camera code. 
+		// On SmartDashboard, do View->Add->CameraServer Stream Viewer to make it pop up. 
+		CameraServer.getInstance().startAutomaticCapture();
+>>>>>>> de78a56341630489393794c83692f0caf81c338d
 	}
 
 	public void autonomousInit() {
