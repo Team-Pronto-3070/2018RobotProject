@@ -40,7 +40,7 @@ public class Robot extends IterativeRobot implements Pronstants {
 		drive = new Drive(prontoGyro);
 		grabber = new Grabber();
 		climber = new Climber();
-		auto = new Autonomous(drive, grabber, climber, initPos, balanceChoice);
+		auto = new Autonomous(drive, grabber, prontoGyro);
 
 		joyL = new Joystick(0);
 		joyR = new Joystick(1);
