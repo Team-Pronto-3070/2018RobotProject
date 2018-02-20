@@ -14,14 +14,13 @@ public class Drive implements Pronstants {
 
 	int initDistL, initDistR;
 
-	public Drive(ProntoGyro prontoGyro) {
+	public Drive() {
 		talLM = new TalonSRX(TALLM_PORT);
 		talLF = new TalonSRX(TALLF_PORT);
 		talRM = new TalonSRX(TALRM_PORT);
 		talRF = new TalonSRX(TALRF_PORT);
 		joyL = new Joystick(JOYL_PORT);
 		joyR = new Joystick(JOYR_PORT);
-		this.prontoGyro = prontoGyro;
 		setInverted();
 		setNeutralMode(false);
 		setCurrentLimits(10, 15, 100);
@@ -32,8 +31,18 @@ public class Drive implements Pronstants {
 		initDistL = talLM.getSelectedSensorPosition(0);
 		initDistR = talRM.getSelectedSensorPosition(0);
 
+		resetEncDist();
+
 		talRM.setSensorPhase(true);
 		talLM.setSensorPhase(true);
+	}
+
+	public boolean getDistance(double distance) {
+		if (Math.abs(getRightDist()) >= distance && Math.abs(getLeftDist()) >= distance) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -48,12 +57,30 @@ public class Drive implements Pronstants {
 		double left = 0;
 		double right = 0;
 		if (Math.abs(joyL) > DEADZONE) {
-			left = joyL * MAX_SPEEED / 2;
+			left = joyL * MAX_SPEEED / 3;
 		} else {
 			left = 0;
+
 		}
 		if (Math.abs(joyR) > DEADZONE) {
-			right = joyR * MAX_SPEEED / 2;
+			right = joyR * MAX_SPEEED / 3;
+		} else {
+			right = 0;
+		}
+		drivePID(left, right);
+
+	}
+	public void altJoystickDrive(double joyX, double joyY) {
+		double left = 0;
+		double right = 0;
+		if (Math.abs(joyX) > DEADZONE) {
+			left = joyX * MAX_SPEEED / 3;
+		} else {
+			left = 0;
+
+		}
+		if (Math.abs(joyY) > DEADZONE) {
+			right = joyY * MAX_SPEEED / 3;
 		} else {
 			right = 0;
 		}
@@ -69,56 +96,12 @@ public class Drive implements Pronstants {
 	 * @param dist
 	 *            Distance wanted, in encoder ticks
 	 */
-	public void driveDistance(double power, double dist) {
-		simpleDrive(power, power);
-		if (getLeftDist() >= dist && getRightDist() >= dist) {
-			stop();
-		} else {
-			driveDistance(power, dist);
-		}
-	}
-
-	public boolean moveAngle(double degrees) {
-		if (degrees > 180) {
-			setRight(AUTO_TURN_SPEED);
-			setLeft(-AUTO_TURN_SPEED);
-
-			if (prontoGyro.getRawHeading() >= -360 + degrees) {
-				stop();
-				return true;
-			} else {
-				moveAngle(degrees);
-			}
-		} else {
-			setRight(-AUTO_TURN_SPEED);
-			setLeft(AUTO_TURN_SPEED);
-			
-			if (prontoGyro.getRawHeading() >= degrees) {
-				stop();
-				return true;
-			} else {
-				moveAngle(degrees);
-			}
-		}
-		return false;
-		
-	}
-
-	/**
-	 * |MUST RESET GYRO IN LINE DIRECTLY ABOVE CALLING turn()!!| Turns a certain
-	 * amount of degrees
-	 * 
-	 * @param degrees
-	 *            Degrees wanted If you want to turn left, put 360- degreesWanted in
-	 *            arg
-	 */
-
-	public boolean turn(double degrees) {
-		prontoGyro.reset();
-		if(!moveAngle(degrees)) {
-			return false;
-		} else {
+	public boolean driveDistance(double power, double dist) {
+		simpleDrive(-power, power);
+		if (getDistance(dist)) {
 			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -195,7 +178,7 @@ public class Drive implements Pronstants {
 	 * @param brake
 	 *            True for Brake, False for Coast
 	 */
-	private void setNeutralMode(boolean brake) {
+	public void setNeutralMode(boolean brake) {
 		if (brake) {
 			talLM.setNeutralMode(NeutralMode.Brake);
 			talLF.setNeutralMode(NeutralMode.Brake);
@@ -258,8 +241,8 @@ public class Drive implements Pronstants {
 	}
 
 	public void drivePID(double setPointL, double setPointR) {
-		talRM.set(ControlMode.Velocity, setPointR * 4096 / 600);
-		talLM.set(ControlMode.Velocity, -setPointL * 4096 / 600);
+		talRM.set(ControlMode.Velocity, setPointR * 4096 / SECONDS_TO_100MS);
+		talLM.set(ControlMode.Velocity, -setPointL * 4096 / SECONDS_TO_100MS);
 		talLF.set(ControlMode.Follower, TALLM_PORT);
 		talRF.set(ControlMode.Follower, TALRM_PORT);
 	}
