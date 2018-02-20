@@ -4,7 +4,8 @@ public interface Pronstants {
 	public static final int TIMEOUTMS = 10;
 	public static final int kPIDLoopIdx = 0;
 
-	public static final double AA_TICKS = 31307; // Encoder ticks to AA
+	public static final double AA_TICKS = 12500; // Encoder ticks to AA
+	public static final double SECONDS_TO_100MS = 600;
 
 	// Talon Ports
 	public static final int TALLM_PORT = 1;

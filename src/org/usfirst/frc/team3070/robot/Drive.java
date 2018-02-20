@@ -30,7 +30,7 @@ public class Drive implements Pronstants {
 
 		initDistL = talLM.getSelectedSensorPosition(0);
 		initDistR = talRM.getSelectedSensorPosition(0);
-		
+
 		resetEncDist();
 
 		talRM.setSensorPhase(true);
@@ -57,12 +57,30 @@ public class Drive implements Pronstants {
 		double left = 0;
 		double right = 0;
 		if (Math.abs(joyL) > DEADZONE) {
-			left = joyL * MAX_SPEEED;
+			left = joyL * MAX_SPEEED / 3;
 		} else {
 			left = 0;
+
 		}
 		if (Math.abs(joyR) > DEADZONE) {
-			right = joyR * MAX_SPEEED;
+			right = joyR * MAX_SPEEED / 3;
+		} else {
+			right = 0;
+		}
+		drivePID(left, right);
+
+	}
+	public void altJoystickDrive(double joyX, double joyY) {
+		double left = 0;
+		double right = 0;
+		if (Math.abs(joyX) > DEADZONE) {
+			left = joyX * MAX_SPEEED / 3;
+		} else {
+			left = 0;
+
+		}
+		if (Math.abs(joyY) > DEADZONE) {
+			right = joyY * MAX_SPEEED / 3;
 		} else {
 			right = 0;
 		}
@@ -223,8 +241,8 @@ public class Drive implements Pronstants {
 	}
 
 	public void drivePID(double setPointL, double setPointR) {
-		talRM.set(ControlMode.Velocity, setPointR * 4096 / 600);
-		talLM.set(ControlMode.Velocity, -setPointL * 4096 / 600);
+		talRM.set(ControlMode.Velocity, setPointR * 4096 / SECONDS_TO_100MS);
+		talLM.set(ControlMode.Velocity, -setPointL * 4096 / SECONDS_TO_100MS);
 		talLF.set(ControlMode.Follower, TALLM_PORT);
 		talRF.set(ControlMode.Follower, TALRM_PORT);
 	}

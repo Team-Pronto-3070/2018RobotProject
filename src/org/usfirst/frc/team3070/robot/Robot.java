@@ -55,6 +55,11 @@ public class Robot extends IterativeRobot implements Pronstants {
 		SmartDashboard.putNumber("Left output", 0);
 		SmartDashboard.putNumber("Right output", 0);
 
+		SmartDashboard.putNumber("EncL", drive.talLM.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("EncR", drive.talRM.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("GetEncL", drive.getLeftDist());
+		SmartDashboard.putNumber("GetEncR", drive.getRightDist());
+
 		// Camera code.
 		// On SmartDashboard, do View->Add->CameraServer Stream Viewer to make it pop
 		// up.
@@ -68,20 +73,17 @@ public class Robot extends IterativeRobot implements Pronstants {
 	@Override
 	public void autonomousPeriodic() {
 		auto.periodic();
-		SmartDashboard.putNumber("EncL", drive.talLM.getSelectedSensorPosition(0));
-		SmartDashboard.putNumber("EncR", drive.talRM.getSelectedSensorPosition(0));
-		SmartDashboard.putNumber("GetEncL", drive.getLeftDist());
-		SmartDashboard.putNumber("GetEncR", drive.getRightDist());
 	}
 
 	public void teleopInit() {
 		// grabber.stop();
 		drive.setNeutralMode(false);
+		drive.stop();
 	}
 
 	@Override
 	public void teleopPeriodic() {
-		drive.joystickDrive(joyL.getRawAxis(1), joyR.getRawAxis(1));
+		teleopDrive(false);
 		// climber.cTeleop(joyL.getRawButton(2), joyR.getRawButton(3));
 		// grabber.teleop(joyL.getRawButton(3), joyR.getRawButton(3));
 		SmartDashboard.putNumber("SpeedL", drive.talLM.getSelectedSensorVelocity(0));
@@ -96,10 +98,23 @@ public class Robot extends IterativeRobot implements Pronstants {
 		ri = SmartDashboard.getNumber("RI", ri);
 		rd = SmartDashboard.getNumber("RD", rd);
 		rf = SmartDashboard.getNumber("RF", rf);
+		
+		SmartDashboard.putNumber("EncL", drive.talLM.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("EncR", drive.talRM.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("GetEncL", drive.getLeftDist());
+		SmartDashboard.putNumber("GetEncR", drive.getRightDist());
 	}
 
 	@Override
 	public void testPeriodic() {
+	}
+	
+	public void teleopDrive(boolean alt) {
+		if(alt) {
+			drive.altJoystickDrive(joyL.getRawAxis(0), joyL.getRawAxis(1));
+		} else {
+			drive.joystickDrive(joyL.getRawAxis(1) / 2, joyR.getRawAxis(1) / 2);
+		}
 	}
 
 }
