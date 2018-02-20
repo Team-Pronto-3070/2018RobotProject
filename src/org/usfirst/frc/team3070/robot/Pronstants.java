@@ -1,20 +1,19 @@
 package org.usfirst.frc.team3070.robot;
 
 public interface Pronstants {
-<<<<<<< HEAD
+
 	public static final String SCALE = "c";
 	public static final String SWITCH = "w";
 	
 	public static final int UNLOCKED_ANGLE = 0;
 	public static final int LOCKED_ANGLE = 1;
-=======
 	public static final int TIMEOUTMS = 10;
 	public static final int kPIDLoopIdx = 0;
 
 	public static final double AA_TICKS = 12500; // Encoder ticks to AA
 	public static final double SECONDS_TO_100MS = 600;
 
->>>>>>> 91d3c122920e39b21e5dce14fda4944d3de4a39b
+
 	// Talon Ports
 	public static final int TALLM_PORT = 1;
 	public static final int TALLF_PORT = 0;
