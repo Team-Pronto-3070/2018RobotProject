@@ -33,6 +33,8 @@ public class Autonomous implements Pronstants {
 	}
 
 	
+public class Autonomous implements Pronstants {
+	Drive drive;
 
 	/**
 	 * Constructor
@@ -43,6 +45,7 @@ public class Autonomous implements Pronstants {
 	 *            Pass in grabber object
 	 * @param climber
 	 *            Pass in climber object
+	 *            Drive instance
 	 */
 	public Autonomous(Drive drive, Grabber grabber, Climber climber, SendableChooser<String> initPos, SendableChooser<String> chooser,
 
@@ -130,6 +133,15 @@ public class Autonomous implements Pronstants {
 			//job is done
 			break;
 		case STOP:
+	public Autonomous(Drive drive) {
+		drive.resetEncDist();
+		this.drive = drive;
+	}
+
+	public void periodic() {
+		if (!drive.getDistance(AA_TICKS)) {
+			drive.drivePID(AA_TICKS, AA_TICKS);
+		} else {
 			drive.stop();
 		}
 }
