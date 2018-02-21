@@ -11,26 +11,10 @@ public class Autonomous implements Pronstants {
 	SendableChooser<String> initPos;
 	ProntoGyro prontoGyro;
 	AutoSteps autoSteps;
-	
-
-	
-
 	String gameData, switchPos, scalePos;
 
 	// Auto Distances (SwitchL, SwitchR, ScaleL, ScaleR, straight)
 	// rearrange and test
-	
-	
-	public void nextStep(AutoSteps next) {
-		// Tells the robot to go to the next step
-		autoSteps = next;
-
-		// Stop the robot
-		drive.stop();
-		grabber.stop();
-
-
-	}
 
 	/**
 	 * Constructor
@@ -55,15 +39,16 @@ public class Autonomous implements Pronstants {
 			scalePos = gameData.substring(1, 2); // Position of scale, either L or R
 		}
 	}
-
-
-
 	
+	public void nextStep(AutoSteps next) {
+		// Tells the robot to go to the next step
+		autoSteps = next;
 
+		// Stop the robot
+		drive.stop();
+		grabber.stop();
+	}
 	
-
-
-
 	public void periodic() {
 		double initGyro = prontoGyro.getRawHeading();
 	
@@ -127,17 +112,5 @@ public class Autonomous implements Pronstants {
 		case STOP:
 		}
 	}
-	public Autonomous(Drive drive) {
-		drive.resetEncDist();
-		this.drive = drive;
-	}
-
-	public void DriveForwards() {
-		if (!drive.getDistance(AA_TICKS)) {
-			drive.drivePID(AA_TICKS, AA_TICKS);
-		} else {
-			drive.stop();
-		}
-}
 }		
 	

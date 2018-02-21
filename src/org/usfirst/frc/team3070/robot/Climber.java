@@ -6,12 +6,13 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Servo;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 public class Climber implements Pronstants {
 	TalonSRX talC;
 	DigitalInput limitSwitch;
 	Servo ratchet;
-	boolean locked;
+	boolean locked = false;
 
 	/**
 	 * Constructor
@@ -19,6 +20,10 @@ public class Climber implements Pronstants {
 	public Climber() {
 		talC = new TalonSRX(TALC_PORT);
 		unlock();
+		ratchet = new Servo(0);
+		
+		// Want the motor to be locked in place when not recieving
+		talC.setNeutralMode(NeutralMode.Brake);
 	}
 	
 	public void unlock() {

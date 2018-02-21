@@ -12,7 +12,7 @@ public class Robot extends IterativeRobot implements Pronstants {
 	final String defaultAuxto = "Default";
 	final String customAuto = "My Auto";
 	String autoSelected;
-	SendableChooser<String> balanceChoice = new SendableChooser<String>();
+	SendableChooser<String> servoTest = new SendableChooser<String>();
 	SendableChooser<String> initPos = new SendableChooser<String>();
 
 	Drive drive;
@@ -35,16 +35,13 @@ public class Robot extends IterativeRobot implements Pronstants {
 	
 	@Override
 	public void robotInit() {
-		balanceChoice.addDefault("Switch", "w");
-		balanceChoice.addObject("Scale", "c");
-		balanceChoice.addObject("Fallback (go straight)", "f");
-		SmartDashboard.putData("Auto choices", balanceChoice);
-
 		initPos.addDefault("Left", "l");
 		initPos.addObject("Center", "c");
 		initPos.addObject("Right", "r");
 		SmartDashboard.putData("Initial Position", initPos);
-
+		
+		servoTest.addDefault("up", "up");
+		servoTest.addDefault("down", "down");
 		// Class initialization
 
 		prontoGyro = new ProntoGyro();
@@ -75,31 +72,9 @@ public class Robot extends IterativeRobot implements Pronstants {
 		SmartDashboard.putNumber("Right output", 0);
 		
 		SmartDashboard.putString("Mode:", "mode");
-
-		joyL = new Joystick(0);
-		joyR = new Joystick(1);
-
-		SmartDashboard.putNumber("Setpoint", 0);
-		SmartDashboard.putNumber("SpeedL", 0);
-		SmartDashboard.putNumber("SpeedR", 0);
-
-		SmartDashboard.putNumber("LP", 0);
-		SmartDashboard.putNumber("LI", 0);
-		SmartDashboard.putNumber("LD", 0);
-		SmartDashboard.putNumber("LF", 0);
-
-		SmartDashboard.putNumber("RP", 0);
-		SmartDashboard.putNumber("RI", 0);
-		SmartDashboard.putNumber("RD", 0);
-		SmartDashboard.putNumber("RF", 0);
-
-		SmartDashboard.putNumber("Left output", 0);
-		SmartDashboard.putNumber("Right output", 0);
 	}
 
 	public void autonomousInit() {
-		autoSelected = balanceChoice.getSelected();
-		System.out.println("" + autoSelected);
 		// Sets up field data
 		auto.gameData = DriverStation.getInstance().getGameSpecificMessage(); // Gets data from field/dashboard
 		auto.switchPos = auto.gameData.substring(0, 1); // Position of alliance's switch, either L or R
@@ -111,7 +86,6 @@ public class Robot extends IterativeRobot implements Pronstants {
 	@Override
 	public void autonomousPeriodic() {
 		System.out.println("Game data is" + auto.gameData);
-		
 	}
 
 	public void teleopInit() {
@@ -130,12 +104,9 @@ public class Robot extends IterativeRobot implements Pronstants {
 
 	@Override
 	public void teleopPeriodic() {
-
-		// climber.cTeleop(joyL.getRawButton(2), joyR.getRawButton(3));
 		grabber.teleop(joyL.getRawButton(3), joyL.getRawButton(2));
 		drive.joystickDrive(joyL.getRawAxis(1), joyR.getRawAxis(1));
 //		climber.cTeleop(joyL.getRawButton(2), joyR.getRawButton(3), joyR.getRawButton(11));
-//		grabber.teleop(joyL.getRawButton(0), joyR.getRawButton(0));
 		SmartDashboard.putNumber("SpeedL", drive.talLM.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("SpeedR", drive.talRM.getSelectedSensorVelocity(0));
 	}
@@ -144,6 +115,11 @@ public class Robot extends IterativeRobot implements Pronstants {
 	public void testPeriodic() {
 		SmartDashboard.putBoolean("Limit Switch",  grabber.getLimit());
 		System.out.println("limit switch: " + grabber.getLimit());
+		
+		boolean up, down;
+		up = servoTest.getSelected().equals("up");
+		down = servoTest.getSelected().equals("down");
+		climber.cTeleop(up, down, false);
 	}
 
 }
