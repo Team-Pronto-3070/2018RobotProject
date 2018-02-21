@@ -3,14 +3,16 @@ package org.usfirst.frc.team3070.robot;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot implements Pronstants {
 	Drive drive;
-	// Grabber grabber;
-	// Climber climber;
+	Grabber grabber;
+	Climber climber;
 	Autonomous auto;
-
+	ProntoGyro prontoGyro;
+	
 	Joystick joyL, joyR;
 
 	double rp = .8;
@@ -29,11 +31,10 @@ public class Robot extends IterativeRobot implements Pronstants {
 		// Class initialization
 
 		prontoGyro = new ProntoGyro();
-		drive = new Drive(prontoGyro);
+		drive = new Drive();
 		grabber = new Grabber();
 		climber = new Climber();
 		auto = new Autonomous(drive, grabber, prontoGyro);
-
 
 		joyL = new Joystick(0);
 		joyR = new Joystick(1);
@@ -88,7 +89,7 @@ public class Robot extends IterativeRobot implements Pronstants {
 	public void teleopPeriodic() {
 		teleopDrive(false);
 		// climber.cTeleop(joyL.getRawButton(2), joyR.getRawButton(3));
-		// grabber.teleop(joyL.getRawButton(3), joyR.getRawButton(3));
+		grabber.teleop(joyL.getRawButton(3), joyL.getRawButton(2));
 		SmartDashboard.putNumber("SpeedL", drive.talLM.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("SpeedR", drive.talRM.getSelectedSensorVelocity(0));
 
@@ -110,6 +111,8 @@ public class Robot extends IterativeRobot implements Pronstants {
 
 	@Override
 	public void testPeriodic() {
+		SmartDashboard.putBoolean("Limit Switch",  grabber.getLimit());
+		System.out.println("limit switch: " + grabber.getLimit());
 	}
 	
 	public void teleopDrive(boolean alt) {

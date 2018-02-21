@@ -11,7 +11,7 @@ public class Autonomous implements Pronstants {
 	SendableChooser<String> initPos;
 	ProntoGyro prontoGyro;
 	AutoSteps autoSteps;
-	limitSwitch = new DigitalInput(0);
+	
 
 	
 
@@ -47,16 +47,10 @@ public class Autonomous implements Pronstants {
 	 *            Pass in climber object
 	 *            Drive instance
 	 */
-	public Autonomous(Drive drive, Grabber grabber, Climber climber, SendableChooser<String> initPos, SendableChooser<String> chooser,
-
-			SendableChooser<String> balanceChoice) {
+	public Autonomous(Drive drive, Grabber grabber, ProntoGyro prontoGyro) {
 		this.drive = drive;
 		// this.grabber = grabber;
-		// this.climber = climber;
-		this.initPos = initPos;
-		
-		nextStep(AutoSteps.FIRST_STRAIGHT);
-		// this.prontoGyro = prontoGyro;
+		// this.climber = climber;toGyro;
 
 		// Sets up field data
 		gameData = DriverStation.getInstance().getGameSpecificMessage(); // Gets data from field/dashboard
@@ -75,6 +69,8 @@ public class Autonomous implements Pronstants {
 
 
 	public void periodic() {
+		double initGyro = prontoGyro.getRawHeading();
+	
 		// the list of steps that the robot needs to do in auto
 		switch (autoSteps) {
 		// this step makes the robot go straight
@@ -91,8 +87,8 @@ public class Autonomous implements Pronstants {
 		//Turns within 3 degrees of the exchange
 		case FIRST_TURN:
 			//checks to adjust for angle
-			if(Math.abs(prontoGyro.initGyro - prontoGyro.getRawHeading()) >= 3) {
-				drive.moveAngle(Math.abs(initGyro - prontoGyro.getRawHeading()));
+			if(Math.abs(initGyro - prontoGyro.getRawHeading()) >= 3) {
+				//drive.(Math.abs(initGyro - prontoGyro.getRawHeading()));
 		}else {
 			//stops once it has reached an acceptable angle
 			drive.stop();
@@ -133,6 +129,8 @@ public class Autonomous implements Pronstants {
 			//job is done
 			break;
 		case STOP:
+		}
+	}
 	public Autonomous(Drive drive) {
 		drive.resetEncDist();
 		this.drive = drive;

@@ -18,7 +18,7 @@ public class Grabber implements Pronstants {
 		joyR = new Joystick(1);
 
 		// TODO Make sure this goes the correct way
-		talGL.setInverted(false);
+		talGL.setInverted(true);
 		// Makes sure talGR is inverse of galGL
 		talGR.setInverted(!talGL.getInverted());
 	}
@@ -77,5 +77,9 @@ public class Grabber implements Pronstants {
 			stop();
 		}
 
+	}
+	
+	public boolean getLimit() {
+		return limitSwitch.get();
 	}
 }

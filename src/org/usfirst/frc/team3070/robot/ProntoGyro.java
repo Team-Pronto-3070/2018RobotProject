@@ -17,7 +17,6 @@ public class ProntoGyro {
 	public static BNO055 imu = BNO055.getInstance(BNO055.opmode_t.OPERATION_MODE_IMUPLUS,BNO055.vector_type_t.VECTOR_EULER);
 	
 	// defines the variable for the angle offset.
-	// Leave as a class variable so that each instance can have it's own angleOffset
 	private double angleOffset;
 	
 	// Constructs the class
