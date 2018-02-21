@@ -40,8 +40,8 @@ public class Robot extends IterativeRobot implements Pronstants {
 		initPos.addObject("Right", "r");
 		SmartDashboard.putData("Initial Position", initPos);
 		
-		servoTest.addDefault("up", "up");
-		servoTest.addDefault("down", "down");
+		servoTest.addDefault("lock", "lock");
+		servoTest.addDefault("unlock", "unlock");
 		// Class initialization
 
 		prontoGyro = new ProntoGyro();
@@ -105,8 +105,8 @@ public class Robot extends IterativeRobot implements Pronstants {
 	@Override
 	public void teleopPeriodic() {
 		grabber.teleop(joyL.getRawButton(3), joyL.getRawButton(2));
-		drive.joystickDrive(joyL.getRawAxis(1), joyR.getRawAxis(1));
-//		climber.cTeleop(joyL.getRawButton(2), joyR.getRawButton(3), joyR.getRawButton(11));
+		//drive.joystickDrive(joyL.getRawAxis(1), joyR.getRawAxis(1));
+		climber.cTeleop(joyR.getRawButton(3), joyR.getRawButton(2), joyR.getRawButton(5));
 		SmartDashboard.putNumber("SpeedL", drive.talLM.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("SpeedR", drive.talRM.getSelectedSensorVelocity(0));
 	}
@@ -115,11 +115,7 @@ public class Robot extends IterativeRobot implements Pronstants {
 	public void testPeriodic() {
 		SmartDashboard.putBoolean("Limit Switch",  grabber.getLimit());
 		System.out.println("limit switch: " + grabber.getLimit());
-		
-		boolean up, down;
-		up = servoTest.getSelected().equals("up");
-		down = servoTest.getSelected().equals("down");
-		climber.cTeleop(up, down, false);
+		climber.cTeleop(joyL.getRawButton(3), joyL.getRawButton(2),joyL.getRawButton(5));
 	}
 
 }

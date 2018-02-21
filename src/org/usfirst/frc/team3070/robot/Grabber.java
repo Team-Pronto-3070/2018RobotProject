@@ -65,7 +65,7 @@ public class Grabber implements Pronstants {
 	public void teleop(boolean in, boolean out) {
 		// if [in] is passed in and the limit switch is not pressed, the grabber will
 		// intake the not-cube.
-		if (in && !limitSwitch.get()) {
+		if (in /*&& !limitSwitch.get()*/) {
 			grab();
 		} else if (out) {// if the button is passed and pressed on the right joystick, the grabber will
 							// shoot out the cube the not cube

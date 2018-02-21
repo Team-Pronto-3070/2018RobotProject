@@ -17,10 +17,10 @@ public interface Pronstants {
 	// Talon Ports
 	public static final int TALLM_PORT = 0;
 	public static final int TALLF_PORT = 7;
-	public static final int TALRM_PORT = 1;
+	public static final int TALRM_PORT = 2;
 	public static final int TALRF_PORT = 3;
 
-	public static final int TALC_PORT = 2;
+	public static final int TALC_PORT = 1;
 
 	public static final int TALGL_PORT = 4;
 	public static final int TALGR_PORT = 6;

@@ -19,9 +19,8 @@ public class Climber implements Pronstants {
 	 */
 	public Climber() {
 		talC = new TalonSRX(TALC_PORT);
-		unlock();
 		ratchet = new Servo(0);
-		
+		unlock();
 		// Want the motor to be locked in place when not recieving
 		talC.setNeutralMode(NeutralMode.Brake);
 	}
@@ -70,9 +69,16 @@ public class Climber implements Pronstants {
 		else {
 			stop();
 		}
+		
 		if(lock && !this.locked) {
 			lock();
 			locked = true;
+		}
+		
+		// TODO Remove this testing code
+		else if(!lock) {
+			unlock();
+			locked = false;
 		}
 	}
 }
