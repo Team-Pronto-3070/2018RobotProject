@@ -1,12 +1,20 @@
 package org.usfirst.frc.team3070.robot;
-
+//Merge test
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot implements Pronstants {
+	final String defaultAuxto = "Default";
+	final String customAuto = "My Auto";
+	String autoSelected;
+	SendableChooser<String> balanceChoice = new SendableChooser<String>();
+	SendableChooser<String> initPos = new SendableChooser<String>();
+
 	Drive drive;
 	Grabber grabber;
 	Climber climber;
@@ -24,9 +32,18 @@ public class Robot extends IterativeRobot implements Pronstants {
 	double li = .006;
 	double ld = 15.0;
 	double lf = 0.327;
-
+	
 	@Override
 	public void robotInit() {
+		balanceChoice.addDefault("Switch", "w");
+		balanceChoice.addObject("Scale", "c");
+		balanceChoice.addObject("Fallback (go straight)", "f");
+		SmartDashboard.putData("Auto choices", balanceChoice);
+
+		initPos.addDefault("Left", "l");
+		initPos.addObject("Center", "c");
+		initPos.addObject("Right", "r");
+		SmartDashboard.putData("Initial Position", initPos);
 
 		// Class initialization
 
@@ -38,89 +55,95 @@ public class Robot extends IterativeRobot implements Pronstants {
 
 		joyL = new Joystick(0);
 		joyR = new Joystick(1);
-		drive.setLeftPID(lp, li, ld, lf);
+		
+		SmartDashboard.putNumber("Setpoint", 0);
+		SmartDashboard.putNumber("SpeedL", 0);
+		SmartDashboard.putNumber("SpeedR", 0);
+		
+		
+		SmartDashboard.putNumber("LP", 0);
+		SmartDashboard.putNumber("LI", 0);
+		SmartDashboard.putNumber("LD", 0);
+		SmartDashboard.putNumber("LF", 0);
+		
+		SmartDashboard.putNumber("RP", 0);
+		SmartDashboard.putNumber("RI", 0);
+		SmartDashboard.putNumber("RD", 0);
+		SmartDashboard.putNumber("RF", 0);
+		
+		SmartDashboard.putNumber("Left output", 0);
+		SmartDashboard.putNumber("Right output", 0);
+		
+		SmartDashboard.putString("Mode:", "mode");
 
-		drive.setRightPID(rp, ri, rd, rf);
+		joyL = new Joystick(0);
+		joyR = new Joystick(1);
 
 		SmartDashboard.putNumber("Setpoint", 0);
 		SmartDashboard.putNumber("SpeedL", 0);
 		SmartDashboard.putNumber("SpeedR", 0);
 
-		SmartDashboard.putNumber("LP", lp);
-		SmartDashboard.putNumber("LI", li);
-		SmartDashboard.putNumber("LD", ld);
-		SmartDashboard.putNumber("LF", lf);
+		SmartDashboard.putNumber("LP", 0);
+		SmartDashboard.putNumber("LI", 0);
+		SmartDashboard.putNumber("LD", 0);
+		SmartDashboard.putNumber("LF", 0);
 
-		SmartDashboard.putNumber("RP", rp);
-		SmartDashboard.putNumber("RI", ri);
-		SmartDashboard.putNumber("RD", rp);
-		SmartDashboard.putNumber("RF", rf);
+		SmartDashboard.putNumber("RP", 0);
+		SmartDashboard.putNumber("RI", 0);
+		SmartDashboard.putNumber("RD", 0);
+		SmartDashboard.putNumber("RF", 0);
 
 		SmartDashboard.putNumber("Left output", 0);
 		SmartDashboard.putNumber("Right output", 0);
-
-		SmartDashboard.putNumber("EncL", drive.talLM.getSelectedSensorPosition(0));
-		SmartDashboard.putNumber("EncR", drive.talRM.getSelectedSensorPosition(0));
-		SmartDashboard.putNumber("GetEncL", drive.getLeftDist());
-		SmartDashboard.putNumber("GetEncR", drive.getRightDist());
-
-		// Camera code.
-		// On SmartDashboard, do View->Add->CameraServer Stream Viewer to make it pop
-		// up.
-		CameraServer.getInstance().startAutomaticCapture();
 	}
 
 	public void autonomousInit() {
-		drive.resetEncDist();
+		autoSelected = balanceChoice.getSelected();
+		System.out.println("" + autoSelected);
+		// Sets up field data
+		auto.gameData = DriverStation.getInstance().getGameSpecificMessage(); // Gets data from field/dashboard
+		auto.switchPos = auto.gameData.substring(0, 1); // Position of alliance's switch, either L or R
+		auto.scalePos = auto.gameData.substring(1, 2); // Position of scale, either L or R
+				//prontoGyro.reset(); 
+		//auto.go();
 	}
 
 	@Override
 	public void autonomousPeriodic() {
-		auto.periodic();
+		System.out.println("Game data is" + auto.gameData);
+		
 	}
 
 	public void teleopInit() {
-		// grabber.stop();
-		drive.setNeutralMode(false);
-		drive.stop();
+		double lp = .8;
+		double li = .006;
+		double ld = 7.0;
+		double lf = 0.327;
+		drive.setLeftPID(lp, li, ld, lf);
+
+		double rp = .8;
+		double ri = .006;
+		double rd = 7.0;
+		double rf = 0.337;
+		drive.setRightPID(rp, ri, rd, rf);
 	}
 
 	@Override
 	public void teleopPeriodic() {
-		teleopDrive(false);
+
 		// climber.cTeleop(joyL.getRawButton(2), joyR.getRawButton(3));
 		grabber.teleop(joyL.getRawButton(3), joyL.getRawButton(2));
+		drive.joystickDrive(joyL.getRawAxis(1), joyR.getRawAxis(1));
+//		climber.cTeleop(joyL.getRawButton(2), joyR.getRawButton(3), joyR.getRawButton(11));
+//		grabber.teleop(joyL.getRawButton(0), joyR.getRawButton(0));
 		SmartDashboard.putNumber("SpeedL", drive.talLM.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("SpeedR", drive.talRM.getSelectedSensorVelocity(0));
-
-		lp = SmartDashboard.getNumber("LP", lp);
-		li = SmartDashboard.getNumber("LI", li);
-		ld = SmartDashboard.getNumber("LD", ld);
-		lf = SmartDashboard.getNumber("LF", lf);
-
-		rp = SmartDashboard.getNumber("RP", rp);
-		ri = SmartDashboard.getNumber("RI", ri);
-		rd = SmartDashboard.getNumber("RD", rd);
-		rf = SmartDashboard.getNumber("RF", rf);
-		
-		SmartDashboard.putNumber("EncL", drive.talLM.getSelectedSensorPosition(0));
-		SmartDashboard.putNumber("EncR", drive.talRM.getSelectedSensorPosition(0));
-		SmartDashboard.putNumber("GetEncL", drive.getLeftDist());
-		SmartDashboard.putNumber("GetEncR", drive.getRightDist());
 	}
 
 	@Override
 	public void testPeriodic() {
 		SmartDashboard.putBoolean("Limit Switch",  grabber.getLimit());
 		System.out.println("limit switch: " + grabber.getLimit());
-	}
-	
-	public void teleopDrive(boolean alt) {
-		if(alt) {
-			drive.altJoystickDrive(joyL.getRawAxis(0), joyL.getRawAxis(1));
-		} else {
-			drive.joystickDrive(joyL.getRawAxis(1) / 2, joyR.getRawAxis(1) / 2);
-		}
 	}
 
 }

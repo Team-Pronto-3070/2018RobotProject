@@ -32,10 +32,6 @@ public class Autonomous implements Pronstants {
 
 	}
 
-	
-
-
-
 	/**
 	 * Constructor
 	 * 
@@ -108,7 +104,7 @@ public class Autonomous implements Pronstants {
 			break;
 			//shoots out the cube
 		case DISPENSE:
-			if(limitSwitch.get()) {
+			if(false) { // TODO Fix this
 				grabber.ungrab();
 			}else {
 				//when the cube is out, the grabber stops
