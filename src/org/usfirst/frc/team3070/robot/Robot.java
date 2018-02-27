@@ -53,6 +53,9 @@ public class Robot extends IterativeRobot implements Pronstants {
 		joyL = new Joystick(0);
 		joyR = new Joystick(1);
 		
+		// In SmartDashboard, do View->Add->CameraServer Stream Viewer
+		CameraServer.getInstance().startAutomaticCapture();
+		
 		SmartDashboard.putNumber("Setpoint", 0);
 		SmartDashboard.putNumber("SpeedL", 0);
 		SmartDashboard.putNumber("SpeedR", 0);
