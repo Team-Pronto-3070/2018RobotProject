@@ -37,6 +37,7 @@ public class Climber implements Pronstants {
 	 * Sets motor speed to 1 Make sure it's going the right way
 	 */
 	public void up() {
+		unlock();
 		talC.set(ControlMode.PercentOutput, 1);
 	}
 
@@ -44,6 +45,7 @@ public class Climber implements Pronstants {
 	 * Sets motor speed to -1
 	 */
 	public void down() {
+		unlock();
 		talC.set(ControlMode.PercentOutput, -1);
 	}
 
@@ -51,6 +53,7 @@ public class Climber implements Pronstants {
 	 * Stops the climber
 	 */
 	public void stop() {
+		lock();
 		talC.set(ControlMode.PercentOutput, 0);
 	}
 
@@ -65,19 +68,16 @@ public class Climber implements Pronstants {
 	public void cTeleop(boolean up, boolean down) {
 		// if [up] is pressed, it will extend as much as it can
 		if (up) {
-			unlock();
 			up();
 		}
 		// else if [down] is pressed, it will retract as much as it can
 		else if (down) {
-			unlock();
 			down();
 		}
 		// if none of the above are being pressed, the extendy bit wont be moved, and
 		// will lock in place.
 		else {
 			stop();
-			lock();
 		}
 	}
 }
