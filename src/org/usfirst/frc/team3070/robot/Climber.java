@@ -24,7 +24,7 @@ public class Climber implements Pronstants {
 		// Want the motor to be locked in place when not recieving
 		talC.setNeutralMode(NeutralMode.Brake);
 	}
-	
+
 	public void unlock() {
 		ratchet.set(UNLOCKED_ANGLE);
 	}
@@ -32,6 +32,7 @@ public class Climber implements Pronstants {
 	public void lock() {
 		ratchet.set(LOCKED_ANGLE);
 	}
+
 	/**
 	 * Sets motor speed to 1 Make sure it's going the right way
 	 */
@@ -54,31 +55,29 @@ public class Climber implements Pronstants {
 	}
 
 	/**
-	 * this method is for the climbing/extending of the robot extender bit
+	 * Teleop code, run in teleopPeriodic. Recommend directly passing getRawButton()
+	 * 
+	 * @param up
+	 *            If the button for going up is pressed
+	 * @param down
+	 *            if the button for going down if pressed.
 	 */
-	public void cTeleop(boolean up, boolean down, boolean lock) {
+	public void cTeleop(boolean up, boolean down) {
 		// if [up] is pressed, it will extend as much as it can
 		if (up) {
+			unlock();
 			up();
 		}
 		// else if [down] is pressed, it will retract as much as it can
 		else if (down) {
+			unlock();
 			down();
 		}
-		// if none of the above are being pressed, the extendy bit wont be moved.
+		// if none of the above are being pressed, the extendy bit wont be moved, and
+		// will lock in place.
 		else {
 			stop();
-		}
-		
-		if(lock && !this.locked) {
 			lock();
-			locked = true;
-		}
-		
-		// TODO Remove this testing code
-		else if(!lock) {
-			unlock();
-			locked = false;
 		}
 	}
 }
