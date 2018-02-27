@@ -2,19 +2,15 @@ package org.usfirst.frc.team3070.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.DigitalInput;
 
 public class Autonomous implements Pronstants {
 	Drive drive;
 	Grabber grabber;
 	SendableChooser<String> initPos;
 	ProntoGyro prontoGyro;
-	AutoSteps autoSteps;
+	AutoSteps autoStep;
 	String gameData, switchPos, scalePos;
-
-	// Auto Distances (SwitchL, SwitchR, ScaleL, ScaleR, straight)
-	// rearrange and test
-
+	boolean done;
 	/**
 	 * Constructor
 	 * 
@@ -23,8 +19,7 @@ public class Autonomous implements Pronstants {
 	 * @param grabber
 	 *            Pass in grabber object
 	 * @param climber
-	 *            Pass in climber object
-	 *            Drive instance
+	 *            Pass in climber object Drive instance
 	 */
 	public Autonomous(Drive drive, Grabber grabber, ProntoGyro prontoGyro) {
 		this.drive = drive;
@@ -38,23 +33,35 @@ public class Autonomous implements Pronstants {
 			scalePos = gameData.substring(1, 2); // Position of scale, either L or R
 		}
 	}
-	
+
 	public void nextStep(AutoSteps next) {
 		// Tells the robot to go to the next step
-		autoSteps = next;
+		autoStep = next;
 
 		// Stop the robot
 		drive.stop();
-		grabber.stop();
 	}
-	
+
 	public void periodic() {
-		double initGyro = prontoGyro.getRawHeading();
-	
 		// the list of steps that the robot needs to do in auto
-		switch(autoStep) {
-		
+		switch (autoStep) {
+		case FIRST_STRAIGHT:
+			if (!done) {
+				if (drive.driveDistance(AUTO_SPEED, SWITCH_TICKS)) {
+					done = true;
+				}
+			} else {
+				nextStep(AutoSteps.LOADING);
+			}
+			break;
+		case LOADING:
+			grabber.ungrab();
+			nextStep(AutoSteps.DONE);
+			break;
+		default:
+		case DONE:
+			nextStep(AutoSteps.DONE);
+			break;
 		}
 	}
-}		
-	
+}

@@ -2,17 +2,20 @@ package org.usfirst.frc.team3070.robot;
 
 public interface Pronstants {
 
+	public static final double WHEEL_DIAM = 6;
+	public static final double WHEEL_CIRCUM = WHEEL_DIAM * Math.PI;
 	public static final String SCALE = "c";
 	public static final String SWITCH = "w";
-	
+
 	public static final int UNLOCKED_ANGLE = 0;
 	public static final int LOCKED_ANGLE = 1;
 	public static final int TIMEOUTMS = 10;
 	public static final int kPIDLoopIdx = 0;
 
-	public static final double AA_TICKS = 12500; // Encoder ticks to AA
-	public static final double SECONDS_TO_100MS = 600;
+	public static final double SWITCH_DIST = 144;
+	public static final double SWITCH_TICKS = (SWITCH_DIST / WHEEL_CIRCUM) * 4096;
 
+	public static final double SECONDS_TO_100MS = 600;
 
 	// Talon Ports
 	public static final int TALLM_PORT = 0;
@@ -30,7 +33,7 @@ public interface Pronstants {
 	public static final int JOYR_PORT = 1;
 
 	public static final int MAX_SPEEED = 800;
-	
+
 	public static final double DEADZONE = 0.2;// TODO: change back
 	public static final double AUTO_SPEED = 0.5;
 }

@@ -70,6 +70,7 @@ public class Drive implements Pronstants {
 		drivePID(left, right);
 
 	}
+
 	public void altJoystickDrive(double joyX, double joyY) {
 		double left = 0;
 		double right = 0;
@@ -97,7 +98,7 @@ public class Drive implements Pronstants {
 	 *            Distance wanted, in encoder ticks
 	 */
 	public boolean driveDistance(double power, double dist) {
-		simpleDrive(-power, power);
+		drivePID(dist, dist);
 		if (getDistance(dist)) {
 			return true;
 		} else {
