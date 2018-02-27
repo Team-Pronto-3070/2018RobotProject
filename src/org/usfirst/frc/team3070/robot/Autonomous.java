@@ -11,6 +11,7 @@ public class Autonomous implements Pronstants {
 	AutoSteps autoStep;
 	String gameData, switchPos, scalePos;
 	boolean done;
+
 	/**
 	 * Constructor
 	 * 
