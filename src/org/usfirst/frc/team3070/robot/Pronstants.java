@@ -16,11 +16,15 @@ public interface Pronstants {
 	public static final double SWITCH_TICKS = (SWITCH_DIST / WHEEL_CIRCUM) * 4096;
 
 	public static final double SECONDS_TO_100MS = 600;
+	
+	public static final boolean RIGHT_INV = true;
+	public static final boolean LEFT_INV = false;
 
 	// Talon Ports
-	public static final int TALLM_PORT = 0;
+	public static final int TALLM_PORT = 2;
 	public static final int TALLF_PORT = 7;
-	public static final int TALRM_PORT = 2;
+
+	public static final int TALRM_PORT = 0;
 	public static final int TALRF_PORT = 3;
 
 	public static final int TALC_PORT = 1;

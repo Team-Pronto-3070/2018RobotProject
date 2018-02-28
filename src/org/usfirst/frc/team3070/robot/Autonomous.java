@@ -44,6 +44,7 @@ public class Autonomous implements Pronstants {
 	public void nextStep(AutoSteps next) {
 		// Tells the robot to go to the next step
 		autoStep = next;
+		System.out.println("Next step: " + autoStep);
 
 		// Stop the robot
 		drive.stop();

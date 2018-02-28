@@ -78,13 +78,12 @@ public class Robot extends IterativeRobot implements Pronstants {
 		auto.gameData = DriverStation.getInstance().getGameSpecificMessage(); // Gets data from field/dashboard
 		auto.switchPos = auto.gameData.substring(0, 1); // Position of alliance's switch, either L or R
 		auto.scalePos = auto.gameData.substring(1, 2); // Position of scale, either L or R
-		// prontoGyro.reset();
-		// auto.go();
+		System.out.println("Game data is" + auto.gameData);
 	}
 
 	@Override
 	public void autonomousPeriodic() {
-		System.out.println("Game data is" + auto.gameData);
+		auto.periodic();
 	}
 
 	public void teleopInit() {
@@ -104,13 +103,8 @@ public class Robot extends IterativeRobot implements Pronstants {
 	@Override
 	public void teleopPeriodic() {
 		grabber.teleop(joyL.getRawButton(3), joyL.getRawButton(2));
-<<<<<<< HEAD
 		drive.joystickDrive(joyL.getRawAxis(1), joyR.getRawAxis(1));
-		climber.cTeleop(joyR.getRawButton(3), joyR.getRawButton(2), joyR.getRawButton(5));
-=======
-		// drive.joystickDrive(joyL.getRawAxis(1), joyR.getRawAxis(1));
 		climber.cTeleop(joyR.getRawButton(3), joyR.getRawButton(2));
->>>>>>> 4656ce204acc965b9248fe69bab3635e259be4cd
 		SmartDashboard.putNumber("SpeedL", drive.talLM.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("SpeedR", drive.talRM.getSelectedSensorVelocity(0));
 	}

@@ -67,7 +67,7 @@ public class Drive implements Pronstants {
 		} else {
 			right = 0;
 		}
-		drivePID(left, right);
+		simpleDrive(joyR, joyL);
 
 	}
 
@@ -145,10 +145,11 @@ public class Drive implements Pronstants {
 	 * Inverts right motors Verify if these are going the right way
 	 */
 	private void setInverted() {
-		talLM.setInverted(false);
-		talLF.setInverted(false);
-		talRM.setInverted(false);
-		talRF.setInverted(false);
+		talLM.setInverted(LEFT_INV);
+		talLF.setInverted(LEFT_INV);
+		
+		talRM.setInverted(RIGHT_INV);
+		talRF.setInverted(RIGHT_INV);
 	}
 
 	/**
