@@ -7,13 +7,14 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+@SuppressWarnings("unused")
 public class Robot extends IterativeRobot implements Pronstants {
 	final String defaultAuto = "Default";
 	final String customAuto = "My Auto";
 	String autoSelected;
 	SendableChooser<String> servoTest = new SendableChooser<String>();
 	SendableChooser<String> initPos = new SendableChooser<String>();
-
+	
 	Drive drive;
 	Grabber grabber;
 	Climber climber;
@@ -33,14 +34,14 @@ public class Robot extends IterativeRobot implements Pronstants {
 
 	@Override
 	public void robotInit() {
-		initPos.addDefault("Left", "l");
-		initPos.addObject("Center", "c");
-		initPos.addObject("Right", "r");
+		initPos.addObject("Left", "L");
+		initPos.addDefault("Center", "C");
+		initPos.addObject("Right", "R");
 		SmartDashboard.putData("Initial Position", initPos);
 
 		servoTest.addDefault("lock", "lock");
 		servoTest.addDefault("unlock", "unlock");
-		
+
 		// Class initialization
 		drive = new Drive();
 		grabber = new Grabber();
@@ -51,11 +52,12 @@ public class Robot extends IterativeRobot implements Pronstants {
 		joyR = new Joystick(1);
 
 		// In SmartDashboard, do View->Add->CameraServer Stream Viewer
-		//CameraServer.getInstance().startAutomaticCapture();
+		// CameraServer.getInstance().startAutomaticCapture();
 
 		SmartDashboard.putNumber("Setpoint", 0);
 		SmartDashboard.putNumber("SpeedL", 0);
 		SmartDashboard.putNumber("SpeedR", 0);
+		SmartDashboard.putNumber("Distance", 0);
 
 		SmartDashboard.putNumber("LP", 0);
 		SmartDashboard.putNumber("LI", 0);
@@ -75,17 +77,26 @@ public class Robot extends IterativeRobot implements Pronstants {
 
 	public void autonomousInit() {
 		// Sets up field data
-		auto.gameData = DriverStation.getInstance().getGameSpecificMessage(); // Gets data from field/dashboard
-		auto.switchPos = auto.gameData.substring(0, 1); // Position of alliance's switch, either L or R
-		auto.scalePos = auto.gameData.substring(1, 2); // Position of scale, either L or R
-		System.out.println("Game data is" + auto.gameData);
+		if(DriverStation.getInstance().getGameSpecificMessage().length() > 0) {
+			auto.gameData = DriverStation.getInstance().getGameSpecificMessage(); // Gets data from field/dashboard
+			auto.switchPos = auto.gameData.substring(0, 1); // Position of alliance's switch, either L or R
+			System.out.println("Game data is" + auto.gameData);
+		}
+		auto.startPos = initPos.getSelected();
 		auto.done = false;
 		auto.nextStep(AutoSteps.FIRST_STRAIGHT);
+		drive.resetEncDist();
+		drive.stop();
+		grabber.stop();
+		climber.stop();
 	}
 
 	@Override
 	public void autonomousPeriodic() {
 		auto.periodic();
+		SmartDashboard.putNumber("SpeedL", drive.talLM.getSelectedSensorVelocity(0));
+		SmartDashboard.putNumber("SpeedR", drive.talRM.getSelectedSensorVelocity(0));
+		SmartDashboard.putNumber("Distance", (drive.getLeftDist() + drive.getRightDist()) / 2);
 	}
 
 	public void teleopInit() {

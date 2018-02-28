@@ -71,23 +71,23 @@ public class Drive implements Pronstants {
 
 	}
 
-	public void altJoystickDrive(double joyX, double joyY) {
-		double left = 0;
-		double right = 0;
-		if (Math.abs(joyX) > DEADZONE) {
-			left = joyX * MAX_SPEEED / 3;
-		} else {
-			left = 0;
-
-		}
-		if (Math.abs(joyY) > DEADZONE) {
-			right = joyY * MAX_SPEEED / 3;
-		} else {
-			right = 0;
-		}
-		drivePID(left, right);
-
-	}
+//	public void altJoystickDrive(double joyX, double joyY) {
+//		double left = 0;
+//		double right = 0;
+//		if (Math.abs(joyX) > DEADZONE) {
+//			left = joyX * MAX_SPEEED / 3;
+//		} else {
+//			left = 0;
+//
+//		}
+//		if (Math.abs(joyY) > DEADZONE) {
+//			right = joyY * MAX_SPEEED / 3;
+//		} else {
+//			right = 0;
+//		}
+//		drivePID(left, right);
+//
+//	}
 
 	/**
 	 * Drive a certain distance
@@ -98,7 +98,8 @@ public class Drive implements Pronstants {
 	 *            Distance wanted, in encoder ticks
 	 */
 	public boolean driveDistance(double power, double dist) {
-		drivePID(dist, dist);
+		//drivePID(dist, dist); // TODO fix yo shit
+		simpleDrive(power, power);
 		if (getDistance(dist)) {
 			return true;
 		} else {

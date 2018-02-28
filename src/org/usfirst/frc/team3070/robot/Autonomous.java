@@ -1,15 +1,10 @@
 package org.usfirst.frc.team3070.robot;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-
 public class Autonomous implements Pronstants {
 	Drive drive;
 	Grabber grabber;
-	SendableChooser<String> initPos;
-	ProntoGyro prontoGyro;
 	AutoSteps autoStep = AutoSteps.FIRST_STRAIGHT;
-	String gameData, switchPos, scalePos;
+	String gameData, switchPos, startPos;
 	boolean done = false;
 
 	/**
@@ -23,13 +18,6 @@ public class Autonomous implements Pronstants {
 	public Autonomous(Drive drive, Grabber grabber) {
 		this.drive = drive;
 		this.grabber = grabber;
-
-		// Sets up field data
-		/*gameData = DriverStation.getInstance().getGameSpecificMessage(); // Gets data from field/dashboard
-		if (gameData != null) {
-			switchPos = gameData.substring(0, 1); // Position of alliance's switch, either L or R
-			scalePos = gameData.substring(1, 2); // Position of scale, either L or R
-		}*/
 	}
 
 	/**
@@ -46,6 +34,7 @@ public class Autonomous implements Pronstants {
 		autoStep = next;
 		System.out.println("Next step: " + autoStep);
 
+		drive.resetEncDist();
 		// Stop the robot
 		drive.stop();
 	}
@@ -57,12 +46,13 @@ public class Autonomous implements Pronstants {
 		// the list of steps that the robot needs to do in auto
 		switch (autoStep) {
 		case FIRST_STRAIGHT:
-			if (!done) {
-				if (drive.driveDistance(AUTO_SPEED, SWITCH_TICKS)) {
-					done = true;
+			if(drive.driveDistance(AUTO_SPEED, SWITCH_TICKS)) {
+				// TODO Figure out why gameData.length() isn't working
+				if(/*gameData.length() > 0 &&*/ /*Check if there is any game data first*/ startPos.equals(switchPos)) {
+					nextStep(AutoSteps.LOADING);
+				} else {
+					nextStep(AutoSteps.DONE);
 				}
-			} else {
-				nextStep(AutoSteps.LOADING);
 			}
 			break;
 		case LOADING:
