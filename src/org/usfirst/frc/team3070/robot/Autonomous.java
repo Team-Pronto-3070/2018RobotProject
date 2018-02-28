@@ -8,9 +8,9 @@ public class Autonomous implements Pronstants {
 	Grabber grabber;
 	SendableChooser<String> initPos;
 	ProntoGyro prontoGyro;
-	AutoSteps autoStep;
+	AutoSteps autoStep = AutoSteps.FIRST_STRAIGHT;
 	String gameData, switchPos, scalePos;
-	boolean done;
+	boolean done = false;
 
 	/**
 	 * Constructor
@@ -25,11 +25,11 @@ public class Autonomous implements Pronstants {
 		this.grabber = grabber;
 
 		// Sets up field data
-		gameData = DriverStation.getInstance().getGameSpecificMessage(); // Gets data from field/dashboard
+		/*gameData = DriverStation.getInstance().getGameSpecificMessage(); // Gets data from field/dashboard
 		if (gameData != null) {
 			switchPos = gameData.substring(0, 1); // Position of alliance's switch, either L or R
 			scalePos = gameData.substring(1, 2); // Position of scale, either L or R
-		}
+		}*/
 	}
 
 	/**

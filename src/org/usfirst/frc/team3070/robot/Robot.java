@@ -51,7 +51,7 @@ public class Robot extends IterativeRobot implements Pronstants {
 		joyR = new Joystick(1);
 
 		// In SmartDashboard, do View->Add->CameraServer Stream Viewer
-		CameraServer.getInstance().startAutomaticCapture();
+		//CameraServer.getInstance().startAutomaticCapture();
 
 		SmartDashboard.putNumber("Setpoint", 0);
 		SmartDashboard.putNumber("SpeedL", 0);
@@ -79,6 +79,8 @@ public class Robot extends IterativeRobot implements Pronstants {
 		auto.switchPos = auto.gameData.substring(0, 1); // Position of alliance's switch, either L or R
 		auto.scalePos = auto.gameData.substring(1, 2); // Position of scale, either L or R
 		System.out.println("Game data is" + auto.gameData);
+		auto.done = false;
+		auto.nextStep(AutoSteps.FIRST_STRAIGHT);
 	}
 
 	@Override
