@@ -1,36 +1,28 @@
 package org.usfirst.frc.team3070.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.DigitalInput;
 
 public class Autonomous implements Pronstants {
 	Drive drive;
 	Grabber grabber;
 	SendableChooser<String> initPos;
 	ProntoGyro prontoGyro;
-	AutoSteps autoSteps;
+	AutoSteps autoStep;
 	String gameData, switchPos, scalePos;
-
-	// Auto Distances (SwitchL, SwitchR, ScaleL, ScaleR, straight)
-	// rearrange and test
+	boolean done;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param drive
-	 *            Pass in drive object
-	 * @param grabber
-	 *            Pass in grabber object
-	 * @param climber
-	 *            Pass in climber object
 	 *            Drive instance
+	 * @param grabber
+	 *            Grabber instance
 	 */
-	public Autonomous(Drive drive, Grabber grabber, ProntoGyro prontoGyro) {
+	public Autonomous(Drive drive, Grabber grabber) {
 		this.drive = drive;
-		// this.grabber = grabber;
-		// this.climber = climber;toGyro;
+		this.grabber = grabber;
 
 		// Sets up field data
 		gameData = DriverStation.getInstance().getGameSpecificMessage(); // Gets data from field/dashboard
@@ -39,78 +31,47 @@ public class Autonomous implements Pronstants {
 			scalePos = gameData.substring(1, 2); // Position of scale, either L or R
 		}
 	}
-	
+
+	/**
+	 * Run when want to go to next step. Stops motors and sets the enum var to the
+	 * argument
+	 * 
+	 * @param next
+	 *            Step wanted to transition to. Generally the next step in the
+	 *            AutoSteps Enumerator
+	 */
+
 	public void nextStep(AutoSteps next) {
 		// Tells the robot to go to the next step
-		autoSteps = next;
+		autoStep = next;
 
 		// Stop the robot
 		drive.stop();
-		grabber.stop();
 	}
-	
+
+	/**
+	 * The periodic method for Autonomous. Run during autoPeriodic()
+	 */
 	public void periodic() {
-		double initGyro = prontoGyro.getRawHeading();
-	
 		// the list of steps that the robot needs to do in auto
-		switch (autoSteps) {
-		// this step makes the robot go straight
+		switch (autoStep) {
 		case FIRST_STRAIGHT:
-			// robot drives the distance defined by firstDist
-			if (drive.talLM.getSelectedSensorPosition(0) <= 2000) {
-				drive.simpleDrive(AUTO_SPEED, AUTO_SPEED);
+			if (!done) {
+				if (drive.driveDistance(AUTO_SPEED, SWITCH_TICKS)) {
+					done = true;
+				}
 			} else {
-				drive.stop();
-				// this advances the step
-				nextStep(AutoSteps.FIRST_TURN);
+				nextStep(AutoSteps.LOADING);
 			}
 			break;
-		//Turns within 3 degrees of the exchange
-		case FIRST_TURN:
-			//checks to adjust for angle
-			if(Math.abs(initGyro - prontoGyro.getRawHeading()) >= 3) {
-				//drive.(Math.abs(initGyro - prontoGyro.getRawHeading()));
-		}else {
-			//stops once it has reached an acceptable angle
-			drive.stop();
-		}
+		case LOADING:
+			grabber.ungrab();
+			nextStep(AutoSteps.DONE);
 			break;
-		// this step is the straight away for getting the robot in range to the exchange
-		case SECOND_STRAIGHT:
-			//goes half of a rotation
-			if (drive.talLM.getSelectedSensorPosition(0) <= 2000) {
-				drive.simpleDrive(AUTO_SPEED, AUTO_SPEED);
-			} else {
-				//stops when it reaches the desired location
-				drive.stop();
-				// this advances the step
-				nextStep(AutoSteps.FIRST_TURN);
-			}
+		default:
+		case DONE:
+			nextStep(AutoSteps.DONE);
 			break;
-			//shoots out the cube
-		case DISPENSE:
-			if(false) { // TODO Fix this
-				grabber.ungrab();
-			}else {
-				//when the cube is out, the grabber stops
-				grabber.stop();
-				nextStep(AutoSteps.THIRD_STRAIGHT);
-			}
-			break;
-			//beeline across the line
-		case THIRD_STRAIGHT:
-			if (drive.talLM.getSelectedSensorPosition(0) <= 30000) {
-				drive.simpleDrive(AUTO_SPEED, AUTO_SPEED);
-			} else {
-				//once the robot crosses the line, roughly, stops
-				drive.stop();
-				// this advances the step
-				nextStep(AutoSteps.FIRST_TURN);
-			}
-			//job is done
-			break;
-		case STOP:
 		}
 	}
-}		
-	
+}
