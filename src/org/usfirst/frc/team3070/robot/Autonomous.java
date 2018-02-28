@@ -16,16 +16,13 @@ public class Autonomous implements Pronstants {
 	 * Constructor
 	 * 
 	 * @param drive
-	 *            Pass in drive object
+	 *            Drive instance
 	 * @param grabber
-	 *            Pass in grabber object
-	 * @param climber
-	 *            Pass in climber object Drive instance
+	 *            Grabber instance
 	 */
-	public Autonomous(Drive drive, Grabber grabber, ProntoGyro prontoGyro) {
+	public Autonomous(Drive drive, Grabber grabber) {
 		this.drive = drive;
-		// this.grabber = grabber;
-		// this.climber = climber;toGyro;
+		this.grabber = grabber;
 
 		// Sets up field data
 		gameData = DriverStation.getInstance().getGameSpecificMessage(); // Gets data from field/dashboard
@@ -35,6 +32,15 @@ public class Autonomous implements Pronstants {
 		}
 	}
 
+	/**
+	 * Run when want to go to next step. Stops motors and sets the enum var to the
+	 * argument
+	 * 
+	 * @param next
+	 *            Step wanted to transition to. Generally the next step in the
+	 *            AutoSteps Enumerator
+	 */
+
 	public void nextStep(AutoSteps next) {
 		// Tells the robot to go to the next step
 		autoStep = next;
@@ -43,6 +49,9 @@ public class Autonomous implements Pronstants {
 		drive.stop();
 	}
 
+	/**
+	 * The periodic method for Autonomous. Run during autoPeriodic()
+	 */
 	public void periodic() {
 		// the list of steps that the robot needs to do in auto
 		switch (autoStep) {
