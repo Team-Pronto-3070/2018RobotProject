@@ -105,7 +105,7 @@ public class Robot extends IterativeRobot implements Pronstants {
 	@Override
 	public void teleopPeriodic() {
 		grabber.teleop(joyL.getRawButton(3), joyL.getRawButton(2));
-		//drive.joystickDrive(joyL.getRawAxis(1), joyR.getRawAxis(1));
+		drive.joystickDrive(joyL.getRawAxis(1), joyR.getRawAxis(1));
 		climber.cTeleop(joyR.getRawButton(3), joyR.getRawButton(2), joyR.getRawButton(5));
 		SmartDashboard.putNumber("SpeedL", drive.talLM.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("SpeedR", drive.talRM.getSelectedSensorVelocity(0));
