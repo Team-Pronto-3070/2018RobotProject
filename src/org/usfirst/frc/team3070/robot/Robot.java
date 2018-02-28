@@ -18,7 +18,6 @@ public class Robot extends IterativeRobot implements Pronstants {
 	Grabber grabber;
 	Climber climber;
 	Autonomous auto;
-	ProntoGyro prontoGyro;
 
 	Joystick joyL, joyR;
 
@@ -41,9 +40,8 @@ public class Robot extends IterativeRobot implements Pronstants {
 
 		servoTest.addDefault("lock", "lock");
 		servoTest.addDefault("unlock", "unlock");
+		
 		// Class initialization
-
-		prontoGyro = new ProntoGyro();
 		drive = new Drive();
 		grabber = new Grabber();
 		climber = new Climber();

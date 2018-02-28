@@ -1,10 +1,12 @@
 package org.usfirst.frc.team3070.robot;
 
-public class Config_Auto_PID implements Pronstants{
+public class Config_Auto_PID implements Pronstants {
 	Drive drive;
+
 	public Config_Auto_PID(Drive drive) {
 		this.drive = drive;
 	}
+
 	public void config() {
 		drive.talRM.configPeakOutputForward(AUTO_SPEED, TIMEOUTMS);
 		drive.talRF.configPeakOutputForward(AUTO_SPEED, TIMEOUTMS);
@@ -15,7 +17,6 @@ public class Config_Auto_PID implements Pronstants{
 		drive.talRF.configPeakOutputReverse(-AUTO_SPEED, TIMEOUTMS);
 		drive.talLM.configPeakOutputReverse(-AUTO_SPEED, TIMEOUTMS);
 		drive.talLF.configPeakOutputReverse(-AUTO_SPEED, TIMEOUTMS);
-		
 
 		drive.talRM.configNominalOutputForward(0, TIMEOUTMS);
 		drive.talRF.configNominalOutputForward(0, TIMEOUTMS);
@@ -26,8 +27,7 @@ public class Config_Auto_PID implements Pronstants{
 		drive.talRF.configNominalOutputReverse(-0, TIMEOUTMS);
 		drive.talLM.configNominalOutputReverse(-0, TIMEOUTMS);
 		drive.talLF.configNominalOutputReverse(-0, TIMEOUTMS);
-		
-		
+
 		drive.talRM.config_kF(kPIDLoopIdx, 0.0, TIMEOUTMS);
 		drive.talRF.config_kF(kPIDLoopIdx, 0.0, TIMEOUTMS);
 		drive.talLM.config_kF(kPIDLoopIdx, 0.0, TIMEOUTMS);
@@ -42,7 +42,7 @@ public class Config_Auto_PID implements Pronstants{
 		drive.talRF.config_kI(kPIDLoopIdx, 0.0, TIMEOUTMS);
 		drive.talLM.config_kI(kPIDLoopIdx, 0.0, TIMEOUTMS);
 		drive.talLF.config_kI(kPIDLoopIdx, 0.0, TIMEOUTMS);
-		
+
 		drive.talRM.config_kD(kPIDLoopIdx, 0.0, TIMEOUTMS);
 		drive.talRF.config_kD(kPIDLoopIdx, 0.0, TIMEOUTMS);
 		drive.talLM.config_kD(kPIDLoopIdx, 0.0, TIMEOUTMS);
