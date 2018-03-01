@@ -19,6 +19,8 @@ public interface Pronstants {
 	
 	public static final boolean RIGHT_INV = true;
 	public static final boolean LEFT_INV = false;
+	
+	public static final double CLIMB_SPEED = 0.7;
 
 	// Talon Ports
 	public static final int TALLM_PORT = 2;

@@ -76,7 +76,7 @@ public class Grabber implements Pronstants {
 		else {
 			stop();
 		}
-
+		
 	}
 	
 	public boolean getLimit() {

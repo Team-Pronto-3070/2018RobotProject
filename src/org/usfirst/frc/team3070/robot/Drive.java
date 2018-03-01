@@ -24,7 +24,6 @@ public class Drive implements Pronstants {
 		setInverted();
 		setNeutralMode(false);
 		setCurrentLimits(10, 15, 100);
-
 		talLM.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
 		talRM.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
 
