@@ -15,9 +15,6 @@ public class Drive implements Pronstants {
 	int initDistL, initDistR;
 	double rampL = 0;
 	double rampR = 0;
-	//0 for not ramping, 1 for ramping up, 2 for ramping down
-	int rampingR = 0;
-	int rampingL = 0;
 
 	public Drive() {
 		talLM = new TalonSRX(TALLM_PORT);
@@ -71,36 +68,8 @@ public class Drive implements Pronstants {
 		} else {
 			right = 0;
 		}
-		if(right > rampR) {
-			rampingR = 1;
-		}else if(right < rampR) {
-			rampingR = 2;
-		}else {
-			rampingR = 0;
-		}
-		if(left > rampL) {
-			rampingL = 1;
-		}else if(right < rampL) {
-			rampingL = 2;
-		}else {
-			rampingL = 0;
-		}
-		switch(rampingL) {
-		//if not ramping just set left to leftJoystick and right to rightJoystick
-		case 0: rampL = left;
-				//if ramping up, make it go up by RAMP_RATE
-		case 1:rampL += RAMP_RATE;
-				//if ramping down, make it go down by RAMP_RATE
-		case 2: rampL -= RAMP_RATE;
-		}
-		switch(rampingR) {
-		//if not ramping just set left to leftJoystick and right to rightJoystick
-		case 0:rampR = right;
-				//if ramping up, make it go up by RAMP_RATE
-		case 1: rampR += RAMP_RATE;
-				//if ramping down, make it go down by RAMP_RATE
-		case 2: rampR -= RAMP_RATE;
-		}
+			rampL = (left + rampL)/2;
+			rampR = (right + rampR)/2;
 		simpleDrive(rampL, rampR);
 
 	}

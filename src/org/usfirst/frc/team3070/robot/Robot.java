@@ -112,14 +112,13 @@ public class Robot extends IterativeRobot implements Pronstants {
 		double rf = 0.337;
 		drive.setRightPID(rp, ri, rd, rf);
 	}
-
 	@Override
 	public void teleopPeriodic() {
-		grabber.teleop(joyL.getRawButton(3), joyL.getRawButton(2));
-		//drive.joystickDrive(joyL.getRawAxis(1), joyR.getRawAxis(1));
-		climber.cTeleop(joyR.getRawButton(3), joyR.getRawButton(2), (joyR.getRawButton(6) && joyR.getRawButton(11))); // Press 6 AND 11 to engage the ratchet
-		SmartDashboard.putNumber("SpeedL", drive.talLM.getSelectedSensorVelocity(0));
-		SmartDashboard.putNumber("SpeedR", drive.talRM.getSelectedSensorVelocity(0));
+		//grabber.teleop(joyL.getRawButton(3), joyL.getRawButton(2));
+		drive.joystickDrive(joyL.getRawAxis(1), joyR.getRawAxis(1));
+		//climber.cTeleop(joyR.getRawButton(3), joyR.getRawButton(2), (joyR.getRawButton(6) && joyR.getRawButton(11))); // Press 6 AND 11 to engage the ratchet
+		//SmartDashboard.putNumber("SpeedL", drive.talLM.getSelectedSensorVelocity(0));
+		//SmartDashboard.putNumber("SpeedR", drive.talRM.getSelectedSensorVelocity(0));
 	}
 
 	@Override
