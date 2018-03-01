@@ -13,6 +13,7 @@ public interface Pronstants {
 	public static final int kPIDLoopIdx = 0;
 
 	public static final double SWITCH_DIST = 144;
+	public static final double RAMP_RATE = 0.01;
 	public static final double SWITCH_TICKS = (SWITCH_DIST / WHEEL_CIRCUM) * 4096;
 
 	public static final double SECONDS_TO_100MS = 600;
