@@ -29,17 +29,17 @@ public class Climber implements Pronstants {
 	}
 
 	/**
-	 * Sets motor speed to -1 Make sure it's going the right way
+	 * Sets motor speed to 1 Make sure it's going the right way
 	 */
 	public void up() {
-		talC.set(ControlMode.PercentOutput, -CLIMB_SPEED);
+		talC.set(ControlMode.PercentOutput, CLIMB_SPEED);
 	}
 
 	/**
-	 * Sets motor speed to 1
+	 * Sets motor speed to -1
 	 */
 	public void down() {
-		talC.set(ControlMode.PercentOutput, CLIMB_SPEED);
+		talC.set(ControlMode.PercentOutput, -CLIMB_SPEED);
 	}
 
 	/**

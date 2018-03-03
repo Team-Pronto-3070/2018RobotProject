@@ -1,11 +1,15 @@
 package org.usfirst.frc.team3070.robot;
 
+import edu.wpi.first.wpilibj.Timer;
+
 public class Autonomous implements Pronstants {
 	Drive drive;
 	Grabber grabber;
 	AutoSteps autoStep = AutoSteps.FIRST_STRAIGHT;
 	String gameData, switchPos, startPos;
 	boolean done = false;
+	
+	Timer timer;
 
 	/**
 	 * Constructor
@@ -18,6 +22,9 @@ public class Autonomous implements Pronstants {
 	public Autonomous(Drive drive, Grabber grabber) {
 		this.drive = drive;
 		this.grabber = grabber;
+		timer = new Timer();
+		timer.reset();
+		timer.start();
 	}
 
 	/**
@@ -33,7 +40,7 @@ public class Autonomous implements Pronstants {
 		// Tells the robot to go to the next step
 		autoStep = next;
 		System.out.println("Next step: " + autoStep);
-
+		
 		drive.resetEncDist();
 		// Stop the robot
 		drive.stop();
