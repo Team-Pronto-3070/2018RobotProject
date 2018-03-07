@@ -22,6 +22,13 @@ public class Climber implements Pronstants {
 		ratchet = new Servo(0);
 		// Want the motor to be locked in place when not receiving
 		talC.setNeutralMode(NeutralMode.Brake);
+		
+		talC.configOpenloopRamp(0.5, 0);
+		
+		talC.configContinuousCurrentLimit(10, 0);
+		talC.configPeakCurrentLimit(15, 0);
+		talC.configPeakCurrentDuration(100, 0);
+		talC.enableCurrentLimit(true);
 	}
 
 	public void lock() {
@@ -32,14 +39,14 @@ public class Climber implements Pronstants {
 	 * Sets motor speed to 1 Make sure it's going the right way
 	 */
 	public void up() {
-		talC.set(ControlMode.PercentOutput, CLIMB_SPEED);
+		talC.set(ControlMode.PercentOutput, -CLIMB_SPEED);
 	}
 
 	/**
 	 * Sets motor speed to -1
 	 */
 	public void down() {
-		talC.set(ControlMode.PercentOutput, -CLIMB_SPEED);
+		talC.set(ControlMode.PercentOutput, CLIMB_SPEED);
 	}
 
 	/**

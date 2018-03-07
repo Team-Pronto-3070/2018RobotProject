@@ -68,8 +68,8 @@ public class Drive implements Pronstants {
 		} else {
 			right = 0;
 		}
-			rampL = (left + rampL)/2;
-			rampR = (right + rampR)/2;
+			rampL = (left + rampL)/2.5;
+			rampR = (right + rampR)/2.5;
 		simpleDrive(rampL, rampR);
 
 	}

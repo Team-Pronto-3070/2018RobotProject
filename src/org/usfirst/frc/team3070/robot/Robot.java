@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -19,6 +20,7 @@ public class Robot extends IterativeRobot implements Pronstants {
 	Grabber grabber;
 	Climber climber;
 	Autonomous auto;
+	Timer timer;
 
 	Joystick joyL, joyR;
 
@@ -46,13 +48,17 @@ public class Robot extends IterativeRobot implements Pronstants {
 		drive = new Drive();
 		grabber = new Grabber();
 		climber = new Climber();
-		auto = new Autonomous(drive, grabber);
+		auto = new Autonomous(drive, grabber, climber);
+		
+		timer = new Timer();
+		
+		SmartDashboard.putNumber("Turn 90 time", 0);
 
 		joyL = new Joystick(0);
 		joyR = new Joystick(1);
 
 		// In SmartDashboard, do View->Add->CameraServer Stream Viewer
-		// CameraServer.getInstance().startAutomaticCapture();
+		CameraServer.getInstance().startAutomaticCapture();
 
 		SmartDashboard.putNumber("Setpoint", 0);
 		SmartDashboard.putNumber("SpeedL", 0);
@@ -72,7 +78,7 @@ public class Robot extends IterativeRobot implements Pronstants {
 		SmartDashboard.putNumber("Left output", 0);
 		SmartDashboard.putNumber("Right output", 0);
 
-		SmartDashboard.putString("Mode:", "mode");
+		//SmartDashboard.putString("Mode:", "mode");
 	}
 
 	public void autonomousInit() {
@@ -114,18 +120,24 @@ public class Robot extends IterativeRobot implements Pronstants {
 	}
 	@Override
 	public void teleopPeriodic() {
-		//grabber.teleop(joyL.getRawButton(3), joyL.getRawButton(2));
+		grabber.teleop(joyL.getRawButton(2), joyL.getRawButton(3));
 		drive.joystickDrive(joyL.getRawAxis(1), joyR.getRawAxis(1));
-		//climber.cTeleop(joyR.getRawButton(3), joyR.getRawButton(2), (joyR.getRawButton(6) && joyR.getRawButton(11))); // Press 6 AND 11 to engage the ratchet
+		climber.cTeleop(joyR.getRawButton(3), joyR.getRawButton(2), (joyR.getRawButton(6) && joyR.getRawButton(11))); // Press 6 AND 11 to engage the ratchet
 		//SmartDashboard.putNumber("SpeedL", drive.talLM.getSelectedSensorVelocity(0));
 		//SmartDashboard.putNumber("SpeedR", drive.talRM.getSelectedSensorVelocity(0));
 	}
-
+	
 	@Override
 	public void testPeriodic() {
-		SmartDashboard.putBoolean("Limit Switch", grabber.getLimit());
-		System.out.println("limit switch: " + grabber.getLimit());
-		climber.cTeleop(joyL.getRawButton(3), joyL.getRawButton(2), (joyR.getRawButton(6) && joyR.getRawButton(11)));
+		if(joyL.getRawButton(2)) {
+			timer.reset();
+			timer.start();
+		}
+		if(timer.get() < SmartDashboard.getNumber("Turn 90 time", 0)) {
+			drive.simpleDrive(AUTO_SPEED, -AUTO_SPEED);
+		} else {
+			drive.stop();
+		}
 	}
 
 }

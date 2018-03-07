@@ -1,10 +1,12 @@
 package org.usfirst.frc.team3070.robot;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Autonomous implements Pronstants {
 	Drive drive;
 	Grabber grabber;
+	Climber climber;
 	AutoSteps autoStep = AutoSteps.FIRST_STRAIGHT;
 	String gameData, switchPos, startPos;
 	boolean done = false;
@@ -19,9 +21,10 @@ public class Autonomous implements Pronstants {
 	 * @param grabber
 	 *            Grabber instance
 	 */
-	public Autonomous(Drive drive, Grabber grabber) {
+	public Autonomous(Drive drive, Grabber grabber, Climber climber) {
 		this.drive = drive;
 		this.grabber = grabber;
+		this.climber = climber;
 		timer = new Timer();
 		timer.reset();
 		timer.start();
@@ -42,8 +45,12 @@ public class Autonomous implements Pronstants {
 		System.out.println("Next step: " + autoStep);
 		
 		drive.resetEncDist();
+		timer.reset();
+		timer.start();
 		// Stop the robot
 		drive.stop();
+		climber.stop();
+		grabber.stop();
 	}
 
 	/**
@@ -53,18 +60,44 @@ public class Autonomous implements Pronstants {
 		// the list of steps that the robot needs to do in auto
 		switch (autoStep) {
 		case FIRST_STRAIGHT:
-			if(drive.driveDistance(AUTO_SPEED, SWITCH_TICKS)) {
-				// TODO Figure out why gameData.length() isn't working
+//			if(drive.driveDistance(AUTO_SPEED, SWITCH_TICKS/2)) { // go halfway to switch
+			drive.simpleDrive(-AUTO_SPEED, -AUTO_SPEED);
+			if(timer.get()<3.5) {
 				if(/*gameData.length() > 0 &&*/ /*Check if there is any game data first*/ startPos.equals(switchPos)) {
-					nextStep(AutoSteps.LOADING);
+					nextStep(AutoSteps.LIFTING);
 				} else {
-					nextStep(AutoSteps.DONE);
+					nextStep(AutoSteps.SECOND_STRAIGHT);
 				}
 			}
 			break;
+		case LIFTING:
+			if(timer.get() < 1) {
+				climber.up();
+			} else {
+				nextStep(AutoSteps.SECOND_STRAIGHT);
+			}
+			break;
+		case SECOND_STRAIGHT:
+//			if(drive.driveDistance(AUTO_SPEED, SWITCH_TICKS/2)) { // Go the second half of the distance to the switch
+			drive.simpleDrive(-AUTO_SPEED, -AUTO_SPEED);
+			if(timer.get() > 3.5) {
+				if(startPos.equals(switchPos)) {
+					nextStep(AutoSteps.LOADING);
+				} else {
+				nextStep(AutoSteps.DONE);
+				}
+			}
+			SmartDashboard.putString("switchPos", switchPos);
+			SmartDashboard.putString("startPos", startPos);
+			break;
 		case LOADING:
-			grabber.ungrab();
-			nextStep(AutoSteps.DONE);
+			SmartDashboard.putString("switchPos", switchPos);
+			if(startPos.equals(switchPos)) {
+				grabber.ungrab();
+			}
+			if(timer.get() > 2) {
+				nextStep(AutoSteps.DONE);
+			}
 			break;
 		default:
 		case DONE:
