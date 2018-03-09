@@ -56,11 +56,7 @@ public class Autonomous implements Pronstants {
 		// the list of steps that the robot needs to do in auto
 		switch (autoStep) {
 		case FIRST_STRAIGHT:
-			if (!done) {
-				if (drive.driveDistance(AUTO_SPEED, SWITCH_TICKS)) {
-					done = true;
-				}
-			} else {
+			if (drive.driveDistance(AUTO_SPEED, SWITCH_TICKS)) {
 				nextStep(AutoSteps.LOADING);
 			}
 			break;
