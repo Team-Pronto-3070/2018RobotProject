@@ -21,21 +21,13 @@ public class Autonomous implements Pronstants {
 	public Autonomous(Drive drive, Grabber grabber) {
 		this.drive = drive;
 		this.grabber = grabber;
-<<<<<<< HEAD
-=======
 		imu = BNO055.getInstance(BNO055.opmode_t.OPERATION_MODE_IMUPLUS, BNO055.vector_type_t.VECTOR_EULER);
->>>>>>> master
-
 	}
 
-<<<<<<< HEAD
-=======
 	public double rawHeading() {
 		return imu.getHeading() - initHeading;
 	}
-	
-	
->>>>>>> master
+
 	/**
 	 * Run when want to go to next step. Stops motors and sets the enum var to the
 	 * argument
@@ -62,9 +54,6 @@ public class Autonomous implements Pronstants {
 		// the list of steps that the robot needs to do in auto
 		switch (autoStep) {
 		case FIRST_STRAIGHT:
-<<<<<<< HEAD
-			if (drive.driveDistance(AUTO_SPEED, SWITCH_TICKS)) {
-=======
 			// TODO Figure out why gameData.length() isn't working
 			if (/* gameData.length() > 0 && */ /* Check if there is any game data first */ startPos.equals("Center")) {
 				if (drive.driveDistance(AUTO_SPEED, ROTATE * 4)) {
@@ -82,23 +71,21 @@ public class Autonomous implements Pronstants {
 		case FIRST_TURN:// add for both ways
 			if (switchPos.equals("R")) {
 				drive.turn(45, AUTO_SPEED);
-				} else {
-					drive.stop();
-					nextStep(AutoSteps.SECOND_STRAIGHT);
-				}
-				if (switchPos.equals("L")) {
-					drive.turn( -45, AUTO_SPEED);
-					} else {
-						drive.stop();
-						nextStep(AutoSteps.SECOND_STRAIGHT);
-					}
-				
-			
+			} else {
+				drive.stop();
+				nextStep(AutoSteps.SECOND_STRAIGHT);
+			}
+			if (switchPos.equals("L")) {
+				drive.turn(-45, AUTO_SPEED);
+			} else {
+				drive.stop();
+				nextStep(AutoSteps.SECOND_STRAIGHT);
+			}
+
 			break;
-			case SECOND_STRAIGHT:
+		case SECOND_STRAIGHT:
 			if (drive.driveDistance(AUTO_SPEED, HYPO_SWITCH)) {
 				drive.stop();
->>>>>>> master
 				nextStep(AutoSteps.LOADING);
 			}
 			break;
@@ -106,15 +93,14 @@ public class Autonomous implements Pronstants {
 			grabber.ungrab();
 			nextStep(AutoSteps.DONE);
 			break;
-		
-				
+
 		case DONE:
 			nextStep(AutoSteps.DONE);
 			break;
-			
+
 		default:
-				nextStep(AutoSteps.DONE);
-				break;
+			nextStep(AutoSteps.DONE);
+			break;
 		}
 	}
 }
