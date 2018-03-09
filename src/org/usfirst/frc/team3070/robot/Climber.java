@@ -24,6 +24,10 @@ public class Climber implements Pronstants {
 		talC.setNeutralMode(NeutralMode.Brake);
 	}
 
+	public void unlock() {
+		ratchet.set(UNLOCKED_ANGLE);
+	}
+
 	public void lock() {
 		ratchet.set(LOCKED_ANGLE);
 	}
@@ -46,6 +50,7 @@ public class Climber implements Pronstants {
 	 * Stops the climber
 	 */
 	public void stop() {
+		lock();
 		talC.set(ControlMode.PercentOutput, 0);
 	}
 
@@ -55,11 +60,11 @@ public class Climber implements Pronstants {
 	 * @param up
 	 *            If the button for going up is pressed
 	 * @param down
-	 *            if the button for going down if pressed.
+	 *            if the button for going down if pressed. <<<<<<< HEAD =======
 	 * @param lock
-	 *            if the button for locking the rachet is pressed.
+	 *            if the button for locking the rachet is pressed. >>>>>>> master
 	 */
-	public void cTeleop(boolean up, boolean down, boolean lock) {
+	public void cTeleop(boolean up, boolean down) {
 		// if [up] is pressed, it will extend as much as it can
 		if (up) {
 			up();
@@ -67,8 +72,8 @@ public class Climber implements Pronstants {
 		// else if [down] is pressed, it will retract as much as it can
 		else if (down) {
 			down();
-			//else if [lock] is pressed, it will lock the rachet;
-		} else if(lock) {
+			// else if [lock] is pressed, it will lock the rachet;
+		} else if (locked) {
 			locked = true;
 		}
 		// if none of the above are being pressed, the extendy bit wont be moved, and
@@ -76,7 +81,7 @@ public class Climber implements Pronstants {
 		else {
 			stop();
 		}
-		if(locked) {
+		if (locked) {
 			lock();
 		}
 	}

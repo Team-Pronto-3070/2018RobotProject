@@ -14,11 +14,11 @@ public class Robot extends IterativeRobot implements Pronstants {
 	String autoSelected;
 	SendableChooser<String> servoTest = new SendableChooser<String>();
 	SendableChooser<String> initPos = new SendableChooser<String>();
-	
+
 	Drive drive;
 	Grabber grabber;
 	Climber climber;
-	Autonomous autonomous;
+	Autonomous auto;
 	private static BNO055 imu;
 	ProntoGyro prontoGyro;
 	Joystick joyL, joyR;
@@ -44,12 +44,11 @@ public class Robot extends IterativeRobot implements Pronstants {
 		servoTest.addDefault("unlock", "unlock");
 
 		// Class initialization
-		drive = new Drive(autonomous, prontoGyro);
+		drive = new Drive(auto, prontoGyro);
 		grabber = new Grabber();
 		climber = new Climber();
-		imu = BNO055.getInstance(BNO055.opmode_t.OPERATION_MODE_IMUPLUS,
-				        		BNO055.vector_type_t.VECTOR_EULER);
-		autonomous = new Autonomous(drive, grabber, prontoGyro);
+		imu = BNO055.getInstance(BNO055.opmode_t.OPERATION_MODE_IMUPLUS, BNO055.vector_type_t.VECTOR_EULER);
+		auto = new Autonomous(drive, grabber);
 
 		joyL = new Joystick(0);
 		joyR = new Joystick(1);
@@ -78,16 +77,16 @@ public class Robot extends IterativeRobot implements Pronstants {
 		SmartDashboard.putString("Mode:", "mode");
 	}
 
-	public void autonomousInit() {
+	public void autoInit() {
 		// Sets up field data
-		if(DriverStation.getInstance().getGameSpecificMessage().length() > 0) {
-			autonomous.gameData = DriverStation.getInstance().getGameSpecificMessage(); // Gets data from field/dashboard
-			autonomous.switchPos = autonomous.gameData.substring(0, 1); // Position of alliance's switch, either L or R
-			System.out.println("Game data is" + autonomous.gameData);
+		if (DriverStation.getInstance().getGameSpecificMessage().length() > 0) {
+			auto.gameData = DriverStation.getInstance().getGameSpecificMessage(); // Gets data from field/dashboard
+			auto.switchPos = auto.gameData.substring(0, 1); // Position of alliance's switch, either L or R
+			System.out.println("Game data is" + auto.gameData);
 		}
-		autonomous.startPos = initPos.getSelected();
-		autonomous.done = false;
-		autonomous.nextStep(AutoSteps.FIRST_STRAIGHT);
+		auto.startPos = initPos.getSelected();
+		auto.done = false;
+		auto.nextStep(AutoSteps.FIRST_STRAIGHT);
 		drive.resetEncDist();
 		drive.stop();
 		grabber.stop();
@@ -96,7 +95,7 @@ public class Robot extends IterativeRobot implements Pronstants {
 
 	@Override
 	public void autonomousPeriodic() {
-		autonomous.periodic();
+		auto.periodic();
 		SmartDashboard.putNumber("SpeedL", drive.talLM.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("SpeedR", drive.talRM.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("Distance", (drive.getLeftDist() + drive.getRightDist()) / 2);
@@ -119,8 +118,8 @@ public class Robot extends IterativeRobot implements Pronstants {
 	@Override
 	public void teleopPeriodic() {
 		grabber.teleop(joyL.getRawButton(3), joyL.getRawButton(2));
-		//drive.joystickDrive(joyL.getRawAxis(1), joyR.getRawAxis(1));
-		climber.cTeleop(joyR.getRawButton(3), joyR.getRawButton(2), (joyR.getRawButton(6) && joyR.getRawButton(11))); // Press 6 AND 11 to engage the ratchet
+		// drive.joystickDrive(joyL.getRawAxis(1), joyR.getRawAxis(1));
+		climber.cTeleop(joyR.getRawButton(3), joyR.getRawButton(2)); // Press 6 AND 11 to engage the ratchet
 		SmartDashboard.putNumber("SpeedL", drive.talLM.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("SpeedR", drive.talRM.getSelectedSensorVelocity(0));
 	}
@@ -129,7 +128,8 @@ public class Robot extends IterativeRobot implements Pronstants {
 	public void testPeriodic() {
 		SmartDashboard.putBoolean("Limit Switch", grabber.getLimit());
 		System.out.println("limit switch: " + grabber.getLimit());
-		climber.cTeleop(joyL.getRawButton(3), joyL.getRawButton(2), (joyR.getRawButton(6) && joyR.getRawButton(11)));
+		climber.cTeleop(joyL.getRawButton(3), joyL.getRawButton(2));
+
 	}
 
 }

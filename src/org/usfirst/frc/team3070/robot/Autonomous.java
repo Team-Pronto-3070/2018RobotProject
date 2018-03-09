@@ -18,18 +18,16 @@ public class Autonomous implements Pronstants {
 	 * @param grabber
 	 *            Grabber instance
 	 */
-	public Autonomous(Drive drive, Grabber grabber, ProntoGyro prontoGyro) {
+	public Autonomous(Drive drive, Grabber grabber) {
 		this.drive = drive;
 		this.grabber = grabber;
 		imu = BNO055.getInstance(BNO055.opmode_t.OPERATION_MODE_IMUPLUS, BNO055.vector_type_t.VECTOR_EULER);
-
 	}
 
 	public double rawHeading() {
 		return imu.getHeading() - initHeading;
 	}
-	
-	
+
 	/**
 	 * Run when want to go to next step. Stops motors and sets the enum var to the
 	 * argument
@@ -73,20 +71,19 @@ public class Autonomous implements Pronstants {
 		case FIRST_TURN:// add for both ways
 			if (switchPos.equals("R")) {
 				drive.turn(45, AUTO_SPEED);
-				} else {
-					drive.stop();
-					nextStep(AutoSteps.SECOND_STRAIGHT);
-				}
-				if (switchPos.equals("L")) {
-					drive.turn( -45, AUTO_SPEED);
-					} else {
-						drive.stop();
-						nextStep(AutoSteps.SECOND_STRAIGHT);
-					}
-				
-			
+			} else {
+				drive.stop();
+				nextStep(AutoSteps.SECOND_STRAIGHT);
+			}
+			if (switchPos.equals("L")) {
+				drive.turn(-45, AUTO_SPEED);
+			} else {
+				drive.stop();
+				nextStep(AutoSteps.SECOND_STRAIGHT);
+			}
+
 			break;
-			case SECOND_STRAIGHT:
+		case SECOND_STRAIGHT:
 			if (drive.driveDistance(AUTO_SPEED, HYPO_SWITCH)) {
 				drive.stop();
 				nextStep(AutoSteps.LOADING);
@@ -96,15 +93,14 @@ public class Autonomous implements Pronstants {
 			grabber.ungrab();
 			nextStep(AutoSteps.DONE);
 			break;
-		
-				
+
 		case DONE:
 			nextStep(AutoSteps.DONE);
 			break;
-			
+
 		default:
-				nextStep(AutoSteps.DONE);
-				break;
+			nextStep(AutoSteps.DONE);
+			break;
 		}
 	}
 }
