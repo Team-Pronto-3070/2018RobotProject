@@ -18,8 +18,9 @@ public class Robot extends IterativeRobot implements Pronstants {
 	Drive drive;
 	Grabber grabber;
 	Climber climber;
-	Autonomous auto;
-
+	Autonomous autonomous;
+	private static BNO055 imu;
+	ProntoGyro prontoGyro;
 	Joystick joyL, joyR;
 
 	double rp = .8;
@@ -43,10 +44,12 @@ public class Robot extends IterativeRobot implements Pronstants {
 		servoTest.addDefault("unlock", "unlock");
 
 		// Class initialization
-		drive = new Drive();
+		drive = new Drive(autonomous, prontoGyro);
 		grabber = new Grabber();
 		climber = new Climber();
-		auto = new Autonomous(drive, grabber);
+		imu = BNO055.getInstance(BNO055.opmode_t.OPERATION_MODE_IMUPLUS,
+				        		BNO055.vector_type_t.VECTOR_EULER);
+		autonomous = new Autonomous(drive, grabber, prontoGyro);
 
 		joyL = new Joystick(0);
 		joyR = new Joystick(1);
@@ -78,13 +81,13 @@ public class Robot extends IterativeRobot implements Pronstants {
 	public void autonomousInit() {
 		// Sets up field data
 		if(DriverStation.getInstance().getGameSpecificMessage().length() > 0) {
-			auto.gameData = DriverStation.getInstance().getGameSpecificMessage(); // Gets data from field/dashboard
-			auto.switchPos = auto.gameData.substring(0, 1); // Position of alliance's switch, either L or R
-			System.out.println("Game data is" + auto.gameData);
+			autonomous.gameData = DriverStation.getInstance().getGameSpecificMessage(); // Gets data from field/dashboard
+			autonomous.switchPos = autonomous.gameData.substring(0, 1); // Position of alliance's switch, either L or R
+			System.out.println("Game data is" + autonomous.gameData);
 		}
-		auto.startPos = initPos.getSelected();
-		auto.done = false;
-		auto.nextStep(AutoSteps.FIRST_STRAIGHT);
+		autonomous.startPos = initPos.getSelected();
+		autonomous.done = false;
+		autonomous.nextStep(AutoSteps.FIRST_STRAIGHT);
 		drive.resetEncDist();
 		drive.stop();
 		grabber.stop();
@@ -93,7 +96,7 @@ public class Robot extends IterativeRobot implements Pronstants {
 
 	@Override
 	public void autonomousPeriodic() {
-		auto.periodic();
+		autonomous.periodic();
 		SmartDashboard.putNumber("SpeedL", drive.talLM.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("SpeedR", drive.talRM.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("Distance", (drive.getLeftDist() + drive.getRightDist()) / 2);
