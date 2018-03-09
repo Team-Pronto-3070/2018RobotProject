@@ -16,11 +16,21 @@ public interface Pronstants {
 	public static final double SWITCH_TICKS = (SWITCH_DIST / WHEEL_CIRCUM) * 4096;
 
 	public static final double SECONDS_TO_100MS = 600;
+	
+	public static final double ROTATE = 4096;
+ 	public static final boolean RIGHT_INV = true;
+	public static final boolean LEFT_INV = false;
+	
+	public static final double CLIMB_SPEED = 0.7;
+	
+	public static final double HYPO_SWITCH = 606208; 
+	//148 inches to the switch(hypotenuse)
 
 	// Talon Ports
-	public static final int TALLM_PORT = 0;
+	public static final int TALLM_PORT = 2;
 	public static final int TALLF_PORT = 7;
-	public static final int TALRM_PORT = 2;
+
+	public static final int TALRM_PORT = 0;
 	public static final int TALRF_PORT = 3;
 
 	public static final int TALC_PORT = 1;
@@ -36,4 +46,11 @@ public interface Pronstants {
 
 	public static final double DEADZONE = 0.2;// TODO: change back
 	public static final double AUTO_SPEED = 0.5;
+	
+	
+	static final double MAX_DEGREES_FULL_SPEED = 5.0;
+	static final double MIN_TURN_SPEED = 0.18;
+	
+	// Adjusting constant for turn function
+		static final double TURN_OFFSET = 3;
 }

@@ -1,16 +1,14 @@
 package org.usfirst.frc.team3070.robot;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-
 public class Autonomous implements Pronstants {
 	Drive drive;
 	Grabber grabber;
-	SendableChooser<String> initPos;
-	ProntoGyro prontoGyro;
-	AutoSteps autoStep;
-	String gameData, switchPos, scalePos;
-	boolean done;
+	private static BNO055 imu;
+	AutoSteps autoStep = AutoSteps.FIRST_STRAIGHT;
+	String gameData, switchPos, startPos;
+	boolean done = false;
+	double initHeading = imu.getHeading();
+	double currHeading = 0;
 
 	/**
 	 * Constructor
@@ -23,15 +21,21 @@ public class Autonomous implements Pronstants {
 	public Autonomous(Drive drive, Grabber grabber) {
 		this.drive = drive;
 		this.grabber = grabber;
+<<<<<<< HEAD
+=======
+		imu = BNO055.getInstance(BNO055.opmode_t.OPERATION_MODE_IMUPLUS, BNO055.vector_type_t.VECTOR_EULER);
+>>>>>>> master
 
-		// Sets up field data
-		gameData = DriverStation.getInstance().getGameSpecificMessage(); // Gets data from field/dashboard
-		if (gameData != null) {
-			switchPos = gameData.substring(0, 1); // Position of alliance's switch, either L or R
-			scalePos = gameData.substring(1, 2); // Position of scale, either L or R
-		}
 	}
 
+<<<<<<< HEAD
+=======
+	public double rawHeading() {
+		return imu.getHeading() - initHeading;
+	}
+	
+	
+>>>>>>> master
 	/**
 	 * Run when want to go to next step. Stops motors and sets the enum var to the
 	 * argument
@@ -44,7 +48,9 @@ public class Autonomous implements Pronstants {
 	public void nextStep(AutoSteps next) {
 		// Tells the robot to go to the next step
 		autoStep = next;
-
+		System.out.println("Next step: " + autoStep);
+		currHeading = imu.getHeading();
+		drive.resetEncDist();
 		// Stop the robot
 		drive.stop();
 	}
@@ -56,7 +62,43 @@ public class Autonomous implements Pronstants {
 		// the list of steps that the robot needs to do in auto
 		switch (autoStep) {
 		case FIRST_STRAIGHT:
+<<<<<<< HEAD
 			if (drive.driveDistance(AUTO_SPEED, SWITCH_TICKS)) {
+=======
+			// TODO Figure out why gameData.length() isn't working
+			if (/* gameData.length() > 0 && */ /* Check if there is any game data first */ startPos.equals("Center")) {
+				if (drive.driveDistance(AUTO_SPEED, ROTATE * 4)) {
+					drive.stop();
+					nextStep(AutoSteps.FIRST_TURN);
+				}
+			} else {
+				if (drive.driveDistance(AUTO_SPEED, SWITCH_TICKS)) {
+					drive.stop();
+					nextStep(AutoSteps.LOADING);
+				}
+
+			}
+			break;
+		case FIRST_TURN:// add for both ways
+			if (switchPos.equals("R")) {
+				drive.turn(45, AUTO_SPEED);
+				} else {
+					drive.stop();
+					nextStep(AutoSteps.SECOND_STRAIGHT);
+				}
+				if (switchPos.equals("L")) {
+					drive.turn( -45, AUTO_SPEED);
+					} else {
+						drive.stop();
+						nextStep(AutoSteps.SECOND_STRAIGHT);
+					}
+				
+			
+			break;
+			case SECOND_STRAIGHT:
+			if (drive.driveDistance(AUTO_SPEED, HYPO_SWITCH)) {
+				drive.stop();
+>>>>>>> master
 				nextStep(AutoSteps.LOADING);
 			}
 			break;
@@ -64,10 +106,15 @@ public class Autonomous implements Pronstants {
 			grabber.ungrab();
 			nextStep(AutoSteps.DONE);
 			break;
-		default:
+		
+				
 		case DONE:
 			nextStep(AutoSteps.DONE);
 			break;
+			
+		default:
+				nextStep(AutoSteps.DONE);
+				break;
 		}
 	}
 }

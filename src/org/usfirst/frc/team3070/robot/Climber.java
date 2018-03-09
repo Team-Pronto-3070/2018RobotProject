@@ -20,33 +20,43 @@ public class Climber implements Pronstants {
 	public Climber() {
 		talC = new TalonSRX(TALC_PORT);
 		ratchet = new Servo(0);
-		unlock();
-		// Want the motor to be locked in place when not recieving
+		// Want the motor to be locked in place when not receiving
 		talC.setNeutralMode(NeutralMode.Brake);
 	}
+<<<<<<< HEAD
 
 	public void unlock() {
 		ratchet.set(UNLOCKED_ANGLE);
 	}
+=======
+>>>>>>> master
 
 	public void lock() {
 		ratchet.set(LOCKED_ANGLE);
 	}
 
 	/**
-	 * Sets motor speed to 1 Make sure it's going the right way
+	 * Sets motor speed to -1 Make sure it's going the right way
 	 */
 	public void up() {
+<<<<<<< HEAD
 		unlock();
 		talC.set(ControlMode.PercentOutput, 1);
+=======
+		talC.set(ControlMode.PercentOutput, -CLIMB_SPEED);
+>>>>>>> master
 	}
 
 	/**
-	 * Sets motor speed to -1
+	 * Sets motor speed to 1
 	 */
 	public void down() {
+<<<<<<< HEAD
 		unlock();
 		talC.set(ControlMode.PercentOutput, -1);
+=======
+		talC.set(ControlMode.PercentOutput, CLIMB_SPEED);
+>>>>>>> master
 	}
 
 	/**
@@ -64,6 +74,11 @@ public class Climber implements Pronstants {
 	 *            If the button for going up is pressed
 	 * @param down
 	 *            if the button for going down if pressed.
+<<<<<<< HEAD
+=======
+	 * @param lock
+	 *            if the button for locking the rachet is pressed.
+>>>>>>> master
 	 */
 	public void cTeleop(boolean up, boolean down) {
 		// if [up] is pressed, it will extend as much as it can
@@ -73,11 +88,20 @@ public class Climber implements Pronstants {
 		// else if [down] is pressed, it will retract as much as it can
 		else if (down) {
 			down();
+			//else if [lock] is pressed, it will lock the rachet;
+		} else if(lock) {
+			locked = true;
 		}
 		// if none of the above are being pressed, the extendy bit wont be moved, and
 		// will lock in place.
 		else {
 			stop();
 		}
+<<<<<<< HEAD
+=======
+		if(locked) {
+			lock();
+		}
+>>>>>>> master
 	}
 }

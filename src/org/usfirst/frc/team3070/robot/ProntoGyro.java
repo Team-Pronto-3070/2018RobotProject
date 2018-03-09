@@ -26,15 +26,15 @@ public class ProntoGyro {
 	}
 	
 	// Returns the heading in relation to the offset
-	public double getOffsetHeading() {	
-		// Defines a variable for angle
-		double angle;
+		public double getOffsetHeading() {	
+			// Defines a variable for angle
+			double angle;
 
-		// Set the angle to the remainder of the current angle divided by 180
-		angle = normalizeHeadingVal(getRawHeading() - angleOffset);
-		
-		return angle;
-	}
+			// Set the angle to the remainder of the current angle divided by 180
+			angle = normalizeHeadingVal(getRawHeading() - angleOffset);
+			
+			return angle;
+		}
 	
 	// Resets the angleOffset to the current heading
 	public void reset() {

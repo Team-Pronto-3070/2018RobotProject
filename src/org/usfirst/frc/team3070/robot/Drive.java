@@ -11,10 +11,11 @@ public class Drive implements Pronstants {
 	TalonSRX talLM, talLF, talRM, talRF;
 	Joystick joyL, joyR;
 	ProntoGyro prontoGyro;
+	Autonomous autonomous;
 
 	int initDistL, initDistR;
 
-	public Drive() {
+	public Drive(Autonomous autonomous, ProntoGyro prontoGyro) {
 		talLM = new TalonSRX(TALLM_PORT);
 		talLF = new TalonSRX(TALLF_PORT);
 		talRM = new TalonSRX(TALRM_PORT);
@@ -24,7 +25,6 @@ public class Drive implements Pronstants {
 		setInverted();
 		setNeutralMode(false);
 		setCurrentLimits(10, 15, 100);
-
 		talLM.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
 		talRM.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
 
@@ -67,27 +67,27 @@ public class Drive implements Pronstants {
 		} else {
 			right = 0;
 		}
-		drivePID(left, right);
+		simpleDrive(joyR, joyL);
 
 	}
 
-	public void altJoystickDrive(double joyX, double joyY) {
-		double left = 0;
-		double right = 0;
-		if (Math.abs(joyX) > DEADZONE) {
-			left = joyX * MAX_SPEEED / 3;
-		} else {
-			left = 0;
-
-		}
-		if (Math.abs(joyY) > DEADZONE) {
-			right = joyY * MAX_SPEEED / 3;
-		} else {
-			right = 0;
-		}
-		drivePID(left, right);
-
-	}
+//	public void altJoystickDrive(double joyX, double joyY) {
+//		double left = 0;
+//		double right = 0;
+//		if (Math.abs(joyX) > DEADZONE) {
+//			left = joyX * MAX_SPEEED / 3;
+//		} else {
+//			left = 0;
+//
+//		}
+//		if (Math.abs(joyY) > DEADZONE) {
+//			right = joyY * MAX_SPEEED / 3;
+//		} else {
+//			right = 0;
+//		}
+//		drivePID(left, right);
+//
+//	}
 
 	/**
 	 * Drive a certain distance
@@ -98,11 +98,55 @@ public class Drive implements Pronstants {
 	 *            Distance wanted, in encoder ticks
 	 */
 	public boolean driveDistance(double power, double dist) {
-		drivePID(dist, dist);
+		//drivePID(dist, dist); // TODO fix yo shit
+		simpleDrive(power, power);
 		if (getDistance(dist)) {
 			return true;
 		} else {
 			return false;
+		}
+	}
+	
+	public boolean turn(double angle, double maxSpeed) {
+		// Defaults the speed to the maximum speed
+		double speed = maxSpeed;
+		// Adjusts speed linearly when within 10 degrees of expected value
+		double delta = Math.abs(autonomous.rawHeading() - angle);
+
+		if (delta <= Pronstants.MAX_DEGREES_FULL_SPEED) {
+			// "Simple" linear regression
+			// m = (Y2 - Y1) / ( X2 - X1 )
+			double m = ((maxSpeed - Pronstants.AUTO_SPEED) / (Pronstants.MAX_DEGREES_FULL_SPEED - Pronstants.TURN_OFFSET));
+			// y = m*x + b => b = y - m*x. Choosing Y1 and X1:
+			double b = Pronstants.MIN_TURN_SPEED - (m * Pronstants.TURN_OFFSET);
+
+			// Substitute in the angle delta for x and
+			speed = m * delta + b;
+
+		}
+
+		// Checks if the gyro angle is less than the desired angle
+		if (prontoGyro.getOffsetHeading() < angle - Pronstants.TURN_OFFSET) {
+			// If it is, turn left
+			simpleDrive(-speed, speed);
+			// and tell the source that turning is not done
+			return false;
+
+		}
+
+		// Otherwise, checks if the gyro angle is greater than the desired angle
+		else if (prontoGyro.getOffsetHeading() > angle + Pronstants.TURN_OFFSET) {
+			// If it is, turn right
+			simpleDrive(speed, -speed);
+			// and tell the source that turning is not done
+			return false;
+		}
+
+		else {
+			// If the gyro angle is aligned with the desired angle,
+			// tell the source that the robot has turned the desired amount
+			stop();
+			return true;
 		}
 	}
 
@@ -145,10 +189,11 @@ public class Drive implements Pronstants {
 	 * Inverts right motors Verify if these are going the right way
 	 */
 	private void setInverted() {
-		talLM.setInverted(false);
-		talLF.setInverted(false);
-		talRM.setInverted(false);
-		talRF.setInverted(false);
+		talLM.setInverted(LEFT_INV);
+		talLF.setInverted(LEFT_INV);
+		
+		talRM.setInverted(RIGHT_INV);
+		talRF.setInverted(RIGHT_INV);
 	}
 
 	/**
