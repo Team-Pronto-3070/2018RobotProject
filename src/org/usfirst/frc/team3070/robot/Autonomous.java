@@ -1,13 +1,15 @@
 package org.usfirst.frc.team3070.robot;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class Autonomous implements Pronstants {
 	Drive drive;
 	Grabber grabber;
-	private static BNO055 imu;
+	private static ProntoGyro imu;
 	AutoSteps autoStep = AutoSteps.FIRST_STRAIGHT;
 	String gameData, switchPos, startPos;
 	boolean done = false;
-	double initHeading = imu.getHeading();
+	double initHeading;
 	double currHeading = 0;
 
 	/**
@@ -21,15 +23,10 @@ public class Autonomous implements Pronstants {
 	public Autonomous(Drive drive, Grabber grabber, ProntoGyro prontoGyro) {
 		this.drive = drive;
 		this.grabber = grabber;
-		imu = BNO055.getInstance(BNO055.opmode_t.OPERATION_MODE_IMUPLUS, BNO055.vector_type_t.VECTOR_EULER);
-
+		imu = prontoGyro;
+		imu.reset();
 	}
 
-	public double rawHeading() {
-		return imu.getHeading() - initHeading;
-	}
-	
-	
 	/**
 	 * Run when want to go to next step. Stops motors and sets the enum var to the
 	 * argument
@@ -43,68 +40,75 @@ public class Autonomous implements Pronstants {
 		// Tells the robot to go to the next step
 		autoStep = next;
 		System.out.println("Next step: " + autoStep);
-		currHeading = imu.getHeading();
+		
 		drive.resetEncDist();
+		imu.reset();
 		// Stop the robot
 		drive.stop();
 	}
 
 	/**
 	 * The periodic method for Autonomous. Run during autoPeriodic()
+	 * TODO Re-fix left and right start autos
 	 */
 	public void periodic() {
 		// the list of steps that the robot needs to do in auto
 		switch (autoStep) {
 		case FIRST_STRAIGHT:
 			// TODO Figure out why gameData.length() isn't working
-			if (/* gameData.length() > 0 && */ /* Check if there is any game data first */ startPos.equals("Center")) {
-				if (drive.driveDistance(AUTO_SPEED, ROTATE * 4)) {
+			if (/* gameData.length() > 0 && */ /* Check if there is any game data first */ startPos.equals("C")) {
+				System.out.println("Center Dist: " + drive.getDistance(ROTATE * 2));
+				if (drive.driveDistance(AUTO_SPEED, ROTATE * 2)) {
 					drive.stop();
 					nextStep(AutoSteps.FIRST_TURN);
 				}
 			} else {
+				System.out.println("L/R Dist: " + drive.getDistance(SWITCH_TICKS));
 				if (drive.driveDistance(AUTO_SPEED, SWITCH_TICKS)) {
 					drive.stop();
-					nextStep(AutoSteps.LOADING);
+					nextStep(AutoSteps.SECOND_STRAIGHT);
 				}
 
 			}
 			break;
 		case FIRST_TURN:// add for both ways
 			if (switchPos.equals("R")) {
-				drive.turn(45, AUTO_SPEED);
-				} else {
+				if(drive.turn(20, AUTO_TURN_SPEED)) {
 					drive.stop();
 					nextStep(AutoSteps.SECOND_STRAIGHT);
 				}
-				if (switchPos.equals("L")) {
-					drive.turn( -45, AUTO_SPEED);
-					} else {
-						drive.stop();
-						nextStep(AutoSteps.SECOND_STRAIGHT);
-					}
-				
-			
+			}
+			if (switchPos.equals("L")) {
+				if(drive.turn(-20, AUTO_TURN_SPEED)) {
+					drive.stop();
+					nextStep(AutoSteps.SECOND_STRAIGHT);
+				}
+			}
+
 			break;
-			case SECOND_STRAIGHT:
+		case SECOND_STRAIGHT:
 			if (drive.driveDistance(AUTO_SPEED, HYPO_SWITCH)) {
 				drive.stop();
-				nextStep(AutoSteps.LOADING);
+				if (startPos.equals("C")) {
+					nextStep(AutoSteps.LOADING);
+				} else {
+					nextStep(AutoSteps.DONE);
+				}
 			}
 			break;
 		case LOADING:
+			
 			grabber.ungrab();
 			nextStep(AutoSteps.DONE);
 			break;
-		
-				
+
 		case DONE:
 			nextStep(AutoSteps.DONE);
 			break;
-			
+
 		default:
-				nextStep(AutoSteps.DONE);
-				break;
+			nextStep(AutoSteps.DONE);
+			break;
 		}
 	}
 }

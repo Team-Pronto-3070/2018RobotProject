@@ -19,7 +19,6 @@ public class Robot extends IterativeRobot implements Pronstants {
 	Grabber grabber;
 	Climber climber;
 	Autonomous autonomous;
-	private static BNO055 imu;
 	ProntoGyro prontoGyro;
 	Joystick joyL, joyR;
 
@@ -44,11 +43,10 @@ public class Robot extends IterativeRobot implements Pronstants {
 		servoTest.addDefault("unlock", "unlock");
 
 		// Class initialization
+		prontoGyro = new ProntoGyro();
 		drive = new Drive(autonomous, prontoGyro);
 		grabber = new Grabber();
 		climber = new Climber();
-		imu = BNO055.getInstance(BNO055.opmode_t.OPERATION_MODE_IMUPLUS,
-				        		BNO055.vector_type_t.VECTOR_EULER);
 		autonomous = new Autonomous(drive, grabber, prontoGyro);
 
 		joyL = new Joystick(0);
@@ -92,6 +90,7 @@ public class Robot extends IterativeRobot implements Pronstants {
 		drive.stop();
 		grabber.stop();
 		climber.stop();
+		prontoGyro.reset();
 	}
 
 	@Override
@@ -100,6 +99,7 @@ public class Robot extends IterativeRobot implements Pronstants {
 		SmartDashboard.putNumber("SpeedL", drive.talLM.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("SpeedR", drive.talRM.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("Distance", (drive.getLeftDist() + drive.getRightDist()) / 2);
+		SmartDashboard.putNumber("Gyro Value", prontoGyro.getOffsetHeading());
 	}
 
 	public void teleopInit() {

@@ -22,6 +22,10 @@ public class Drive implements Pronstants {
 		talRF = new TalonSRX(TALRF_PORT);
 		joyL = new Joystick(JOYL_PORT);
 		joyR = new Joystick(JOYR_PORT);
+		
+		this.autonomous = autonomous;
+		this.prontoGyro = prontoGyro;
+		
 		setInverted();
 		setNeutralMode(false);
 		setCurrentLimits(10, 15, 100);
@@ -108,46 +112,76 @@ public class Drive implements Pronstants {
 	}
 	
 	public boolean turn(double angle, double maxSpeed) {
-		// Defaults the speed to the maximum speed
-		double speed = maxSpeed;
-		// Adjusts speed linearly when within 10 degrees of expected value
-		double delta = Math.abs(autonomous.rawHeading() - angle);
-
-		if (delta <= Pronstants.MAX_DEGREES_FULL_SPEED) {
-			// "Simple" linear regression
-			// m = (Y2 - Y1) / ( X2 - X1 )
-			double m = ((maxSpeed - Pronstants.AUTO_SPEED) / (Pronstants.MAX_DEGREES_FULL_SPEED - Pronstants.TURN_OFFSET));
-			// y = m*x + b => b = y - m*x. Choosing Y1 and X1:
-			double b = Pronstants.MIN_TURN_SPEED - (m * Pronstants.TURN_OFFSET);
-
-			// Substitute in the angle delta for x and
-			speed = m * delta + b;
-
+		// "simple" regression to 0
+		double delta = Math.abs(angle)-Math.abs(prontoGyro.getOffsetHeading());
+		double adjuster = Math.abs(delta/angle);
+		double newSpeed = Math.abs(maxSpeed*adjuster);
+		if(newSpeed < 0.1) {
+			newSpeed = 0.1;
 		}
-
-		// Checks if the gyro angle is less than the desired angle
-		if (prontoGyro.getOffsetHeading() < angle - Pronstants.TURN_OFFSET) {
-			// If it is, turn left
-			simpleDrive(-speed, speed);
-			// and tell the source that turning is not done
-			return false;
-
+		// if ccw
+		if(angle<0) {
+			if(angle < prontoGyro.getOffsetHeading()) {
+				
+				simpleDrive(-newSpeed, newSpeed);
+				return false;
+			}
+			else {
+				stop();
+				return true;
+			}
 		}
-
-		// Otherwise, checks if the gyro angle is greater than the desired angle
-		else if (prontoGyro.getOffsetHeading() > angle + Pronstants.TURN_OFFSET) {
-			// If it is, turn right
-			simpleDrive(speed, -speed);
-			// and tell the source that turning is not done
-			return false;
-		}
-
+		// if cw
 		else {
-			// If the gyro angle is aligned with the desired angle,
-			// tell the source that the robot has turned the desired amount
-			stop();
-			return true;
+			if(angle > prontoGyro.getOffsetHeading()) {
+				simpleDrive(newSpeed, -newSpeed);
+				return false;
+			}
+			else {
+				stop();
+				return true;
+			}
 		}
+//		// Defaults the speed to the maximum speed
+//		double speed = maxSpeed;
+//		// Adjusts speed linearly when within 10 degrees of expected value
+//		double delta = Math.abs(prontoGyro.getOffsetHeading() - angle);
+//
+//		if (delta <= Pronstants.MAX_DEGREES_FULL_SPEED) {
+//			// "Simple" linear regression
+//			// m = (Y2 - Y1) / ( X2 - X1 )
+//			double m = ((maxSpeed - Pronstants.AUTO_SPEED) / (Pronstants.MAX_DEGREES_FULL_SPEED - Pronstants.TURN_OFFSET));
+//			// y = m*x + b => b = y - m*x. Choosing Y1 and X1:
+//			double b = Pronstants.MIN_TURN_SPEED - (m * Pronstants.TURN_OFFSET);
+//
+//			// Substitute in the angle delta for x and
+//			speed = m * delta + b;
+//
+//		}
+//
+//		// Checks if the gyro angle is less than the desired angle
+//		if (prontoGyro.getOffsetHeading() < angle - Pronstants.TURN_OFFSET) {
+//			// If it is, turn left
+//			simpleDrive(-speed, speed);
+//			// and tell the source that turning is not done
+//			return false;
+//
+//		}
+//
+//		// Otherwise, checks if the gyro angle is greater than the desired angle
+//		else if (prontoGyro.getOffsetHeading() > angle + Pronstants.TURN_OFFSET) {
+//			// If it is, turn right
+//			simpleDrive(speed, -speed);
+//			// and tell the source that turning is not done
+//			return false;
+//		}
+//
+//		else {
+//			// If the gyro angle is aligned with the desired angle,
+//			// tell the source that the robot has turned the desired amount
+//			stop();
+//			return true;
+//		}
 	}
 
 	public void setRight(double power) {

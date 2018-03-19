@@ -46,6 +46,7 @@ public interface Pronstants {
 
 	public static final double DEADZONE = 0.2;// TODO: change back
 	public static final double AUTO_SPEED = 0.5;
+	public static final double AUTO_TURN_SPEED = 0.25;
 	
 	
 	static final double MAX_DEGREES_FULL_SPEED = 5.0;
