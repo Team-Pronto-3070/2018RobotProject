@@ -1,7 +1,5 @@
 package org.usfirst.frc.team3070.robot;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 public class Autonomous implements Pronstants {
 	Drive drive;
 	Grabber grabber;
@@ -40,7 +38,7 @@ public class Autonomous implements Pronstants {
 		// Tells the robot to go to the next step
 		autoStep = next;
 		System.out.println("Next step: " + autoStep);
-		
+
 		drive.resetEncDist();
 		imu.reset();
 		// Stop the robot
@@ -48,8 +46,8 @@ public class Autonomous implements Pronstants {
 	}
 
 	/**
-	 * The periodic method for Autonomous. Run during autoPeriodic()
-	 * TODO Re-fix left and right start autos
+	 * The periodic method for Autonomous. Run during autoPeriodic() TODO Re-fix
+	 * left and right start autos
 	 */
 	public void periodic() {
 		// the list of steps that the robot needs to do in auto
@@ -73,19 +71,20 @@ public class Autonomous implements Pronstants {
 			break;
 		case FIRST_TURN:// add for both ways
 			if (switchPos.equals("R")) {
-				if(drive.turn(20, AUTO_TURN_SPEED)) {
+				if (drive.turn(20, AUTO_TURN_SPEED)) {
 					drive.stop();
 					nextStep(AutoSteps.SECOND_STRAIGHT);
 				}
 			}
 			if (switchPos.equals("L")) {
-				if(drive.turn(-20, AUTO_TURN_SPEED)) {
+				if (drive.turn(-20, AUTO_TURN_SPEED)) {
 					drive.stop();
 					nextStep(AutoSteps.SECOND_STRAIGHT);
 				}
 			}
 
 			break;
+
 		case SECOND_STRAIGHT:
 			if (drive.driveDistance(AUTO_SPEED, HYPO_SWITCH)) {
 				drive.stop();
@@ -97,7 +96,7 @@ public class Autonomous implements Pronstants {
 			}
 			break;
 		case LOADING:
-			
+
 			grabber.ungrab();
 			nextStep(AutoSteps.DONE);
 			break;
