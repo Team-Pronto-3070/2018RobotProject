@@ -56,24 +56,14 @@ public class Autonomous implements Pronstants {
 			// TODO Figure out why gameData.length() isn't working
 			if (/* gameData.length() > 0 && */ /* Check if there is any game data first */ startPos.equals("C")) {
 				System.out.println("Center Dist: " + drive.getDistance(ROTATE * 2));
-				if (!done) {
-					if (drive.driveDistance(AUTO_SPEED, ROTATE * 2)) {
-						done = true;
-					}
-				} else {
-					nextStep(AutoSteps.SECOND_STRAIGHT);
+				if (drive.driveDistance(AUTO_SPEED, ROTATE * 2)) {
+					nextStep(AutoSteps.FIRST_TURN);
 				}
 			} else {
 				System.out.println("L/R Dist: " + drive.getDistance(SWITCH_TICKS));
-				if (!done) {
-					if (drive.driveDistance(AUTO_SPEED, SWITCH_TICKS)) {
-						done = true;
-					}
-
-				} else {
-					nextStep(AutoSteps.SECOND_STRAIGHT);
+				if (drive.driveDistance(AUTO_SPEED, SWITCH_TICKS)) {
+					nextStep(AutoSteps.DONE);
 				}
-
 			}
 			break;
 		case FIRST_TURN:// add for both ways
