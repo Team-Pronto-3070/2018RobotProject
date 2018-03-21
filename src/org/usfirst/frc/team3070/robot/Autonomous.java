@@ -3,7 +3,7 @@ package org.usfirst.frc.team3070.robot;
 public class Autonomous implements Pronstants {
 	Drive drive;
 	Grabber grabber;
-	private static ProntoGyro imu;
+	public static ProntoGyro imu;
 	AutoSteps autoStep = AutoSteps.FIRST_STRAIGHT;
 	String gameData, switchPos, startPos;
 	boolean done = false;

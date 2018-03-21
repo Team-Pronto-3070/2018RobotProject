@@ -130,6 +130,11 @@ public class Robot extends IterativeRobot implements Pronstants {
 		SmartDashboard.putBoolean("Limit Switch", grabber.getLimit());
 		System.out.println("limit switch: " + grabber.getLimit());
 		climber.cTeleop(joyL.getRawButton(3), joyL.getRawButton(2), (joyR.getRawButton(6) && joyR.getRawButton(11)));
+		SmartDashboard.putNumber("Gyro", Autonomous.imu.getRawHeading());
+		SmartDashboard.putString("GameData", autonomous.gameData);
+		SmartDashboard.putString("Start Position", autonomous.startPos);
+		SmartDashboard.putString("startPos", autonomous.switchPos);
+		SmartDashboard.putBoolean("Limit switch", climber.limitSwitch.)
 	}
 
 }
