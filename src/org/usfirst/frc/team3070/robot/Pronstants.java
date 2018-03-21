@@ -23,7 +23,7 @@ public interface Pronstants {
 	
 	public static final double CLIMB_SPEED = 0.7;
 	
-	public static final double HYPO_SWITCH = 606208; 
+	public static final double HYPO_SWITCH = 20524; 
 	//148 inches to the switch(hypotenuse)
 
 	// Talon Ports
@@ -45,7 +45,7 @@ public interface Pronstants {
 	public static final int MAX_SPEEED = 800;
 
 	public static final double DEADZONE = 0.2;// TODO: change back
-	public static final double AUTO_SPEED = 0.5;
+	public static final double AUTO_SPEED = 0.3;
 	public static final double AUTO_TURN_SPEED = 0.25;
 	
 	

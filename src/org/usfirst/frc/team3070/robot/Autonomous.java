@@ -3,7 +3,7 @@ package org.usfirst.frc.team3070.robot;
 public class Autonomous implements Pronstants {
 	Drive drive;
 	Grabber grabber;
-	private static ProntoGyro imu;
+	public static ProntoGyro imu;
 	AutoSteps autoStep = AutoSteps.FIRST_STRAIGHT;
 	String gameData, switchPos, startPos;
 	boolean done = false;
@@ -56,21 +56,22 @@ public class Autonomous implements Pronstants {
 			// TODO Figure out why gameData.length() isn't working
 			if (/* gameData.length() > 0 && */ /* Check if there is any game data first */ startPos.equals("C")) {
 				System.out.println("Center Dist: " + drive.getDistance(ROTATE * 2));
-				if (!done) {
-					if (drive.driveDistance(AUTO_SPEED, ROTATE * 2)) {
-						done = true;
-					}
-				} else {
-					nextStep(AutoSteps.SECOND_STRAIGHT);
+				if (drive.driveDistance(AUTO_SPEED, ROTATE * 2)) {
+					nextStep(AutoSteps.FIRST_TURN);
 				}
 			} else {
 				System.out.println("L/R Dist: " + drive.getDistance(SWITCH_TICKS));
+<<<<<<< HEAD
 				if (!done) {
 					if (drive.driveDistance(AUTO_SPEED, SWITCH_TICKS)) {
 						done = true;
 					}
 				} else {
 					nextStep(AutoSteps.SECOND_STRAIGHT);
+=======
+				if (drive.driveDistance(AUTO_SPEED, SWITCH_TICKS)) {
+					nextStep(AutoSteps.DONE);
+>>>>>>> 3357b7b3a18f196ad14f8091b86aae8e30d41f53
 				}
 			}
 			break;

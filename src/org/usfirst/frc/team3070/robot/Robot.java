@@ -119,7 +119,7 @@ public class Robot extends IterativeRobot implements Pronstants {
 	@Override
 	public void teleopPeriodic() {
 		grabber.teleop(joyL.getRawButton(3), joyL.getRawButton(2));
-		//drive.joystickDrive(joyL.getRawAxis(1), joyR.getRawAxis(1));
+		drive.joystickDrive(joyL.getRawAxis(1), joyR.getRawAxis(1));
 		climber.cTeleop(joyR.getRawButton(3), joyR.getRawButton(2), (joyR.getRawButton(6) && joyR.getRawButton(11))); // Press 6 AND 11 to engage the ratchet
 		SmartDashboard.putNumber("SpeedL", drive.talLM.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("SpeedR", drive.talRM.getSelectedSensorVelocity(0));
@@ -130,6 +130,11 @@ public class Robot extends IterativeRobot implements Pronstants {
 		SmartDashboard.putBoolean("Limit Switch", grabber.getLimit());
 		System.out.println("limit switch: " + grabber.getLimit());
 		climber.cTeleop(joyL.getRawButton(3), joyL.getRawButton(2), (joyR.getRawButton(6) && joyR.getRawButton(11)));
+		SmartDashboard.putNumber("Gyro", Autonomous.imu.getRawHeading());
+		SmartDashboard.putString("GameData", autonomous.gameData);
+		SmartDashboard.putString("Start Position", autonomous.startPos);
+		SmartDashboard.putString("startPos", autonomous.switchPos);
+		SmartDashboard.putBoolean("Limit switch", climber.limitSwitch.)
 	}
 
 }

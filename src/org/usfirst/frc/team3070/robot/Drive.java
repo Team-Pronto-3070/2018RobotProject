@@ -116,8 +116,8 @@ public class Drive implements Pronstants {
 		double delta = Math.abs(angle)-Math.abs(prontoGyro.getOffsetHeading());
 		double adjuster = Math.abs(delta/angle);
 		double newSpeed = Math.abs(maxSpeed*adjuster);
-		if(newSpeed < 0.1) {
-			newSpeed = 0.1;
+		if(newSpeed < 0.15) {
+			newSpeed = 0.15;
 		}
 		// if ccw
 		if(angle<0) {
