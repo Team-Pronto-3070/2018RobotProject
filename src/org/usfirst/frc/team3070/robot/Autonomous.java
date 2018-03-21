@@ -69,11 +69,9 @@ public class Autonomous implements Pronstants {
 					if (drive.driveDistance(AUTO_SPEED, SWITCH_TICKS)) {
 						done = true;
 					}
-
 				} else {
 					nextStep(AutoSteps.SECOND_STRAIGHT);
 				}
-
 			}
 			break;
 		case FIRST_TURN:// add for both ways
@@ -89,9 +87,7 @@ public class Autonomous implements Pronstants {
 					nextStep(AutoSteps.SECOND_STRAIGHT);
 				}
 			}
-
 			break;
-
 		case SECOND_STRAIGHT:
 			if (drive.driveDistance(AUTO_SPEED, HYPO_SWITCH)) {
 				drive.stop();
@@ -103,15 +99,12 @@ public class Autonomous implements Pronstants {
 			}
 			break;
 		case LOADING:
-
 			grabber.ungrab();
 			nextStep(AutoSteps.DONE);
 			break;
-
 		case DONE:
 			nextStep(AutoSteps.DONE);
 			break;
-
 		default:
 			nextStep(AutoSteps.DONE);
 			break;
