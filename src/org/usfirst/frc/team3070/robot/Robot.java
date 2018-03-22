@@ -34,13 +34,11 @@ public class Robot extends IterativeRobot implements Pronstants {
 
 	@Override
 	public void robotInit() {
+		//Allows driver to tell robot where it starts
 		initPos.addObject("Left", "L");
 		initPos.addDefault("Center", "C");
 		initPos.addObject("Right", "R");
 		SmartDashboard.putData("Initial Position", initPos);
-
-		servoTest.addDefault("lock", "lock");
-		servoTest.addDefault("unlock", "unlock");
 
 		// Class initialization
 		prontoGyro = new ProntoGyro();
@@ -48,7 +46,7 @@ public class Robot extends IterativeRobot implements Pronstants {
 		grabber = new Grabber();
 		climber = new Climber();
 		autonomous = new Autonomous(drive, grabber, prontoGyro);
-
+		//Joystick initialization
 		joyL = new Joystick(0);
 		joyR = new Joystick(1);
 
@@ -75,7 +73,7 @@ public class Robot extends IterativeRobot implements Pronstants {
 
 		SmartDashboard.putString("Mode:", "mode");
 	}
-
+//setup for the autonomous period
 	public void autonomousInit() {
 		// Sets up field data
 		if(DriverStation.getInstance().getGameSpecificMessage().length() > 0) {
@@ -83,9 +81,11 @@ public class Robot extends IterativeRobot implements Pronstants {
 			autonomous.switchPos = autonomous.gameData.substring(0, 1); // Position of alliance's switch, either L or R
 			System.out.println("Game data is" + autonomous.gameData);
 		}
+		//sets the start position to what was selected in initPos
 		autonomous.startPos = initPos.getSelected();
-		autonomous.done = false;
+		//starts the autonomous code at the first step
 		autonomous.nextStep(AutoSteps.FIRST_STRAIGHT);
+		//stops and resets all of the robots functions
 		drive.resetEncDist();
 		drive.stop();
 		grabber.stop();
@@ -95,7 +95,9 @@ public class Robot extends IterativeRobot implements Pronstants {
 
 	@Override
 	public void autonomousPeriodic() {
+		//calls the autonomous code
 		autonomous.periodic();
+		//gives values of the sensors
 		SmartDashboard.putNumber("SpeedL", drive.talLM.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("SpeedR", drive.talRM.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("Distance", (drive.getLeftDist() + drive.getRightDist()) / 2);
@@ -103,24 +105,15 @@ public class Robot extends IterativeRobot implements Pronstants {
 	}
 
 	public void teleopInit() {
-		double lp = .8;
-		double li = .006;
-		double ld = 7.0;
-		double lf = 0.327;
-		drive.setLeftPID(lp, li, ld, lf);
-
-		double rp = .8;
-		double ri = .006;
-		double rd = 7.0;
-		double rf = 0.337;
-		drive.setRightPID(rp, ri, rd, rf);
+		//tumbleweeds and crickets
 	}
 
 	@Override
 	public void teleopPeriodic() {
+		//grabber goes in and out with button 2 & 3 on the left joystick
 		grabber.teleop(joyL.getRawButton(3), joyL.getRawButton(2));
+		//Drives with the position of the joysticks on the y axis
 		drive.joystickDrive(joyL.getRawAxis(1), joyR.getRawAxis(1));
-		climber.cTeleop(joyR.getRawButton(3), joyR.getRawButton(2), (joyR.getRawButton(6) && joyR.getRawButton(11))); // Press 6 AND 11 to engage the ratchet
 		SmartDashboard.putNumber("SpeedL", drive.talLM.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("SpeedR", drive.talRM.getSelectedSensorVelocity(0));
 	}
@@ -130,6 +123,8 @@ public class Robot extends IterativeRobot implements Pronstants {
 		SmartDashboard.putBoolean("Limit Switch", grabber.getLimit());
 		System.out.println("limit switch: " + grabber.getLimit());
 		climber.cTeleop(joyL.getRawButton(3), joyL.getRawButton(2), (joyR.getRawButton(6) && joyR.getRawButton(11)));
+			
+
 	}
 
 }

@@ -29,18 +29,19 @@ public class Drive implements Pronstants {
 		setInverted();
 		setNeutralMode(false);
 		setCurrentLimits(10, 15, 100);
+		//sets up the encoders on the two master talons
 		talLM.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
 		talRM.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
 
 		initDistL = talLM.getSelectedSensorPosition(0);
 		initDistR = talRM.getSelectedSensorPosition(0);
-
+		// resets the encoders
 		resetEncDist();
 
 		talRM.setSensorPhase(true);
 		talLM.setSensorPhase(true);
 	}
-
+	//checks to see if the robot has gone a certain distance
 	public boolean getDistance(double distance) {
 		if (Math.abs(getRightDist()) >= distance && Math.abs(getLeftDist()) >= distance) {
 			return true;
@@ -50,7 +51,7 @@ public class Drive implements Pronstants {
 	}
 
 	/**
-	 * PID joystick drive with a deadzone.
+	 * joystick drive with a deadzone.
 	 * 
 	 * @param joyL
 	 *            Left joystick Y-axis
@@ -75,23 +76,7 @@ public class Drive implements Pronstants {
 
 	}
 
-//	public void altJoystickDrive(double joyX, double joyY) {
-//		double left = 0;
-//		double right = 0;
-//		if (Math.abs(joyX) > DEADZONE) {
-//			left = joyX * MAX_SPEEED / 3;
-//		} else {
-//			left = 0;
-//
-//		}
-//		if (Math.abs(joyY) > DEADZONE) {
-//			right = joyY * MAX_SPEEED / 3;
-//		} else {
-//			right = 0;
-//		}
-//		drivePID(left, right);
-//
-//	}
+
 
 	/**
 	 * Drive a certain distance
@@ -110,16 +95,17 @@ public class Drive implements Pronstants {
 			return false;
 		}
 	}
-	
+	//turns the robot to a certain distance at a certain speed  
 	public boolean turn(double angle, double maxSpeed) {
-		// "simple" regression to 0
+		// "simple" regression to 0 by Spencer "If you don't understand it, think harder" - Spencer March 19, 2018
 		double delta = Math.abs(angle)-Math.abs(prontoGyro.getOffsetHeading());
 		double adjuster = Math.abs(delta/angle);
 		double newSpeed = Math.abs(maxSpeed*adjuster);
+		//sets a minimum  to the speed from above^
 		if(newSpeed < 0.15) {
 			newSpeed = 0.15;
 		}
-		// if ccw
+		// if counter clockwise
 		if(angle<0) {
 			if(angle < prontoGyro.getOffsetHeading()) {
 				
@@ -131,7 +117,7 @@ public class Drive implements Pronstants {
 				return true;
 			}
 		}
-		// if cw
+		// if clockwise
 		else {
 			if(angle > prontoGyro.getOffsetHeading()) {
 				simpleDrive(newSpeed, -newSpeed);
@@ -142,53 +128,20 @@ public class Drive implements Pronstants {
 				return true;
 			}
 		}
-//		// Defaults the speed to the maximum speed
-//		double speed = maxSpeed;
-//		// Adjusts speed linearly when within 10 degrees of expected value
-//		double delta = Math.abs(prontoGyro.getOffsetHeading() - angle);
-//
-//		if (delta <= Pronstants.MAX_DEGREES_FULL_SPEED) {
-//			// "Simple" linear regression
-//			// m = (Y2 - Y1) / ( X2 - X1 )
-//			double m = ((maxSpeed - Pronstants.AUTO_SPEED) / (Pronstants.MAX_DEGREES_FULL_SPEED - Pronstants.TURN_OFFSET));
-//			// y = m*x + b => b = y - m*x. Choosing Y1 and X1:
-//			double b = Pronstants.MIN_TURN_SPEED - (m * Pronstants.TURN_OFFSET);
-//
-//			// Substitute in the angle delta for x and
-//			speed = m * delta + b;
-//
-//		}
-//
-//		// Checks if the gyro angle is less than the desired angle
-//		if (prontoGyro.getOffsetHeading() < angle - Pronstants.TURN_OFFSET) {
-//			// If it is, turn left
-//			simpleDrive(-speed, speed);
-//			// and tell the source that turning is not done
-//			return false;
-//
-//		}
-//
-//		// Otherwise, checks if the gyro angle is greater than the desired angle
-//		else if (prontoGyro.getOffsetHeading() > angle + Pronstants.TURN_OFFSET) {
-//			// If it is, turn right
-//			simpleDrive(speed, -speed);
-//			// and tell the source that turning is not done
-//			return false;
-//		}
-//
-//		else {
-//			// If the gyro angle is aligned with the desired angle,
-//			// tell the source that the robot has turned the desired amount
-//			stop();
-//			return true;
-//		}
-	}
 
+	}
+	/**
+	 * sets the right motors to a given power
+	 * @param power
+	 */
 	public void setRight(double power) {
 		talRM.set(ControlMode.PercentOutput, power);
 		talRF.set(ControlMode.Follower, TALRM_PORT);
 	}
-
+	/**
+	 * sets the left motors to a given power
+	 * @param power
+	 */
 	public void setLeft(double power) {
 		talLM.set(ControlMode.PercentOutput, power);
 		talLF.set(ControlMode.Follower, TALLM_PORT);
@@ -306,24 +259,5 @@ public class Drive implements Pronstants {
 		talRF.enableCurrentLimit(true);
 	}
 
-	public void setLeftPID(double p, double i, double d, double f) {
-		talLM.config_kF(0, f, 10);
-		talLM.config_kP(0, p, 10);
-		talLM.config_kI(0, i, 10);
-		talLM.config_kD(0, d, 10);
-	}
-
-	public void setRightPID(double p, double i, double d, double f) {
-		talRM.config_kF(0, f, 10);
-		talRM.config_kP(0, p, 10);
-		talRM.config_kI(0, i, 10);
-		talRM.config_kD(0, d, 10);
-	}
-
-	public void drivePID(double setPointL, double setPointR) {
-		talRM.set(ControlMode.Velocity, setPointR * 4096 / SECONDS_TO_100MS);
-		talLM.set(ControlMode.Velocity, -setPointL * 4096 / SECONDS_TO_100MS);
-		talLF.set(ControlMode.Follower, TALLM_PORT);
-		talRF.set(ControlMode.Follower, TALRM_PORT);
-	}
+	
 }

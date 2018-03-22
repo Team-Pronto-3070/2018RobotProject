@@ -6,7 +6,7 @@ public class Autonomous implements Pronstants {
 	private static ProntoGyro imu;
 	AutoSteps autoStep = AutoSteps.FIRST_STRAIGHT;
 	String gameData, switchPos, startPos;
-	boolean done = false;
+	
 	double initHeading;
 	double currHeading = 0;
 
