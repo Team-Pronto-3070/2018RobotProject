@@ -7,15 +7,11 @@ import edu.wpi.first.wpilibj.Joystick;
 
 public class Grabber implements Pronstants {
 	TalonSRX talGL, talGR;
-	DigitalInput limitSwitch;
 	Joystick joyL, joyR;
 
 	public Grabber() {
 		talGL = new TalonSRX(TALGL_PORT);
 		talGR = new TalonSRX(TALGR_PORT);
-		limitSwitch = new DigitalInput(0);
-		joyL = new Joystick(0);
-		joyR = new Joystick(1);
 
 		// TODO Make sure this goes the correct way
 		talGL.setInverted(true);
@@ -77,9 +73,5 @@ public class Grabber implements Pronstants {
 			stop();
 		}
 		
-	}
-	
-	public boolean getLimit() {
-		return limitSwitch.get();
 	}
 }

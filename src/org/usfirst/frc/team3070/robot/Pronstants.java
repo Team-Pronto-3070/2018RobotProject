@@ -31,6 +31,8 @@ public interface Pronstants {
 
 	public static final int TALGL_PORT = 4;
 	public static final int TALGR_PORT = 6;
+	
+	public static final int CLIMB_SPEED = 100;
 
 	// Joystick Ports
 	public static final int JOYL_PORT = 0;
