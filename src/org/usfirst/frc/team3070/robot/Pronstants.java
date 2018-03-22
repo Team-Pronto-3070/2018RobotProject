@@ -17,10 +17,8 @@ public interface Pronstants {
 	public static final double ROTATE = 4096;
  	public static final boolean RIGHT_INV = true;
 	public static final boolean LEFT_INV = false;
-	
 	//148 inches to the switch(hypotenuse)
 	public static final double HYPO_SWITCH = 20524; 
-	
 
 	// Talon Ports
 	public static final int TALLM_PORT = 0;
