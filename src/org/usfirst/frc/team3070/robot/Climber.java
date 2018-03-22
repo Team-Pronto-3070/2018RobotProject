@@ -31,10 +31,6 @@ public class Climber implements Pronstants {
 		talC.enableCurrentLimit(true);
 	}
 
-	public void lock() {
-		ratchet.set(LOCKED_ANGLE);
-	}
-
 	/**
 	 * Sets motor speed to 1 Make sure it's going the right way
 	 */
