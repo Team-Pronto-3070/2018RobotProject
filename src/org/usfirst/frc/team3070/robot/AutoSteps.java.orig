@@ -1,0 +1,9 @@
+package org.usfirst.frc.team3070.robot;
+
+public enum AutoSteps {
+<<<<<<< HEAD
+	FIRST_STRAIGHT, FIRST_TURN, SECOND_STRAIGHT, LOADING, DONE
+=======
+	FIRST_STRAIGHT, LIFTING, SECOND_STRAIGHT, LOADING, DONE
+>>>>>>> origin/MountVernon
+}

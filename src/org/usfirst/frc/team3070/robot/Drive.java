@@ -14,6 +14,8 @@ public class Drive implements Pronstants {
 	Autonomous autonomous;
 
 	int initDistL, initDistR;
+	double rampL = 0;
+	double rampR = 0;
 
 	public Drive(Autonomous autonomous, ProntoGyro prontoGyro) {
 		talLM = new TalonSRX(TALLM_PORT);
@@ -62,17 +64,19 @@ public class Drive implements Pronstants {
 		double left = 0;
 		double right = 0;
 		if (Math.abs(joyL) > DEADZONE) {
-			left = joyL * MAX_SPEEED / 3;
+			left = joyL;
 		} else {
 			left = 0;
 
 		}
 		if (Math.abs(joyR) > DEADZONE) {
-			right = joyR * MAX_SPEEED / 3;
+			right = joyR;
 		} else {
 			right = 0;
 		}
-		simpleDrive(joyR, joyL);
+			rampL = (left + rampL)/2.5;
+			rampR = (right + rampR)/2.5;
+		simpleDrive(rampL, rampR);
 
 	}
 

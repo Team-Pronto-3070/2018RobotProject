@@ -11,6 +11,7 @@ public interface Pronstants {
 	//distance to switch in inches, then converted to encoder ticks
 	public static final double SWITCH_DIST = 144;
 	public static final double SWITCH_TICKS = (SWITCH_DIST / WHEEL_CIRCUM) * 4096;
+<<<<<<< HEAD
 	//encoder ticks measure with milliseconds
 	public static final double MINUTES_TO_100MS = 600;
 	//one rotation of the wheel equals 4096 encoder ticks
@@ -21,6 +22,15 @@ public interface Pronstants {
 	//148 inches to the switch(hypotenuse)
 	public static final double HYPO_SWITCH = 20524; 
 	
+=======
+
+	public static final double SECONDS_TO_100MS = 600;
+	
+	public static final boolean RIGHT_INV = false;
+	public static final boolean LEFT_INV = true;
+	
+	public static final double CLIMB_SPEED = .8;
+>>>>>>> origin/MountVernon
 
 	// Talon Ports
 	public static final int TALLM_PORT = 0;
@@ -37,6 +47,7 @@ public interface Pronstants {
 	// Joystick Ports
 	public static final int JOYL_PORT = 0;
 	public static final int JOYR_PORT = 1;
+<<<<<<< HEAD
 	//deadzone for the joysticks 
 	public static final double DEADZONE = 0.2;// TODO: change back
 	//speed for the auto code
@@ -49,4 +60,11 @@ public interface Pronstants {
 	
 	// Adjusting constant for turn function
 		static final double TURN_OFFSET = 3;
+=======
+
+	public static final int MAX_SPEEED = 800;
+
+	public static final double DEADZONE = 0.1;// TODO: change back
+	public static final double AUTO_SPEED = 0.35;
+>>>>>>> origin/MountVernon
 }
