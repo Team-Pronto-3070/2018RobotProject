@@ -30,7 +30,10 @@ public class Climber implements Pronstants {
 		talC.configPeakCurrentDuration(100, 0);
 		talC.enableCurrentLimit(true);
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4ca51623d33df0aef0a0e7c4a0e6002b45a920d9
 	/**
 	 * Sets motor speed to 1 Make sure it's going the right way
 	 */
