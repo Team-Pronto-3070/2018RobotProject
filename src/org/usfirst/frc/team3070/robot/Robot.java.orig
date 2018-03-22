@@ -19,10 +19,14 @@ public class Robot extends IterativeRobot implements Pronstants {
 	Drive drive;
 	Grabber grabber;
 	Climber climber;
+<<<<<<< HEAD
 	Autonomous autonomous;
 	ProntoGyro prontoGyro;
+=======
+	Autonomous auto;
 	Timer timer;
 
+>>>>>>> origin/MountVernon
 	Joystick joyL, joyR;
 
 	double rp = .8;
@@ -48,17 +52,22 @@ public class Robot extends IterativeRobot implements Pronstants {
 		drive = new Drive(autonomous, prontoGyro);
 		grabber = new Grabber();
 		climber = new Climber();
+<<<<<<< HEAD
 		autonomous = new Autonomous(drive, grabber, prontoGyro);
 		//Joystick initialization
+=======
+		auto = new Autonomous(drive, grabber, climber);
+		
 		timer = new Timer();
 		
 		SmartDashboard.putNumber("Turn 90 time", 0);
 
+>>>>>>> origin/MountVernon
 		joyL = new Joystick(0);
 		joyR = new Joystick(1);
 
 		// In SmartDashboard, do View->Add->CameraServer Stream Viewer
-		// CameraServer.getInstance().startAutomaticCapture();
+		CameraServer.getInstance().startAutomaticCapture();
 
 		SmartDashboard.putNumber("Setpoint", 0);
 		SmartDashboard.putNumber("SpeedL", 0);
@@ -78,7 +87,7 @@ public class Robot extends IterativeRobot implements Pronstants {
 		SmartDashboard.putNumber("Left output", 0);
 		SmartDashboard.putNumber("Right output", 0);
 
-		SmartDashboard.putString("Mode:", "mode");
+		//SmartDashboard.putString("Mode:", "mode");
 	}
 //setup for the autonomous period
 	public void autonomousInit() {
@@ -114,24 +123,43 @@ public class Robot extends IterativeRobot implements Pronstants {
 	public void teleopInit() {
 		//tumbleweeds and crickets
 	}
-
 	@Override
 	public void teleopPeriodic() {
+<<<<<<< HEAD
 		//grabber goes in and out with button 2 & 3 on the left joystick
 		grabber.teleop(joyL.getRawButton(3), joyL.getRawButton(2));
 		//Drives with the position of the joysticks on the y axis
 		drive.joystickDrive(joyL.getRawAxis(1), joyR.getRawAxis(1));
 		SmartDashboard.putNumber("SpeedL", drive.talLM.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("SpeedR", drive.talRM.getSelectedSensorVelocity(0));
+=======
+		grabber.teleop(joyL.getRawButton(2), joyL.getRawButton(3));
+		drive.joystickDrive(joyL.getRawAxis(1), joyR.getRawAxis(1));
+		climber.cTeleop(joyR.getRawButton(3), joyR.getRawButton(2), (joyR.getRawButton(6) && joyR.getRawButton(11))); // Press 6 AND 11 to engage the ratchet
+		//SmartDashboard.putNumber("SpeedL", drive.talLM.getSelectedSensorVelocity(0));
+		//SmartDashboard.putNumber("SpeedR", drive.talRM.getSelectedSensorVelocity(0));
+>>>>>>> origin/MountVernon
 	}
 	
 	@Override
 	public void testPeriodic() {
+<<<<<<< HEAD
+		SmartDashboard.putBoolean("Limit Switch", grabber.getLimit());
+		System.out.println("limit switch: " + grabber.getLimit());
+		climber.cTeleop(joyL.getRawButton(3), joyL.getRawButton(2), (joyR.getRawButton(6) && joyR.getRawButton(11)));
+			
+
+=======
 		if(joyL.getRawButton(2)) {
 			timer.reset();
 			timer.start();
-			
-
 		}
+		if(timer.get() < SmartDashboard.getNumber("Turn 90 time", 0)) {
+			drive.simpleDrive(AUTO_SPEED, -AUTO_SPEED);
+		} else {
+			drive.stop();
+		}
+>>>>>>> origin/MountVernon
 	}
+
 }

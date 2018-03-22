@@ -14,13 +14,14 @@ public double normalizeHeadingVal(double heading) - Normalizes a heading value t
 
 public class ProntoGyro {
 	// defines the variable imu from the class BNO055
-	public static BNO055 imu = BNO055.getInstance(BNO055.opmode_t.OPERATION_MODE_IMUPLUS,BNO055.vector_type_t.VECTOR_EULER);
+	BNO055 imu;
 	
 	// defines the variable for the angle offset.
 	private double angleOffset;
 	
 	// Constructs the class
 	public ProntoGyro() {
+		imu = BNO055.getInstance(BNO055.opmode_t.OPERATION_MODE_IMUPLUS,BNO055.vector_type_t.VECTOR_EULER);
 		// Resets the gyro
 		reset();
 	}
